@@ -1,7 +1,6 @@
 package com.myshopproject.domain.repository
 
 import com.myshopproject.domain.entities.DataRegister
-import com.myshopproject.domain.entities.DataUserResponse
 import com.myshopproject.domain.entities.LoginResult
 import com.myshopproject.domain.entities.RegisterResponse
 import com.myshopproject.domain.utils.Resource

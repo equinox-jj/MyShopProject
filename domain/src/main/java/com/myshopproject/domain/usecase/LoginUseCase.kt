@@ -9,10 +9,7 @@ import javax.inject.Inject
 class LoginUseCase @Inject constructor(
     private val createAccountRepository: CreateAccountRepository
 ) {
-    operator fun invoke(
-        email: String,
-        password: String
-    ): Flow<Resource<LoginResult>> {
+    operator fun invoke(email: String, password: String): Flow<Resource<LoginResult>> {
         return createAccountRepository.loginAccount(email, password)
     }
 }

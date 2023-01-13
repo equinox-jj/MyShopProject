@@ -14,7 +14,7 @@
         <ImageView
             android:id="@+id/ivProductLogo"
             android:layout_width="200dp"
-            android:layout_height="100dp"
+            android:layout_height="50dp"
             android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="92dp"
@@ -28,6 +28,7 @@
             android:id="@+id/flPhotoProfile"
             android:layout_width="150dp"
             android:layout_height="150dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivProductLogo">
@@ -48,28 +49,31 @@
                 android:background="@drawable/bg_button_profile"
                 android:contentDescription="@null"
                 android:padding="10dp"
-                app:srcCompat="@drawable/ic_lock" />
+                app:srcCompat="@drawable/ic_camera_filled" />
 
         </FrameLayout>
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="16dp"
             android:background="@drawable/bg_form"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/flPhotoProfile">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilEmailRegister"
-                android:layout_width="350dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
+                android:layout_marginStart="32dp"
                 android:layout_marginTop="64dp"
-                app:boxBackgroundColor="@color/white">
+                android:layout_marginEnd="32dp"
+                app:boxBackgroundColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etEmailRegister"
@@ -83,13 +87,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilPasswordRegister"
-                android:layout_width="350dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tilEmailRegister"
-                android:layout_centerHorizontal="true"
                 android:layout_marginTop="16dp"
                 app:boxBackgroundColor="@color/white"
-                app:endIconMode="password_toggle">
+                app:endIconMode="password_toggle"
+                app:layout_constraintEnd_toEndOf="@+id/tilEmailRegister"
+                app:layout_constraintStart_toStartOf="@+id/tilEmailRegister"
+                app:layout_constraintTop_toBottomOf="@+id/tilEmailRegister">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etPasswordRegister"
@@ -103,13 +108,15 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilConfPasswordRegister"
-                android:layout_width="350dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tilPasswordRegister"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="16dp"
                 app:boxBackgroundColor="@color/white"
-                app:endIconMode="password_toggle">
+                app:endIconMode="password_toggle"
+                app:layout_constraintEnd_toEndOf="@+id/tilPasswordRegister"
+                app:layout_constraintStart_toStartOf="@+id/tilPasswordRegister"
+                app:layout_constraintTop_toBottomOf="@+id/tilPasswordRegister">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etConfPasswordRegister"
@@ -123,12 +130,13 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilNameRegister"
-                android:layout_width="350dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tilConfPasswordRegister"
-                android:layout_centerHorizontal="true"
                 android:layout_marginTop="16dp"
-                app:boxBackgroundColor="@color/white">
+                app:boxBackgroundColor="@color/white"
+                app:layout_constraintEnd_toEndOf="@+id/tilConfPasswordRegister"
+                app:layout_constraintStart_toStartOf="@+id/tilConfPasswordRegister"
+                app:layout_constraintTop_toBottomOf="@+id/tilConfPasswordRegister">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etNameRegister"
@@ -142,12 +150,13 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilPhoneRegister"
-                android:layout_width="350dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tilNameRegister"
-                android:layout_centerHorizontal="true"
                 android:layout_marginTop="16dp"
-                app:boxBackgroundColor="@color/white">
+                app:boxBackgroundColor="@color/white"
+                app:layout_constraintEnd_toEndOf="@+id/tilNameRegister"
+                app:layout_constraintStart_toStartOf="@+id/tilNameRegister"
+                app:layout_constraintTop_toBottomOf="@+id/tilNameRegister">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etPhoneRegister"
@@ -163,24 +172,25 @@
                 android:id="@+id/tvGender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tilPhoneRegister"
-                android:layout_alignStart="@+id/tilPhoneRegister"
                 android:layout_marginTop="16dp"
-                android:fontFamily="@font/poppins"
-                android:text="@string/gender" />
+                android:fontFamily="@font/poppins_bold"
+                android:text="@string/gender"
+                app:layout_constraintStart_toStartOf="@+id/tilPhoneRegister"
+                app:layout_constraintTop_toBottomOf="@+id/tilPhoneRegister" />
 
             <RadioGroup
                 android:id="@+id/rgGender"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvGender"
-                android:layout_alignStart="@+id/tvGender"
-                android:layout_alignEnd="@+id/tilPhoneRegister"
-                android:layout_centerHorizontal="true"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
                 android:orientation="horizontal"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp">
+                android:paddingEnd="16dp"
+                app:layout_constraintEnd_toEndOf="@+id/tilPhoneRegister"
+                app:layout_constraintStart_toStartOf="@+id/tilPhoneRegister"
+                app:layout_constraintTop_toBottomOf="@+id/tvGender">
 
                 <RadioButton
                     android:id="@+id/rbMale"
@@ -205,36 +215,38 @@
                 style="@style/Ctm.Button.Login"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/rgGender"
-                android:layout_centerHorizontal="true"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/poppins_bold"
-                android:text="@string/sign_up" />
+                android:text="@string/sign_up"
+                app:layout_constraintEnd_toEndOf="@+id/rgGender"
+                app:layout_constraintStart_toStartOf="@+id/rgGender"
+                app:layout_constraintTop_toBottomOf="@+id/rgGender" />
 
             <Button
                 android:id="@+id/btnToLogin"
                 style="@style/Ctm.Button.SignUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/btnSignUp"
-                android:layout_alignParentBottom="true"
                 android:layout_marginTop="64dp"
                 android:fontFamily="@font/poppins_bold"
-                android:text="@string/login" />
+                android:text="@string/login"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnSignUp" />
 
-            <ProgressBar
-                android:id="@+id/pbRegister"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="8dp"
-                android:indeterminate="true"
-                android:visibility="gone" />
+            <include
+                android:id="@+id/registerCardLoading"
+                layout="@layout/custom_loading"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="32dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

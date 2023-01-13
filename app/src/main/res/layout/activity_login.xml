@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/ivProductLogo"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_marginStart="35dp"
         android:layout_marginTop="35dp"
         android:layout_marginEnd="35dp"
@@ -20,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rlLogin"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -33,12 +33,16 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilEmailLogin"
-            android:layout_width="350dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
+            android:layout_marginStart="32dp"
             android:layout_marginTop="64dp"
-            app:boxBackgroundColor="@color/white">
+            android:layout_marginEnd="32dp"
+            app:boxBackgroundColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:startIconDrawable="@drawable/ic_person_filled">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etEmailLogin"
@@ -52,13 +56,15 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilPasswordLogin"
-            android:layout_width="350dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tilEmailLogin"
-            android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"
             app:boxBackgroundColor="@color/white"
-            app:endIconMode="password_toggle">
+            app:endIconMode="password_toggle"
+            app:layout_constraintEnd_toEndOf="@+id/tilEmailLogin"
+            app:layout_constraintStart_toStartOf="@+id/tilEmailLogin"
+            app:layout_constraintTop_toBottomOf="@+id/tilEmailLogin"
+            app:startIconDrawable="@drawable/ic_lock_filled">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPasswordLogin"
@@ -75,33 +81,35 @@
             style="@style/Ctm.Button.Login"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tilPasswordLogin"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:fontFamily="@font/poppins_bold"
-            android:text="@string/login" />
+            android:text="@string/login"
+            app:layout_constraintEnd_toEndOf="@+id/tilPasswordLogin"
+            app:layout_constraintStart_toStartOf="@+id/tilPasswordLogin"
+            app:layout_constraintTop_toBottomOf="@+id/tilPasswordLogin" />
 
         <Button
             android:id="@+id/btnToSignUp"
             style="@style/Ctm.Button.SignUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:fontFamily="@font/poppins_bold"
-            android:text="@string/sign_up" />
+            android:text="@string/sign_up"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <ProgressBar
-            android:id="@+id/pbLogin"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
+        <include
+            android:id="@+id/loginCardLoading"
+            layout="@layout/custom_loading"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="32dp"
             android:visibility="gone"
-            android:layout_marginRight="8dp"
-            android:indeterminate="true" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

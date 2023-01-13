@@ -6,7 +6,6 @@ import android.util.Patterns
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.myshopproject.databinding.ActivityLoginBinding
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.main.MainActivity
@@ -14,7 +13,6 @@ import com.myshopproject.presentation.register.RegisterActivity
 import com.myshopproject.utils.setVisibilityGone
 import com.myshopproject.utils.setVisibilityVisible
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
@@ -37,18 +35,21 @@ class LoginActivity : AppCompatActivity() {
         viewModel.state.observe(this@LoginActivity) { response ->
             when (response) {
                 is Resource.Loading -> {
-                    binding.pbLogin.setVisibilityVisible()
+                    binding.loginCardLoading.root.setVisibilityVisible()
                 }
                 is Resource.Success -> {
                     userToken = response.data!!.accessToken
-                    binding.pbLogin.setVisibilityGone()
-                    Toast.makeText(this@LoginActivity, "${response.data!!.status}", Toast.LENGTH_SHORT).show()
+                    binding.loginCardLoading.root.setVisibilityGone()
+                    Toast.makeText(this@LoginActivity, "Login Successfully Response: ${response.data!!.status}", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                     finish()
                 }
                 is Resource.Error -> {
-                    binding.pbLogin.setVisibilityGone()
-                    Toast.makeText(this@LoginActivity, "${response.message}", Toast.LENGTH_SHORT).show()
+                    when {
+                        response.errorCode == 400 -> {}
+                    }
+                    binding.loginCardLoading.root.setVisibilityGone()
+                    Toast.makeText(this@LoginActivity, "Email or password not match! ${response.errorCode}", Toast.LENGTH_SHORT).show()
                 }
             }
         }

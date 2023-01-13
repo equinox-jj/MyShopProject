@@ -5,11 +5,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.animation.AnimationUtils
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.myshopproject.R
 import com.myshopproject.databinding.ActivitySplashBinding
 import com.myshopproject.presentation.login.LoginActivity
 import com.myshopproject.presentation.login.LoginViewModel
@@ -29,13 +27,10 @@ class SplashActivity : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val animation = AnimationUtils.loadAnimation(this, R.anim.splash_anim)
-        binding.ivLogoSplash.startAnimation(animation)
-
         Handler(Looper.getMainLooper()).postDelayed({
             lifecycleScope.launch {
                 viewModel.getUserSession.collect {
-                    if (it.isNotEmpty()) {
+                    if (it.accessToken.isNotEmpty()) {
                         startActivity(Intent(this@SplashActivity, MainActivity::class.java))
                         finish()
                     } else {
@@ -44,7 +39,7 @@ class SplashActivity : AppCompatActivity() {
                     }
                 }
             }
-        }, 5000)
+        }, 3000)
     }
 
 }

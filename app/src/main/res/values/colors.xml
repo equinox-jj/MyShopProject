@@ -7,9 +7,17 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="grey">#BBB7B7</color>
 
     <color name="bg_color">#FFC7CD</color>
-    <color name="bg_button_login">#EB848E</color>
+    <color name="bg_button_pink">#EB848E</color>
     <color name="bg_status_bar">#FFC7CD</color>
+
+    <color name="primaryColor">#EB848E</color>
+    <color name="primaryLightColor">#FFC7CD</color>
+    <color name="primaryDarkColor">#a00037</color>
+    <color name="secondaryColor">#1976d2</color>
+    <color name="secondaryLightColor">#63a4ff</color>
+    <color name="secondaryDarkColor">#004ba0</color>
+    <color name="primaryTextColor">#ffffff</color>
+    <color name="secondaryTextColor">#ffffff</color>
 </resources>

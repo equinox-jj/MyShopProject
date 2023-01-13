@@ -2,9 +2,12 @@ package com.myshopproject.presentation.register
 
 import android.os.Bundle
 import android.util.Patterns
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.myshopproject.R
 import com.myshopproject.databinding.ActivityRegisterBinding
 import com.myshopproject.domain.entities.DataRegister
 import com.myshopproject.domain.utils.Resource
@@ -18,7 +21,6 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
 
     private val viewModel by viewModels<RegisterViewModel>()
-    private var gender: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,17 +35,15 @@ class RegisterActivity : AppCompatActivity() {
         viewModel.state.observe(this@RegisterActivity) { response ->
             when (response) {
                 is Resource.Loading -> {
-                    binding.pbRegister.setVisibilityVisible()
+                    binding.registerCardLoading.root.setVisibilityVisible()
                 }
                 is Resource.Success -> {
-                    binding.pbRegister.setVisibilityGone()
-                    finish()
-                    Toast.makeText(this@RegisterActivity, "Successfully Registered", Toast.LENGTH_SHORT).show()
+                    binding.registerCardLoading.root.setVisibilityGone()
+                    alertDialogRegisSuccess()
                 }
                 is Resource.Error -> {
-                    binding.pbRegister.setVisibilityGone()
-                    Toast.makeText(this@RegisterActivity, "${response.message}", Toast.LENGTH_SHORT)
-                        .show()
+                    binding.registerCardLoading.root.setVisibilityGone()
+                    Toast.makeText(this@RegisterActivity, "${response.errorCode}", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -64,6 +64,12 @@ class RegisterActivity : AppCompatActivity() {
                     )
                 }
             }
+            btnToLogin.setOnClickListener {
+                finish()
+            }
+            ivButtonProfile.setOnClickListener {
+                alertDialogSelectImage()
+            }
         }
     }
 
@@ -75,9 +81,6 @@ class RegisterActivity : AppCompatActivity() {
         val confirmPass = binding.etConfPasswordRegister.text.toString()
         val name = binding.etNameRegister.text.toString()
         val phone = binding.etPhoneRegister.text.toString()
-        val male = binding.rbMale
-        val female = binding.rbFemale
-        val checkGender = if (binding.rbFemale.isChecked) isGender(binding.rbFemale.isChecked) else isGender(binding.rbMale.isChecked)
 
         when {
             email.isEmpty() -> {
@@ -114,6 +117,28 @@ class RegisterActivity : AppCompatActivity() {
         } else {
             0
         }
+    }
+
+    private fun alertDialogRegisSuccess() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Register Success")
+        builder.setMessage("Register Successfully.")
+        builder.setPositiveButton("Ok") { _, _ ->
+            finish()
+        }
+        builder.create().show()
+    }
+
+    private fun alertDialogSelectImage() {
+        val view = layoutInflater.inflate(R.layout.custom_dialog_select_image, null)
+        val builder = AlertDialog.Builder(this, R.style.Ctm_AlertDialog)
+
+        val fromCamera = view.findViewById<TextView>(R.id.tvSelectCamera)
+        val fromGallery = view.findViewById<TextView>(R.id.tvSelectGallery)
+
+        builder.setView(view).show()
+        fromCamera.setOnClickListener { }
+        fromGallery.setOnClickListener { }
     }
 
 }
