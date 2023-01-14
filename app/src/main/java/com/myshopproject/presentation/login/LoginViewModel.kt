@@ -9,8 +9,8 @@ import com.myshopproject.domain.preferences.MyPreferences
 import com.myshopproject.domain.usecase.LoginUseCase
 import com.myshopproject.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,26 +25,44 @@ class LoginViewModel @Inject constructor(
     val getUserSession = pref.getSession()
 
     fun loginAccount(email: String, password: String) {
-        viewModelScope.launch {
-            loginUseCase.invoke(email, password)
-                .onStart {
+        loginUseCase.invoke(email, password).onEach { response ->
+            when(response) {
+                is Resource.Loading -> {
                     _state.value = Resource.Loading
                 }
-                .collect { response ->
-                    response.data?.let { result ->
-                        _state.value = Resource.Success(result)
-                        pref.saveSession(
-                            result.refreshToken,
-                            result.accessToken,
-                            result.dataUser.id,
-                            result.dataUser.email,
-                            result.dataUser.gender,
-                            result.dataUser.name,
-                            result.dataUser.phone
-                        )
+                is Resource.Success -> {
+                    response.data?.let {
+                        _state.value = Resource.Success(it)
                     }
                 }
-        }
+                is Resource.Error -> {
+                    _state.value = Resource.Error(true, response.message, response.errorCode, response.errorBody)
+                }
+            }
+        }.launchIn(viewModelScope)
     }
+
+//    fun loginAccount(email: String, password: String) {
+//        viewModelScope.launch {
+//            loginUseCase.invoke(email, password)
+//                .onStart {
+//                    _state.value = Resource.Loading
+//                }
+//                .collect { response ->
+//                    response.data?.let { result ->
+//                        _state.value = Resource.Success(result)
+//                        pref.saveSession(
+//                            result.refreshToken,
+//                            result.accessToken,
+//                            result.dataUser.id,
+//                            result.dataUser.email,
+//                            result.dataUser.gender,
+//                            result.dataUser.name,
+//                            result.dataUser.phone
+//                        )
+//                    }
+//                }
+//        }
+//    }
 
 }

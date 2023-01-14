@@ -1,9 +1,14 @@
 package com.myshopproject.presentation.register
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Patterns
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +26,15 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
 
     private val viewModel by viewModels<RegisterViewModel>()
+
+    private var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val uri = result.data?.data as Uri
+
+            val data: Intent? = result.data
+
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,10 +98,10 @@ class RegisterActivity : AppCompatActivity() {
 
         when {
             email.isEmpty() -> {
-                binding.tilEmailRegister.error = "Please fill your email address."
+                binding.etEmailRegister.error = "Please fill your email address."
             }
             !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
-                binding.tilEmailRegister.error = "Please enter a valid email address."
+                binding.etEmailRegister.error = "Please enter a valid email address."
             }
             password.isEmpty() -> {
                 binding.tilPasswordRegister.error = "Please enter your password."
@@ -137,7 +151,10 @@ class RegisterActivity : AppCompatActivity() {
         val fromGallery = view.findViewById<TextView>(R.id.tvSelectGallery)
 
         builder.setView(view).show()
-        fromCamera.setOnClickListener { }
+        fromCamera.setOnClickListener {
+            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            startActivity(cameraIntent)
+        }
         fromGallery.setOnClickListener { }
     }
 

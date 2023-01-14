@@ -56,7 +56,7 @@ object NetworkModule {
         gsonConverterFactory: GsonConverterFactory
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://172.17.20.201/training_android/public/")
+            .baseUrl("http://localhost:3001/training_android/public/")
             .client(okHttpClient)
             .addConverterFactory(gsonConverterFactory)
             .build()

@@ -31,7 +31,9 @@
             android:layout_gravity="end|bottom"
             android:background="@drawable/bg_button_profile"
             android:contentDescription="@null"
+            android:foreground="?android:attr/selectableItemBackground"
             android:padding="10dp"
+            android:theme="@android:style/ThemeOverlay.Material.Dark"
             app:srcCompat="@drawable/ic_camera_filled" />
 
     </FrameLayout>
@@ -95,11 +97,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
+                    android:contentDescription="@null"
                     android:src="@drawable/ic_world_filled"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:contentDescription="@null" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tvChangeLanguange"
@@ -150,11 +152,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
+                    android:contentDescription="@null"
                     android:src="@drawable/ic_lock_filled"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:contentDescription="@null" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tvChangePass"
@@ -196,11 +198,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
+                    android:contentDescription="@null"
                     android:src="@drawable/ic_exit_outlined"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:contentDescription="@null" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tvLogout"

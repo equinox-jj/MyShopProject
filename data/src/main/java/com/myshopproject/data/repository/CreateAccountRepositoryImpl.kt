@@ -19,32 +19,38 @@ class CreateAccountRepositoryImpl @Inject constructor(
     override fun loginAccount(email: String, password: String): Flow<Resource<LoginResult>> = flow {
         emit(Resource.Loading)
         try {
-            val result = apiService.loginAccount(email, password).success.toDomain()
-            emit(Resource.Success(result))
+            val response = apiService.loginAccount(email, password).success.toDomain()
+            emit(Resource.Success(response))
         } catch (t: Throwable) {
             if (t is HttpException) {
                 when(t.code()) {
-                    404 -> emit(Resource.Error(true, t.code(), t.response()?.errorBody()))
-                    500 -> emit(Resource.Error(true, t.code(), t.response()?.errorBody()))
-                    else -> emit(Resource.Error(true, null, null))
+                    400 -> emit(Resource.Error(true, t.message(), t.code(), t.response()?.errorBody()))
+                    404 -> emit(Resource.Error(true, t.message(), t.code(), t.response()?.errorBody()))
+                    500 -> emit(Resource.Error(true, t.message(), t.code(), t.response()?.errorBody()))
+                    else -> emit(Resource.Error(true, null,null, null))
                 }
             }
+        } catch (e: Exception) {
+            emit(Resource.Error(true, e.localizedMessage, null, null))
         }
     }
 
     override fun registerAccount(dataUser: DataRegister): Flow<Resource<RegisterResponse>> = flow {
         emit(Resource.Loading)
         try {
-            val result = apiService.registerAccount(dataUser).toDomain()
-            emit(Resource.Success(result))
+            val response = apiService.registerAccount(dataUser).toDomain()
+            emit(Resource.Success(response))
         } catch (t: Throwable) {
             if (t is HttpException) {
                 when(t.code()) {
-                    404 -> emit(Resource.Error(true, t.code(), t.response()?.errorBody()))
-                    500 -> emit(Resource.Error(true, t.code(), t.response()?.errorBody()))
-                    else -> emit(Resource.Error(true, null, null))
+                    400 -> emit(Resource.Error(true, t.message(), t.code(), t.response()?.errorBody()))
+                    404 -> emit(Resource.Error(true, t.message(),t.code(), t.response()?.errorBody()))
+                    500 -> emit(Resource.Error(true, t.message(),t.code(), t.response()?.errorBody()))
+                    else -> emit(Resource.Error(true, null,null, null))
                 }
             }
+        } catch (e: Exception) {
+            emit(Resource.Error(true, e.localizedMessage, null, null))
         }
     }
 }
