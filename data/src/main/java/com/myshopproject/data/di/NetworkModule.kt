@@ -4,9 +4,9 @@ import android.content.Context
 import com.myshopproject.data.BuildConfig
 import com.myshopproject.data.preferences.MyPreferencesImpl
 import com.myshopproject.data.remote.network.ApiService
-import com.myshopproject.data.repository.CreateAccountRepositoryImpl
+import com.myshopproject.data.repository.AuthRepositoryImpl
 import com.myshopproject.domain.preferences.MyPreferences
-import com.myshopproject.domain.repository.CreateAccountRepository
+import com.myshopproject.domain.repository.AuthRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,11 +35,24 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
+    fun provideOkHttpClient(
+        @ApplicationContext context: Context,
+        httpLoggingInterceptor: HttpLoggingInterceptor
+    ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(httpLoggingInterceptor)
+//            .addInterceptor { chain ->
+//                val localDataStore = MyPreferencesImpl(context)
+//                val newRequest: Request = chain
+//                    .request()
+//                    .newBuilder()
+//                    .addHeader("Authorization")
+//                    .build()
+//                chain.proceed(newRequest)
+//            }
             .readTimeout(10, TimeUnit.SECONDS)
             .connectTimeout(10, TimeUnit.SECONDS)
+            .writeTimeout(10, TimeUnit.SECONDS)
             .build()
     }
 
@@ -76,7 +89,7 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun providesRepository(apiService: ApiService): CreateAccountRepository {
-        return CreateAccountRepositoryImpl(apiService)
+    fun providesRepository(apiService: ApiService): AuthRepository {
+        return AuthRepositoryImpl(apiService)
     }
 }

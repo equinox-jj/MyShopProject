@@ -1,5 +1,6 @@
 package com.myshopproject.presentation.login
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,7 +23,7 @@ class LoginViewModel @Inject constructor(
     private val _state = MutableLiveData<Resource<LoginResult>>()
     val state: LiveData<Resource<LoginResult>> = _state
 
-    val getUserSession = pref.getSession()
+    val getAccessToken = pref.getAccessToken()
 
     fun loginAccount(email: String, password: String) {
         loginUseCase.invoke(email, password).onEach { response ->
@@ -33,36 +34,20 @@ class LoginViewModel @Inject constructor(
                 is Resource.Success -> {
                     response.data?.let {
                         _state.value = Resource.Success(it)
+                        pref.saveRefreshToken(it.refreshToken)
+                        pref.saveAccessToken(it.accessToken)
+                        pref.saveUserId(it.dataUser.id)
+                        pref.saveEmailUser(it.dataUser.email)
+                        pref.saveGenderUser(it.dataUser.gender)
+                        pref.saveNameUser(it.dataUser.name)
+                        pref.savePhoneNumber(it.dataUser.phone)
                     }
                 }
                 is Resource.Error -> {
-                    _state.value = Resource.Error(true, response.message, response.errorCode, response.errorBody)
+                    _state.value = Resource.Error(response.message, response.errorCode, response.errorBody)
                 }
             }
         }.launchIn(viewModelScope)
     }
-
-//    fun loginAccount(email: String, password: String) {
-//        viewModelScope.launch {
-//            loginUseCase.invoke(email, password)
-//                .onStart {
-//                    _state.value = Resource.Loading
-//                }
-//                .collect { response ->
-//                    response.data?.let { result ->
-//                        _state.value = Resource.Success(result)
-//                        pref.saveSession(
-//                            result.refreshToken,
-//                            result.accessToken,
-//                            result.dataUser.id,
-//                            result.dataUser.email,
-//                            result.dataUser.gender,
-//                            result.dataUser.name,
-//                            result.dataUser.phone
-//                        )
-//                    }
-//                }
-//        }
-//    }
 
 }

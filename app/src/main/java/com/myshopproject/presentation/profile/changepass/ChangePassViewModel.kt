@@ -1,11 +1,12 @@
-package com.myshopproject.presentation.register
+package com.myshopproject.presentation.profile.changepass
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.myshopproject.domain.entities.RegisterResponse
-import com.myshopproject.domain.usecase.RegisterUseCase
+import com.myshopproject.domain.entities.SuccessResponseStatus
+import com.myshopproject.domain.preferences.MyPreferences
+import com.myshopproject.domain.usecase.ChangePassUseCase
 import com.myshopproject.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -13,30 +14,32 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
-class RegisterViewModel @Inject constructor(
-    private val registerUseCase: RegisterUseCase
+class ChangePassViewModel @Inject constructor(
+    private val changePassUseCase: ChangePassUseCase,
+    pref: MyPreferences
 ) : ViewModel() {
 
-    private val _state = MutableLiveData<Resource<RegisterResponse>>()
-    val state: LiveData<Resource<RegisterResponse>> = _state
+    private val _state = MutableLiveData<Resource<SuccessResponseStatus>>()
+    val state: LiveData<Resource<SuccessResponseStatus>> = _state
 
-    fun registerAccount(
-//        image: MultipartBody.Part,
-        email: String,
+    val getAuthorization = pref.getRefreshToken()
+    val getUserId = pref.getUserId()
+
+    fun changePassword(
+        authorization: String,
+        id: Int,
         password: String,
-        name: String,
-        phone: String,
-        gender: Int
+        newPassword: String,
+        confirmPassword: String
     ) {
-        registerUseCase.invoke(
-//            image = image,
-            email = email,
+        changePassUseCase.invoke(
+            authorization = authorization,
+            id = id,
             password = password,
-            name = name,
-            phone = phone,
-            gender = gender
+            newPassword = newPassword,
+            confirmPassword = confirmPassword
         ).onEach { response ->
-            when (response) {
+            when(response) {
                 is Resource.Loading -> {
                     _state.value = Resource.Loading
                 }

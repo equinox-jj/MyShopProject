@@ -11,10 +11,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.myshopproject.R
 import com.myshopproject.databinding.FragmentProfileBinding
 import com.myshopproject.presentation.login.LoginActivity
-import com.myshopproject.presentation.login.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -25,7 +25,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private val binding get() = _binding!!
 
     private val viewModel by viewModels<ProfileViewModel>()
-    private val loginVewModel by viewModels<LoginViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,13 +37,15 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private fun initObserver() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                loginVewModel.getUserSession.collect() {
-                    binding.tvUserName.text = it.name
-                    binding.tvUserEmail.text = it.email
-                    Log.d(
-                        "User Preferences",
-                        "refreshToken = ${it.refreshToken}, accessToken = ${it.accessToken}, id = ${it.id}, name = ${it.name}, email = ${it.email}, gender = ${it.gender}, phone = ${it.phone}"
-                    )
+                launch {
+                    viewModel.getNameUser.collect() {
+                        binding.tvUserName.text = it
+                    }
+                }
+                launch {
+                    viewModel.getEmailUser.collect() {
+                        binding.tvUserEmail.text = it
+                    }
                 }
             }
         }
@@ -56,6 +57,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 viewModel.removeSession()
                 startActivity(Intent(requireContext(), LoginActivity::class.java))
                 activity?.finish()
+            }
+            cvChangePassword.setOnClickListener {
+                findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToChangePassFragment())
             }
             ivSelectPhotoProfile.setOnClickListener {
                 alertDialogSelectImage()
@@ -71,12 +75,17 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         val fromGallery = view.findViewById<TextView>(R.id.tvSelectGallery)
 
         builder.setView(view).show()
-        fromCamera.setOnClickListener { }
-        fromGallery.setOnClickListener { }
+        fromCamera.setOnClickListener {
+
+        }
+        fromGallery.setOnClickListener {
+
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
 }

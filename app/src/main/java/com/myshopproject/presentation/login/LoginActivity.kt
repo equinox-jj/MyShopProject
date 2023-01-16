@@ -2,6 +2,7 @@ package com.myshopproject.presentation.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -24,8 +25,6 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private val viewModel by viewModels<LoginViewModel>()
 
-    private var userToken: String? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -42,9 +41,9 @@ class LoginActivity : AppCompatActivity() {
                     binding.loginCardLoading.root.setVisibilityVisible()
                 }
                 is Resource.Success -> {
-                    userToken = response.data!!.accessToken
                     binding.loginCardLoading.root.setVisibilityGone()
-                    Toast.makeText(this@LoginActivity, "Login Successfully Response: ${response.data!!.status}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@LoginActivity, "${response.data!!.status} \n Login Successfully", Toast.LENGTH_SHORT).show()
+                    Log.d("UserData","${response.data!!.dataUser.id}")
                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                     finish()
                 }
@@ -55,7 +54,7 @@ class LoginActivity : AppCompatActivity() {
                     val jsonObject = gson.fromJson(errors, JsonObject::class.java)
                     val errorResponse = gson.fromJson(jsonObject, ErrorResponseDTO::class.java)
 
-                    Toast.makeText(this@LoginActivity, errorResponse.error.message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@LoginActivity, "${errorResponse.error.message} ${errorResponse.error.status}", Toast.LENGTH_SHORT).show()
                 }
             }
         }

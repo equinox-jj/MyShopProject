@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
-import com.myshopproject.domain.entities.UserDataPref
 import com.myshopproject.domain.preferences.MyPreferences
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -27,46 +26,49 @@ class MyPreferencesImpl(context: Context) : MyPreferences {
 
     private val dataStore = context.dataStore
 
-    override suspend fun saveSession(
-        refreshToken: String,
-        accessToken: String,
-        id: Int,
-        email: String,
-        gender: Int,
-        name: String,
-        phone: String
-    ) {
+    override suspend fun saveRefreshToken(refreshToken: String) {
         dataStore.edit { mutablePref ->
             mutablePref[userRefreshToken] = refreshToken
+        }
+    }
+
+    override suspend fun saveAccessToken(accessToken: String) {
+        dataStore.edit { mutablePref ->
             mutablePref[userToken] = accessToken
+        }
+    }
+
+    override suspend fun saveUserId(id: Int) {
+        dataStore.edit { mutablePref ->
             mutablePref[userId] = id
+        }
+    }
+
+    override suspend fun saveEmailUser(email: String) {
+        dataStore.edit { mutablePref ->
             mutablePref[userEmail] = email
+        }
+    }
+
+    override suspend fun saveGenderUser(gender: Int) {
+        dataStore.edit { mutablePref ->
             mutablePref[userGender] = gender
+        }
+    }
+
+    override suspend fun saveNameUser(name: String) {
+        dataStore.edit { mutablePref ->
             mutablePref[userName] = name
+        }
+    }
+
+    override suspend fun savePhoneNumber(phone: String) {
+        dataStore.edit { mutablePref ->
             mutablePref[userPhone] = phone
         }
     }
 
-    override suspend fun saveUserId(userIds: Int) {
-        dataStore.edit { mutablePref ->
-            mutablePref[userId] = userIds
-        }
-    }
-
-    override suspend fun removeSession() {
-        dataStore.edit { mutablePref ->
-            mutablePref.remove(userToken)
-            mutablePref.remove(userRefreshToken)
-            mutablePref.remove(userId)
-            mutablePref.remove(userEmail)
-            mutablePref.remove(userGender)
-            mutablePref.remove(userName)
-            mutablePref.remove(userPhone)
-            mutablePref.clear()
-        }
-    }
-
-    override fun getSession(): Flow<UserDataPref> {
+    override fun getRefreshToken(): Flow<String> {
         return dataStore.data
             .catch { exception ->
                 if (exception is IOException) {
@@ -76,22 +78,97 @@ class MyPreferencesImpl(context: Context) : MyPreferences {
                 }
             }
             .map { preferences ->
-                val userRefreshTokenPref = preferences[userRefreshToken] ?: ""
-                val userTokenPref = preferences[userToken] ?: ""
-                val userIdPref = preferences[userId] ?: 0
-                val userEmailPref = preferences[userEmail] ?: ""
-                val userGenderPref = preferences[userGender] ?: 0
-                val userNamePref = preferences[userName] ?: ""
-                val userPhonePref = preferences[userPhone] ?: ""
-                UserDataPref(
-                    userRefreshTokenPref,
-                    userTokenPref,
-                    userIdPref,
-                    userEmailPref,
-                    userGenderPref,
-                    userNamePref,
-                    userPhonePref
-                )
+                preferences[userRefreshToken] ?: ""
             }
+    }
+
+    override fun getAccessToken(): Flow<String> {
+        return dataStore.data
+            .catch { exception ->
+                if (exception is IOException) {
+                    emit(emptyPreferences())
+                } else {
+                    throw exception
+                }
+            }
+            .map { preferences ->
+                preferences[userToken] ?: ""
+            }
+    }
+
+    override fun getUserId(): Flow<Int> {
+        return dataStore.data
+            .catch { exception ->
+                if (exception is IOException) {
+                    emit(emptyPreferences())
+                } else {
+                    throw exception
+                }
+            }
+            .map { preferences ->
+                preferences[userId] ?: 0
+            }
+    }
+
+    override fun getEmailUser(): Flow<String> {
+        return dataStore.data
+            .catch { exception ->
+                if (exception is IOException) {
+                    emit(emptyPreferences())
+                } else {
+                    throw exception
+                }
+            }
+            .map { preferences ->
+                preferences[userEmail] ?: ""
+            }
+    }
+
+    override fun getGenderUser(): Flow<Int> {
+        return dataStore.data
+            .catch { exception ->
+                if (exception is IOException) {
+                    emit(emptyPreferences())
+                } else {
+                    throw exception
+                }
+            }
+            .map { preferences ->
+                preferences[userGender] ?: 0
+            }
+    }
+
+    override fun getNameUser(): Flow<String> {
+        return dataStore.data
+            .catch { exception ->
+                if (exception is IOException) {
+                    emit(emptyPreferences())
+                } else {
+                    throw exception
+                }
+            }
+            .map { preferences ->
+                preferences[userName] ?: ""
+            }
+    }
+
+    override fun getPhoneNumber(): Flow<String> {
+        return dataStore.data
+            .catch { exception ->
+                if (exception is IOException) {
+                    emit(emptyPreferences())
+                } else {
+                    throw exception
+                }
+            }
+            .map { preferences ->
+                preferences[userPhone] ?: ""
+            }
+    }
+
+    override suspend fun removeSession() {
+        dataStore.edit { mutablePref ->
+            mutablePref.clear()
+        }
     }
 }

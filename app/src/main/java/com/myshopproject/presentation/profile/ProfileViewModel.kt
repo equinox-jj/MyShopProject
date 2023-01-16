@@ -12,6 +12,9 @@ class ProfileViewModel @Inject constructor(
     private val pref: MyPreferences
 ) : ViewModel() {
 
+    val getNameUser = pref.getNameUser()
+    val getEmailUser = pref.getEmailUser()
+
     fun removeSession() {
         viewModelScope.launch {
             pref.removeSession()

@@ -31,12 +31,12 @@
 
     <style name="Ctm.Button.Login" parent="Widget.MaterialComponents.Button">
         <item name="backgroundTint">@color/bg_button_pink</item>
-        <item name="android:background">@drawable/bg_button_login</item>
+        <item name="android:background">@drawable/bg_button_auth_submit</item>
     </style>
 
     <style name="Ctm.Button.SignUp" parent="Widget.MaterialComponents.Button">
         <item name="backgroundTint">@color/bg_button_pink</item>
-        <item name="android:background">@drawable/bg_button_sign_up</item>
+        <item name="android:background">@drawable/bg_button_auth_navigate</item>
     </style>
 
     <style name="Ctm.AlertDialog" parent="Theme.AppCompat.Dialog.Alert">

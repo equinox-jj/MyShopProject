@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
-            android:background="@drawable/bg_button_profile"
+            android:background="@drawable/bg_button_select_image"
             android:contentDescription="@null"
             android:foreground="?android:attr/selectableItemBackground"
             android:padding="10dp"

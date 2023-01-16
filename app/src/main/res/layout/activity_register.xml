@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,7 +9,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/ivProductLogo"
@@ -46,7 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
-                android:background="@drawable/bg_button_profile"
+                android:background="@drawable/bg_button_select_image"
                 android:contentDescription="@null"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:theme="@android:style/ThemeOverlay.Material.Dark"
@@ -188,8 +188,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
                 android:orientation="horizontal"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:weightSum="2"
                 app:layout_constraintEnd_toEndOf="@+id/tilPhoneRegister"
                 app:layout_constraintStart_toStartOf="@+id/tilPhoneRegister"
                 app:layout_constraintTop_toBottomOf="@+id/tvGender">
@@ -256,4 +255,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MyShopProject</string>
+
+    <string name="sign_up">Daftar</string>
+    <string name="login">Masuk</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="confirm_password">Konfirmasi Password</string>
+    <string name="name">Nama</string>
+    <string name="phone_number">Nomor Handphone</string>
+    <string name="gender">Jenis Kelamin</string>
+    <string name="male">Laki-Laki</string>
+    <string name="female">Perempuan</string>
+    <string name="home">Home</string>
+    <string name="favorite">Favorit</string>
+    <string name="profile">Profil</string>
+    <string name="waiting">Menunggu…</string>
+    <string name="select_image">Pilih Gambar :</string>
+    <string name="camera">Kamera</string>
+    <string name="gallery">Galeri</string>
+    <string name="confirm_new_password">Konfirmasi Password Baru</string>
+    <string name="save">Simpan</string>
+    <string name="new_password">Password Baru</string>
+    <string name="old_password">Password Lama</string>
+    <string name="change_language">Ubah Bahasa</string>
+    <string name="change_password">Ubah Password</string>
+    <string name="logout">Keluar</string>
+</resources>
