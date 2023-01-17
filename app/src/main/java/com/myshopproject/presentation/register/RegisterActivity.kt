@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Patterns
 import android.widget.TextView
 import android.widget.Toast
@@ -18,6 +17,7 @@ import com.myshopproject.R
 import com.myshopproject.data.remote.dto.ErrorResponseDTO
 import com.myshopproject.databinding.ActivityRegisterBinding
 import com.myshopproject.domain.utils.Resource
+import com.myshopproject.presentation.camera.CameraActivity
 import com.myshopproject.utils.setVisibilityGone
 import com.myshopproject.utils.setVisibilityVisible
 import com.myshopproject.utils.uriToFile
@@ -40,6 +40,38 @@ class RegisterActivity : AppCompatActivity() {
         private const val REQUEST_CODE_PERMISSIONS = 10
     }
 
+    private val launcherIntentCameraX = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        if (it.resultCode == 200) {
+            val myFile = it.data?.getSerializableExtra("picture") as File
+            val isBackCamera = it.data?.getBooleanExtra("backCamera", true) as Boolean
+
+            getFile = myFile
+//            result = rotateBitmap(
+//                BitmapFactory.decodeFile(myFile.absolutePath),
+//                isBackCamera
+//            )
+
+            binding.apply {
+//                floatingActionButton.isEnabled = true
+//                imgProfile.visibility = View.VISIBLE
+//                imgProfile.setImageBitmap(result)
+            }
+        }
+    }
+
+    private val launcherIntentGallery = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val selectedImg: Uri = result.data?.data as Uri
+
+            val myFile = uriToFile(selectedImg, this@RegisterActivity)
+            getFile = myFile
+            binding.ivPhotoProfile.setImageURI(selectedImg)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -167,19 +199,6 @@ class RegisterActivity : AppCompatActivity() {
         builder.create().show()
     }
 
-    private val launcherIntentGallery = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == RESULT_OK) {
-            val selectedImg: Uri = result.data?.data as Uri
-
-            val myFile = uriToFile(selectedImg, this@RegisterActivity)
-            getFile = myFile
-            binding.ivPhotoProfile.setImageURI(selectedImg)
-        }
-    }
-
-
     private fun alertDialogSelectImage() {
         val view = layoutInflater.inflate(R.layout.custom_dialog_select_image, null)
         val builder = AlertDialog.Builder(this, R.style.Ctm_AlertDialog)
@@ -193,7 +212,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun openCamera() {
-        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        val cameraIntent = Intent(this@RegisterActivity, CameraActivity::class.java)
         startActivity(cameraIntent)
     }
 

@@ -1,7 +1,6 @@
 package com.myshopproject.domain.repository
 
 import com.myshopproject.domain.entities.LoginResult
-import com.myshopproject.domain.entities.RegisterResponse
 import com.myshopproject.domain.entities.SuccessResponseStatus
 import com.myshopproject.domain.utils.Resource
 import kotlinx.coroutines.flow.Flow
@@ -15,9 +14,9 @@ interface AuthRepository {
         name: String,
         phone: String,
         gender: Int
-    ): Flow<Resource<RegisterResponse>>
+    ): Flow<Resource<SuccessResponseStatus>>
     fun changePassword(
-        authorization: String,
+//        authorization: String,
         id: Int,
         password: String,
         newPassword: String,

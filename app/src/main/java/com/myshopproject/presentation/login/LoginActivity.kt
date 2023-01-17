@@ -42,7 +42,7 @@ class LoginActivity : AppCompatActivity() {
                 }
                 is Resource.Success -> {
                     binding.loginCardLoading.root.setVisibilityGone()
-                    Toast.makeText(this@LoginActivity, "${response.data!!.status} \n Login Successfully", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@LoginActivity, "Login Successfully ${response.data!!.status}", Toast.LENGTH_SHORT).show()
                     Log.d("UserData","${response.data!!.dataUser.id}")
                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                     finish()

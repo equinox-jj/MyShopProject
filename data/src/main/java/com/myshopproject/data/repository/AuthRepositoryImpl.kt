@@ -3,7 +3,6 @@ package com.myshopproject.data.repository
 import com.myshopproject.data.mapper.toDomain
 import com.myshopproject.data.remote.network.ApiService
 import com.myshopproject.domain.entities.LoginResult
-import com.myshopproject.domain.entities.RegisterResponse
 import com.myshopproject.domain.entities.SuccessResponseStatus
 import com.myshopproject.domain.repository.AuthRepository
 import com.myshopproject.domain.utils.Resource
@@ -45,7 +44,7 @@ class AuthRepositoryImpl @Inject constructor(
         name: String,
         phone: String,
         gender: Int
-    ): Flow<Resource<RegisterResponse>> = flow {
+    ): Flow<Resource<SuccessResponseStatus>> = flow {
         emit(Resource.Loading)
         try {
             val response = apiService.registerAccount(
@@ -72,7 +71,7 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override fun changePassword(
-        authorization: String,
+//        authorization: String,
         id: Int,
         password: String,
         newPassword: String,
@@ -81,7 +80,7 @@ class AuthRepositoryImpl @Inject constructor(
         emit(Resource.Loading)
         try {
             val response = apiService.changePassword(
-                authorization = authorization,
+//                authorization = authorization,
                 id = id,
                 password = password,
                 newPassword = newPassword,

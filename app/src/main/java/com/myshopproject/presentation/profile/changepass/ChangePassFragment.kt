@@ -83,7 +83,7 @@ class ChangePassFragment : Fragment(R.layout.fragment_change_pass) {
             btnSaveNewPass.setOnClickListener {
                 if (validation()) {
                     viewModel.changePassword(
-                        authorization = authorization!!,
+//                        authorization = authorization!!,
                         id = userId!!,
                         password = binding.etOldPass.text.toString(),
                         newPassword = binding.etNewPass.text.toString(),

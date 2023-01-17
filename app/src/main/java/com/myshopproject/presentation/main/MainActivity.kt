@@ -15,7 +15,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    // Navigation Component
     private lateinit var navController: NavController
     private lateinit var navHostFragment: NavHostFragment
 

@@ -1,8 +1,9 @@
 package com.myshopproject.data.remote.network
 
 import com.myshopproject.data.remote.dto.LoginResponseDTO
-import com.myshopproject.data.remote.dto.RegisterResponseDTO
+import com.myshopproject.data.remote.dto.RefreshTokenResponseDTO
 import com.myshopproject.data.remote.dto.SuccessResponseDTO
+import retrofit2.Response
 import retrofit2.http.*
 
 interface ApiService {
@@ -25,17 +26,22 @@ interface ApiService {
         @Part("name") name: String,
         @Part("phone") phone: String,
         @Part("gender") gender: Int,
-    ): RegisterResponseDTO
+    ): SuccessResponseDTO
 
+    @FormUrlEncoded
     @Headers(*["apikey: TuIBt77u7tZHi8n7WqUC"])
     @POST("api/ecommerce/refresh-token")
-    suspend fun getRefreshToken()
+    suspend fun getRefreshToken(
+        @Path("id") id: Int?,
+        @Field("access_token") accessToken: String?,
+        @Field("refresh_token") refreshToken: String?
+    ): Response<RefreshTokenResponseDTO>
 
     @FormUrlEncoded
     @Headers(*["apikey: TuIBt77u7tZHi8n7WqUC"])
     @PUT("api/ecommerce/change-password/{id}")
     suspend fun changePassword(
-        @Header("Authorization") authorization: String,
+//        @Header("Authorization") authorization: String,
         @Path("id") id: Int,
         @Field("password") password: String,
         @Field("new_password") newPassword: String,
@@ -47,6 +53,6 @@ interface ApiService {
     @Multipart
     suspend fun changeImage(
 //        @Part image: MultipartBody.Part,
-    ): RegisterResponseDTO
+    ): SuccessResponseDTO
 
 }

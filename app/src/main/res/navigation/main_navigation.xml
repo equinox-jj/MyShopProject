@@ -29,6 +29,8 @@
         android:name="com.myshopproject.presentation.favorite.FavoriteFragment"
         android:label="fragment_favorite"
         tools:layout="@layout/fragment_favorite" />
+
+
     <fragment
         android:id="@+id/changePassFragment"
         android:name="com.myshopproject.presentation.profile.changepass.ChangePassFragment"

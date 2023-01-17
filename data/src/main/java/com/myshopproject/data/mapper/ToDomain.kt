@@ -25,15 +25,6 @@ fun DataUserDTO.toDomain() = DataUserResponse(
 //    image = image,
 )
 
-fun RegisterResponseDTO.toDomain() = RegisterResponse(
-    success = success.toDomain()
-)
-
-fun RegisterResultDTO.toDomain() = RegisterResult(
-    message = message,
-    status = status
-)
-
 fun SuccessResponseDTO.toDomain() = SuccessResponseStatus(
     success = success.toDomain()
 )
@@ -49,5 +40,16 @@ fun ErrorResponseDTO.toDomain() = ErrorResponseStatus(
 
 fun ErrorResultDTO.toDomain() = ErrorResultStatus(
     message = message,
+    status = status
+)
+
+fun RefreshTokenResponseDTO.toDomain() = RefreshTokenResponse(
+    success = success.toDomain()
+)
+
+fun RefreshTokenResultDTO.toDomain() = RefreshTokenResult(
+    accessToken = accessToken,
+    message = message,
+    refreshToken = refreshToken,
     status = status
 )

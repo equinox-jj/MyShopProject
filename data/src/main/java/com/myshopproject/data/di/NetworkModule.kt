@@ -5,6 +5,9 @@ import com.myshopproject.data.BuildConfig
 import com.myshopproject.data.preferences.MyPreferencesImpl
 import com.myshopproject.data.remote.network.ApiService
 import com.myshopproject.data.repository.AuthRepositoryImpl
+import com.myshopproject.data.utils.AuthAuthentication
+import com.myshopproject.data.utils.AuthInterceptor
+import com.myshopproject.data.utils.HeaderInterceptor
 import com.myshopproject.domain.preferences.MyPreferences
 import com.myshopproject.domain.repository.AuthRepository
 import dagger.Module
@@ -35,21 +38,25 @@ object NetworkModule {
 
     @Singleton
     @Provides
+    fun providesAuthAuthentication(pref: MyPreferences): AuthAuthentication = AuthAuthentication(pref)
+
+    @Singleton
+    @Provides
+    fun providesAuthInterceptor(pref: MyPreferences): AuthInterceptor = AuthInterceptor(pref)
+
+    @Singleton
+    @Provides
     fun provideOkHttpClient(
-        @ApplicationContext context: Context,
-        httpLoggingInterceptor: HttpLoggingInterceptor
+        httpLoggingInterceptor: HttpLoggingInterceptor,
+//        headerInterceptor: HeaderInterceptor,
+        authInterceptor: AuthInterceptor,
+        authAuthentication: AuthAuthentication,
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(httpLoggingInterceptor)
-//            .addInterceptor { chain ->
-//                val localDataStore = MyPreferencesImpl(context)
-//                val newRequest: Request = chain
-//                    .request()
-//                    .newBuilder()
-//                    .addHeader("Authorization")
-//                    .build()
-//                chain.proceed(newRequest)
-//            }
+//            .addInterceptor(headerInterceptor)
+            .addInterceptor(authInterceptor)
+            .authenticator(authAuthentication)
             .readTimeout(10, TimeUnit.SECONDS)
             .connectTimeout(10, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
@@ -69,7 +76,8 @@ object NetworkModule {
         gsonConverterFactory: GsonConverterFactory
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://localhost:3001/training_android/public/")
+            .baseUrl("http://172.17.20.201/training_android/public/")
+//            .baseUrl("http://localhost:3001/training_android/public/")
             .client(okHttpClient)
             .addConverterFactory(gsonConverterFactory)
             .build()

@@ -8,14 +8,14 @@ import javax.inject.Inject
 
 class ChangePassUseCase @Inject constructor(private val authRepository: AuthRepository) {
     operator fun invoke(
-        authorization: String,
+//        authorization: String,
         id: Int,
         password: String,
         newPassword: String,
         confirmPassword: String
     ): Flow<Resource<SuccessResponseStatus>> {
         return authRepository.changePassword(
-            authorization = authorization,
+//            authorization = authorization,
             id = id,
             password = password,
             newPassword = newPassword,
