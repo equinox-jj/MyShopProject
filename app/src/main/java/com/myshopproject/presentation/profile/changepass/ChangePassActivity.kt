@@ -1,79 +1,73 @@
 package com.myshopproject.presentation.profile.changepass
 
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.myshopproject.R
 import com.myshopproject.data.remote.dto.ErrorResponseDTO
-import com.myshopproject.databinding.FragmentChangePassBinding
+import com.myshopproject.databinding.ActivityChangePassBinding
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.utils.setVisibilityGone
 import com.myshopproject.utils.setVisibilityVisible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 @AndroidEntryPoint
-class ChangePassFragment : Fragment(R.layout.fragment_change_pass) {
+class ChangePassActivity : AppCompatActivity() {
 
-    private var _binding: FragmentChangePassBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: ActivityChangePassBinding
 
     private val viewModel by viewModels<ChangePassViewModel>()
 
     private var userId: Int? = null
     private var authorization: String? = null
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentChangePassBinding.bind(view)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityChangePassBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setupListener()
         initObserver()
     }
 
     private fun initObserver() {
-        viewModel.state.observe(viewLifecycleOwner) { response ->
+        viewModel.state.observe(this@ChangePassActivity) { response ->
             when (response) {
                 is Resource.Loading -> {
                     binding.changePassCardLoading.root.setVisibilityVisible()
                 }
                 is Resource.Success -> {
                     binding.changePassCardLoading.root.setVisibilityGone()
-                    findNavController().popBackStack()
-                    Toast.makeText(requireContext(), "${response.data!!.success.status} \n Login Successfully", Toast.LENGTH_SHORT).show()
+                    finish()
+                    Toast.makeText(this@ChangePassActivity, "${response.data!!.success.status} \n Login Successfully", Toast.LENGTH_SHORT).show()
                 }
                 is Resource.Error -> {
-                    binding.changePassCardLoading.root.setVisibilityGone()
-                    val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
-                    val gson = Gson()
-                    val jsonObject = gson.fromJson(errors, JsonObject::class.java)
-                    val errorResponse = gson.fromJson(jsonObject, ErrorResponseDTO::class.java)
+                    try {
+                        binding.changePassCardLoading.root.setVisibilityGone()
+                        val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
+                        val gson = Gson()
+                        val jsonObject = gson.fromJson(errors, JsonObject::class.java)
+                        val errorResponse = gson.fromJson(jsonObject, ErrorResponseDTO::class.java)
 
-                    Toast.makeText(requireContext(), "${errorResponse.error.message} ${errorResponse.error.status}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@ChangePassActivity, "${errorResponse.error.message} ${errorResponse.error.status}", Toast.LENGTH_SHORT).show()
+                    } catch (e: Exception) {
+                        Toast.makeText(this@ChangePassActivity, "Token Has Expired", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    viewModel.getAuthorization.collect {
-                        authorization = it
-                    }
-                }
-                launch {
-                    viewModel.getUserId.collect {
-                        userId = it
-                    }
-                }
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                authorization = viewModel.getAuthorization.first()
+                userId = viewModel.getUserId.first()
             }
         }
     }
@@ -83,7 +77,6 @@ class ChangePassFragment : Fragment(R.layout.fragment_change_pass) {
             btnSaveNewPass.setOnClickListener {
                 if (validation()) {
                     viewModel.changePassword(
-//                        authorization = authorization!!,
                         id = userId!!,
                         password = binding.etOldPass.text.toString(),
                         newPassword = binding.etNewPass.text.toString(),
@@ -117,8 +110,4 @@ class ChangePassFragment : Fragment(R.layout.fragment_change_pass) {
         return isValid
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 }

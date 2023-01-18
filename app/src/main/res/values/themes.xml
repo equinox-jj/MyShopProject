@@ -1,7 +1,7 @@
 <resources>
 
     <style name="Theme.MyShopProject" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimary">@color/primaryLightColor</item>
         <item name="colorPrimaryVariant">@color/primaryLightColor</item>
         <item name="colorOnPrimary">@color/white</item>
 
@@ -10,7 +10,6 @@
         <item name="colorOnSecondary">@color/black</item>
 
         <item name="android:statusBarColor">@color/primaryLightColor</item>
-        <item name="actionBarTheme">@style/MyActionBar</item>
     </style>
 
     <style name="Theme.NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -23,10 +22,6 @@
         <item name="colorOnSecondary">@color/black</item>
 
         <item name="android:statusBarColor">@color/primaryLightColor</item>
-    </style>
-
-    <style name="MyActionBar" parent="@style/ThemeOverlay.MaterialComponents.ActionBar">
-
     </style>
 
     <style name="Ctm.Button.Login" parent="Widget.MaterialComponents.Button">
@@ -42,5 +37,4 @@
     <style name="Ctm.AlertDialog" parent="Theme.AppCompat.Dialog.Alert">
         <item name="android:windowBackground">@drawable/bg_select_image_dialog</item>
     </style>
-
 </resources>

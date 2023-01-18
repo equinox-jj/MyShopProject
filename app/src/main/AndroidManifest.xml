@@ -4,8 +4,14 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!--    <uses-permission android:name="android.permission.CAMERA" />-->
-    <!--    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
+
+    <uses-feature android:name="android.hardware.camera" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
 
     <application
         android:name=".MyApp"
@@ -19,6 +25,16 @@
         android:theme="@style/Theme.NoActionBar"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <activity
+            android:name=".presentation.profile.changepass.ChangePassActivity"
+            android:label="Change Password"
+            android:theme="@style/Theme.MyShopProject"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
 
         <activity
             android:name=".presentation.camera.CameraActivity"
@@ -59,9 +75,7 @@
 
         <activity
             android:name=".presentation.main.MainActivity"
-            android:exported="false"
-            android:theme="@style/Theme.MyShopProject" />
-
+            android:exported="false" />
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

@@ -22,6 +22,8 @@ class MyPreferencesImpl(context: Context) : MyPreferences {
         val userGender = intPreferencesKey("user_gender")
         val userName = stringPreferencesKey("user_name")
         val userPhone = stringPreferencesKey("user_phone")
+        val userImage = stringPreferencesKey("user_image")
+        val languagePref = intPreferencesKey("language_pref")
     }
 
     private val dataStore = context.dataStore
@@ -65,6 +67,18 @@ class MyPreferencesImpl(context: Context) : MyPreferences {
     override suspend fun savePhoneNumber(phone: String) {
         dataStore.edit { mutablePref ->
             mutablePref[userPhone] = phone
+        }
+    }
+
+    override suspend fun saveImageUser(image: String) {
+        dataStore.edit { mutablePref ->
+            mutablePref[userImage] = image
+        }
+    }
+
+    override suspend fun saveLanguage(language: Int) {
+        dataStore.edit { mutablePref ->
+            mutablePref[languagePref] = language
         }
     }
 
@@ -166,7 +180,35 @@ class MyPreferencesImpl(context: Context) : MyPreferences {
             }
     }
 
-    override suspend fun removeSession() {
+    override fun getImageUser(): Flow<String> {
+        return dataStore.data
+            .catch { exception ->
+                if (exception is IOException) {
+                    emit(emptyPreferences())
+                } else {
+                    throw exception
+                }
+            }
+            .map { preferences ->
+                preferences[userImage] ?: ""
+            }
+    }
+
+    override fun getLanguage(): Flow<Int> {
+        return dataStore.data
+            .catch { exception ->
+                if (exception is IOException) {
+                    emit(emptyPreferences())
+                } else {
+                    throw exception
+                }
+            }
+            .map { preferences ->
+                preferences[languagePref] ?: 0
+            }
+    }
+
+    override suspend fun clearSession() {
         dataStore.edit { mutablePref ->
             mutablePref.clear()
         }

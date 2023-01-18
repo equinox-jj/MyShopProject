@@ -1,7 +1,9 @@
-package com.myshopproject.data.utils
+package com.myshopproject.utils
 
+import android.content.Context
+import android.util.Log
 import com.myshopproject.data.remote.dto.RefreshTokenResponseDTO
-import com.myshopproject.data.remote.network.ApiService
+import com.myshopproject.data.remote.network.ApiRefreshToken
 import com.myshopproject.domain.preferences.MyPreferences
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -13,39 +15,40 @@ import javax.inject.Inject
 
 class AuthAuthentication @Inject constructor(
     private val pref: MyPreferences
-): Authenticator {
+) : Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
-        val accessToken = runBlocking {
-            pref.getAccessToken().first()
-        }
-        val refreshToken = runBlocking {
-            pref.getRefreshToken().first()
-        }
-        val userId = runBlocking {
-            pref.getUserId().first()
-        }
-
         return runBlocking {
+            val accessToken = pref.getAccessToken().first()
+            val refreshToken = pref.getRefreshToken().first()
+            val userId = pref.getUserId().first()
+
             val newToken = getNewToken(userId, accessToken, refreshToken)
 
-            if (!newToken.isSuccessful || newToken.body() == null) {
-                pref.removeSession()
+            if (!newToken.isSuccessful || newToken.body() == null || newToken.code() == 401) {
+                pref.clearSession() // Clear Preferences
             }
 
             newToken.body()?.let {
                 pref.saveAccessToken(it.success.accessToken)
+                pref.saveRefreshToken(it.success.refreshToken)
+                Log.d("AccessTokens", it.success.accessToken)
+                Log.d("RefreshTokens", it.success.refreshToken)
                 response.request.newBuilder()
-                    .header("Authorization", it.success.accessToken)
+                    .header("Authorization", it.success.accessToken) // Save New Token To Header
                     .build()
             }
         }
     }
 
-    private suspend fun getNewToken(userId: Int?, accessToken: String?, refreshToken: String?): retrofit2.Response<RefreshTokenResponseDTO> {
+    private suspend fun getNewToken(
+        userId: Int?,
+        accessToken: String?,
+        refreshToken: String?
+    ): retrofit2.Response<RefreshTokenResponseDTO> {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
-        val okHttpClient =  OkHttpClient.Builder()
+        val okHttpClient = OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .build()
 
@@ -55,7 +58,7 @@ class AuthAuthentication @Inject constructor(
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        val services = retrofit.create(ApiService::class.java)
+        val services = retrofit.create(ApiRefreshToken::class.java)
         return services.getRefreshToken(userId, accessToken, refreshToken)
     }
 }

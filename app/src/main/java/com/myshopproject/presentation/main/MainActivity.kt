@@ -1,13 +1,14 @@
 package com.myshopproject.presentation.main
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.myshopproject.R
 import com.myshopproject.databinding.ActivityMainBinding
+import com.myshopproject.utils.setVisibilityGone
+import com.myshopproject.utils.setVisibilityVisible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,13 +24,25 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.toolbarMain)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
         navHostFragment = supportFragmentManager.findFragmentById(R.id.mainNavContainer) as NavHostFragment
         navController = navHostFragment.navController
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.homeFragment -> showBottomNav()
-                R.id.favoriteFragment -> showBottomNav()
-                R.id.profileFragment -> showBottomNav()
+                R.id.homeFragment -> {
+                    showBottomNav()
+                    showToolbar()
+                }
+                R.id.favoriteFragment -> {
+                    showBottomNav()
+                    showToolbar()
+                }
+                R.id.profileFragment -> {
+                    showBottomNav()
+                    hideToolbar()
+                }
                 else -> hideBottomNav()
             }
         }
@@ -38,10 +51,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showBottomNav() {
-        binding.bottomNavigation.visibility = View.VISIBLE
+        binding.bottomNavigation.setVisibilityVisible()
     }
 
     private fun hideBottomNav() {
-        binding.bottomNavigation.visibility = View.GONE
+        binding.bottomNavigation.setVisibilityGone()
+    }
+
+    private fun showToolbar() {
+        binding.toolbarMain.setVisibilityVisible()
+    }
+
+    private fun hideToolbar() {
+        binding.toolbarMain.setVisibilityGone()
     }
 }

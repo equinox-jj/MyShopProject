@@ -41,16 +41,13 @@
                 android:src="@drawable/placeholder_img"
                 app:riv_oval="true" />
 
-            <ImageButton
-                android:id="@+id/ivButtonProfile"
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabButtonProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
-                android:background="@drawable/bg_button_select_image"
                 android:contentDescription="@null"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:theme="@android:style/ThemeOverlay.Material.Dark"
-                android:padding="10dp"
+                app:backgroundTint="@color/white"
                 app:srcCompat="@drawable/ic_camera_filled" />
 
         </FrameLayout>
@@ -83,7 +80,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins"
                     android:hint="@string/email"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textEmailAddress"
+                    android:textStyle="bold" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -104,7 +102,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins"
                     android:hint="@string/password"
-                    android:inputType="textPassword" />
+                    android:inputType="textPassword"
+                    android:textStyle="bold" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -126,7 +125,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins"
                     android:hint="@string/confirm_password"
-                    android:inputType="textPassword" />
+                    android:inputType="textPassword"
+                    android:textStyle="bold" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -146,7 +146,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins"
                     android:hint="@string/name"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    android:textStyle="bold" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -166,7 +167,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins"
                     android:hint="@string/phone_number"
-                    android:inputType="phone" />
+                    android:inputType="phone"
+                    android:textStyle="bold" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -199,7 +201,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/poppins"
-                    android:text="@string/male" />
+                    android:text="@string/male"
+                    android:textStyle="bold" />
 
                 <RadioButton
                     android:id="@+id/rbFemale"
@@ -207,7 +210,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/poppins"
-                    android:text="@string/female" />
+                    android:text="@string/female"
+                    android:textStyle="bold" />
 
             </RadioGroup>
 

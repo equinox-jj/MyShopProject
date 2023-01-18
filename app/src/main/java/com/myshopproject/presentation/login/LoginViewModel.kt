@@ -35,12 +35,15 @@ class LoginViewModel @Inject constructor(
                     response.data?.let {
                         _state.value = Resource.Success(it)
                         pref.saveRefreshToken(it.refreshToken)
+                        Log.d("RefreshTokenVM", it.refreshToken)
                         pref.saveAccessToken(it.accessToken)
+                        Log.d("AccessTokenVM", it.accessToken)
                         pref.saveUserId(it.dataUser.id)
                         pref.saveEmailUser(it.dataUser.email)
                         pref.saveGenderUser(it.dataUser.gender)
                         pref.saveNameUser(it.dataUser.name)
                         pref.savePhoneNumber(it.dataUser.phone)
+                        pref.saveImageUser(it.dataUser.path)
                     }
                 }
                 is Resource.Error -> {

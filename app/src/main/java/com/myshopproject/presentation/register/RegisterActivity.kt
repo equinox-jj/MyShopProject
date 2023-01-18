@@ -1,10 +1,12 @@
 package com.myshopproject.presentation.register
 
-import android.Manifest
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.util.Patterns
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -18,11 +20,13 @@ import com.myshopproject.data.remote.dto.ErrorResponseDTO
 import com.myshopproject.databinding.ActivityRegisterBinding
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.camera.CameraActivity
-import com.myshopproject.utils.setVisibilityGone
-import com.myshopproject.utils.setVisibilityVisible
-import com.myshopproject.utils.uriToFile
+import com.myshopproject.utils.*
 import dagger.hilt.android.AndroidEntryPoint
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import java.io.File
 
@@ -32,44 +36,41 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
     private val viewModel by viewModels<RegisterViewModel>()
 
+    private lateinit var resultCamera: Bitmap
     private var getFile: File? = null
-    private var imageMultipart : MultipartBody.Part? = null
-    private lateinit var currentPhotoPath: String
-    companion object {
-        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
-        private const val REQUEST_CODE_PERMISSIONS = 10
-    }
 
     private val launcherIntentCameraX = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
-        if (it.resultCode == 200) {
+        if (it.resultCode == RESULT_OK) {
             val myFile = it.data?.getSerializableExtra("picture") as File
             val isBackCamera = it.data?.getBooleanExtra("backCamera", true) as Boolean
 
             getFile = myFile
-//            result = rotateBitmap(
-//                BitmapFactory.decodeFile(myFile.absolutePath),
-//                isBackCamera
-//            )
+            resultCamera = rotateBitmap(
+                BitmapFactory.decodeFile(myFile.absolutePath),
+                isBackCamera
+            )
 
             binding.apply {
-//                floatingActionButton.isEnabled = true
-//                imgProfile.visibility = View.VISIBLE
-//                imgProfile.setImageBitmap(result)
+                ivPhotoProfile.visibility = View.VISIBLE
+                ivPhotoProfile.setImageBitmap(resultCamera)
             }
         }
     }
 
     private val launcherIntentGallery = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == RESULT_OK) {
-            val selectedImg: Uri = result.data?.data as Uri
+    ) {
+        if (it.resultCode == RESULT_OK) {
+            val uri = it.data?.data as Uri
+            val file = uriToFile(uri, this@RegisterActivity)
+            getFile = file
 
-            val myFile = uriToFile(selectedImg, this@RegisterActivity)
-            getFile = myFile
-            binding.ivPhotoProfile.setImageURI(selectedImg)
+            binding.apply {
+                ivPhotoProfile.visibility = View.VISIBLE
+                ivPhotoProfile.setImageURI(uri)
+            }
         }
     }
 
@@ -107,23 +108,23 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun setupListener() {
-//        val file = reduceFileImage(getFile as File)
-//        val requestImageFile = file.asRequestBody("image/jpg".toMediaTypeOrNull())
-//        imageMultipart = MultipartBody.Part.createFormData(
-//            "image",
-//            file.name,
-//            requestImageFile
-//        )
-
         binding.apply {
             btnSignUp.setOnClickListener {
-                if (validation()) {
+                if (validation() || getFile != null) {
+                    val file = reduceFileImage(getFile as File)
+                    val requestBodyImage = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+                    val multiPartImage: MultipartBody.Part = MultipartBody.Part.createFormData(
+                        "image",
+                        file.name,
+                        requestBodyImage
+                    )
+
                     viewModel.registerAccount(
-//                        image = ,
-                        email = binding.etEmailRegister.text.toString(),
-                        name = binding.etNameRegister.text.toString(),
-                        phone = binding.etPhoneRegister.text.toString(),
-                        password = binding.etPasswordRegister.text.toString(),
+                        image = multiPartImage,
+                        email = binding.etEmailRegister.text.toString().toRequestBody("text/plain".toMediaType()),
+                        name = binding.etNameRegister.text.toString().toRequestBody("text/plain".toMediaType()),
+                        phone = binding.etPhoneRegister.text.toString().toRequestBody("text/plain".toMediaType()),
+                        password = binding.etPasswordRegister.text.toString().toRequestBody("text/plain".toMediaType()),
                         gender = isGender()
                     )
                 }
@@ -131,7 +132,7 @@ class RegisterActivity : AppCompatActivity() {
             btnToLogin.setOnClickListener {
                 finish()
             }
-            ivButtonProfile.setOnClickListener {
+            fabButtonProfile.setOnClickListener {
                 alertDialogSelectImage()
             }
         }
@@ -146,7 +147,7 @@ class RegisterActivity : AppCompatActivity() {
         val name = binding.etNameRegister.text.toString()
         val phone = binding.etPhoneRegister.text.toString()
         val male = binding.rbMale
-        val female = binding. rbFemale
+        val female = binding.rbFemale
         val genderList = listOf(male, female).firstOrNull() { it.isChecked }
 
         when {
@@ -213,14 +214,14 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun openCamera() {
         val cameraIntent = Intent(this@RegisterActivity, CameraActivity::class.java)
-        startActivity(cameraIntent)
+        launcherIntentCameraX.launch(cameraIntent)
     }
 
     private fun openGallery() {
         val intent = Intent()
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
-        val chooser = Intent.createChooser(intent, "Pilih Gambar")
+        val chooser = Intent.createChooser(intent, "Select Image")
         launcherIntentGallery.launch(chooser)
     }
 

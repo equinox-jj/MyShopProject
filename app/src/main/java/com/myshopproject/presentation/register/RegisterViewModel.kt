@@ -5,31 +5,36 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myshopproject.domain.entities.SuccessResponseStatus
+import com.myshopproject.domain.preferences.MyPreferences
 import com.myshopproject.domain.usecase.RegisterUseCase
 import com.myshopproject.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val registerUseCase: RegisterUseCase
+    private val registerUseCase: RegisterUseCase,
+    pref: MyPreferences
 ) : ViewModel() {
 
     private val _state = MutableLiveData<Resource<SuccessResponseStatus>>()
     val state: LiveData<Resource<SuccessResponseStatus>> = _state
 
     fun registerAccount(
-//        image: MultipartBody.Part,
-        email: String,
-        password: String,
-        name: String,
-        phone: String,
+        image: MultipartBody.Part,
+        email: RequestBody,
+        password: RequestBody,
+        name: RequestBody,
+        phone: RequestBody,
         gender: Int
     ) {
         registerUseCase.invoke(
-//            image = image,
+            image = image,
             email = email,
             password = password,
             name = name,

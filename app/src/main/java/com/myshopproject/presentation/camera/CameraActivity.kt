@@ -1,6 +1,8 @@
 package com.myshopproject.presentation.camera
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowInsets
@@ -12,6 +14,7 @@ import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.myshopproject.databinding.ActivityCameraBinding
 import com.myshopproject.utils.createTempFile
@@ -31,8 +34,35 @@ class CameraActivity : AppCompatActivity() {
         binding = ActivityCameraBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        if (!cameraPermissionsGranted()) {
+            ActivityCompat.requestPermissions(
+                this@CameraActivity,
+                arrayOf(Manifest.permission.CAMERA),
+                10
+            )
+        }
+
         cameraExecutor = Executors.newSingleThreadExecutor()
 
+        setupListener()
+    }
+
+    private fun cameraPermissionsGranted() = arrayOf(Manifest.permission.CAMERA).all {
+        ContextCompat.checkSelfPermission(this@CameraActivity, it) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun setupListener() {
+        binding.apply {
+            captureImage.setOnClickListener { takePhoto() }
+            switchCamera.setOnClickListener {
+                cameraSelector = if (cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) {
+                    CameraSelector.DEFAULT_FRONT_CAMERA
+                } else {
+                    CameraSelector.DEFAULT_BACK_CAMERA
+                }
+                startCamera()
+            }
+        }
     }
 
     private fun takePhoto() {
@@ -49,7 +79,7 @@ class CameraActivity : AppCompatActivity() {
                     val intent = Intent()
                     intent.putExtra("picture", photoFile)
                     intent.putExtra("backCamera", cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA)
-                    setResult(200, intent)
+                    setResult(RESULT_OK, intent)
                     finish()
                 }
 

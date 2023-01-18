@@ -21,8 +21,8 @@ fun DataUserDTO.toDomain() = DataUserResponse(
     name = name,
     phone = phone,
     id = id,
-//    path = path,
-//    image = image,
+    image = image,
+    path = path
 )
 
 fun SuccessResponseDTO.toDomain() = SuccessResponseStatus(
@@ -51,5 +51,15 @@ fun RefreshTokenResultDTO.toDomain() = RefreshTokenResult(
     accessToken = accessToken,
     message = message,
     refreshToken = refreshToken,
+    status = status
+)
+
+fun ChangeImageResponseDTO.toDomain() = ChangeImageResponse(
+    success = success.toDomain()
+)
+
+fun ChangeImageResultDTO.toDomain() = ChangeImageResult(
+    path = path,
+    message = message,
     status = status
 )

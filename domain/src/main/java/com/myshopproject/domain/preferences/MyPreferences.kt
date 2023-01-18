@@ -10,6 +10,8 @@ interface MyPreferences {
     suspend fun saveGenderUser(gender: Int)
     suspend fun saveNameUser(name: String)
     suspend fun savePhoneNumber(phone: String)
+    suspend fun saveImageUser(image: String)
+    suspend fun saveLanguage(language: Int)
     fun getRefreshToken(): Flow<String>
     fun getAccessToken(): Flow<String>
     fun getUserId(): Flow<Int>
@@ -17,5 +19,7 @@ interface MyPreferences {
     fun getGenderUser(): Flow<Int>
     fun getNameUser(): Flow<String>
     fun getPhoneNumber(): Flow<String>
-    suspend fun removeSession()
+    fun getImageUser(): Flow<String>
+    fun getLanguage(): Flow<Int>
+    suspend fun clearSession()
 }

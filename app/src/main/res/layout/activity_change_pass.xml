@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.profile.changepass.ChangePassFragment">
+    tools:context=".presentation.profile.changepass.ChangePassActivity">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilOldPass"
@@ -23,8 +23,10 @@
             android:id="@+id/etOldPass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins"
             android:hint="@string/old_password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textStyle="bold" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -43,8 +45,10 @@
             android:id="@+id/etNewPass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins"
             android:hint="@string/new_password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textStyle="bold" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -63,8 +67,10 @@
             android:id="@+id/etConfirmNewPass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins"
             android:hint="@string/confirm_new_password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textStyle="bold" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -74,6 +80,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:fontFamily="@font/poppins_extrabold"
         android:text="@string/save"
         app:layout_constraintEnd_toEndOf="@+id/tilConfirmNewPass"
         app:layout_constraintStart_toStartOf="@+id/tilConfirmNewPass"

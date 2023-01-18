@@ -26,14 +26,12 @@ class ChangePassViewModel @Inject constructor(
     val getUserId = pref.getUserId()
 
     fun changePassword(
-//        authorization: String,
         id: Int,
         password: String,
         newPassword: String,
         confirmPassword: String
     ) {
         changePassUseCase.invoke(
-//            authorization = authorization,
             id = id,
             password = password,
             newPassword = newPassword,

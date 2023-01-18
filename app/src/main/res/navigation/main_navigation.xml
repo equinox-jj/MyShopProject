@@ -19,8 +19,8 @@
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action
-            android:id="@+id/action_profileFragment_to_changePassFragment"
-            app:destination="@id/changePassFragment" />
+            android:id="@+id/action_profileFragment_to_changePassActivity"
+            app:destination="@id/changePassActivity" />
     </fragment>
 
 
@@ -31,11 +31,11 @@
         tools:layout="@layout/fragment_favorite" />
 
 
-    <fragment
-        android:id="@+id/changePassFragment"
-        android:name="com.myshopproject.presentation.profile.changepass.ChangePassFragment"
-        android:label="fragment_change_pass"
-        tools:layout="@layout/fragment_change_pass" />
+    <activity
+        android:id="@+id/changePassActivity"
+        android:name="com.myshopproject.presentation.profile.changepass.ChangePassActivity"
+        android:label="Change Password"
+        tools:layout="@layout/activity_change_pass" />
 
 
 </navigation>
