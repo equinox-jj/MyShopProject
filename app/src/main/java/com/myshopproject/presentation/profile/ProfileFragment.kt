@@ -50,7 +50,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private val viewModel by viewModels<ProfileViewModel>()
 
     private var listLanguage = arrayOf("EN", "IN")
-    private var listFlag = intArrayOf(R.drawable.us, R.drawable.indonesia)
+    private var listFlag = intArrayOf(R.drawable.ic_us_flag, R.drawable.ic_indonesia_flag)
 
     private lateinit var resultCamera: Bitmap
     private var getFile: File? = null
@@ -73,6 +73,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             binding.apply {
                 ivProfile.visibility = View.VISIBLE
                 ivProfile.setImageBitmap(resultCamera)
+                postChangeImage()
             }
         }
     }
@@ -88,6 +89,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             binding.apply {
                 ivProfile.visibility = View.VISIBLE
                 ivProfile.setImageURI(uri)
+                postChangeImage()
             }
         }
     }
@@ -97,8 +99,24 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         _binding = FragmentProfileBinding.bind(view)
 
         setupListener()
-        initObserver()
         spinnerAdapter()
+        initDataStore()
+    }
+
+    private fun initDataStore() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                val nameUserPref = viewModel.getNameUser.first()
+                val emailUserPref = viewModel.getEmailUser.first()
+                val imageUserPref = viewModel.getImageUser.first()
+                val userIdPref = viewModel.getUserId.first()
+
+                binding.tvUserName.text = nameUserPref
+                binding.tvUserEmail.text = emailUserPref
+                binding.ivProfile.load(imageUserPref)
+                userId = userIdPref
+            }
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -126,13 +144,11 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                                 setLanguage("en")
                                 setDialogChangeLanguage()
                                 viewModel.saveLanguagePref(position)
-                                activity!!.recreate()
                             }
                             1 -> {
                                 setLanguage("in")
                                 setDialogChangeLanguage()
                                 viewModel.saveLanguagePref(position)
-                                activity!!.recreate()
                             }
                         }
                     } else {
@@ -153,6 +169,20 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         requireActivity().resources.updateConfiguration(config, requireActivity().resources.displayMetrics)
     }
 
+    private fun postChangeImage() {
+        if (getFile != null) {
+            val file = reduceFileImage(getFile as File)
+            val requestBodyImage = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+            val multiPartImage: MultipartBody.Part = MultipartBody.Part.createFormData(
+                "image",
+                file.name,
+                requestBodyImage
+            )
+            viewModel.changeImage(userId!!, multiPartImage)
+            initObserver()
+        }
+    }
+
     private fun initObserver() {
         viewModel.state.observe(viewLifecycleOwner) { response ->
             when(response) {
@@ -161,6 +191,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 }
                 is Resource.Success -> {
                     binding.profileCardLoading.root.setVisibilityGone()
+
+                    viewModel.saveImageUser(response.data!!.success.path)
+
                     Toast.makeText(requireContext(), "${response.data!!.success.status} \n Login Successfully", Toast.LENGTH_SHORT).show()
                 }
                 is Resource.Error -> {
@@ -178,36 +211,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 }
             }
         }
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                val nameUserPref = viewModel.getNameUser.first()
-                val emailUserPref = viewModel.getEmailUser.first()
-                val imageUserPref = viewModel.getImageUser.first()
-                val userIdPref = viewModel.getUserId.first()
-
-                binding.tvUserName.text = nameUserPref
-                binding.tvUserEmail.text = emailUserPref
-                binding.ivProfile.load(imageUserPref)
-                userId = userIdPref
-            }
-        }
     }
 
     private fun setupListener() {
         binding.apply {
-            ivProfile.setOnClickListener {
-                if (getFile != null) {
-                    val file = reduceFileImage(getFile as File)
-                    val requestBodyImage = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-                    val multiPartImage: MultipartBody.Part = MultipartBody.Part.createFormData(
-                        "image",
-                        file.name,
-                        requestBodyImage
-                    )
-
-                    viewModel.changeImage(userId!!, multiPartImage)
-                }
-            }
             cvLogout.setOnClickListener {
                 viewModel.removeSession()
                 startActivity(Intent(requireContext(), LoginActivity::class.java))
@@ -226,7 +233,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         AlertDialog.Builder(requireContext())
             .setTitle(R.string.change_language)
             .setMessage(R.string.change_language)
-            .setPositiveButton("Ok") { _, _ -> }
+            .setPositiveButton("Ok") { _, _ ->
+                activity?.recreate()
+            }
             .setNegativeButton("Cancel") { _, _ -> }
             .show()
     }

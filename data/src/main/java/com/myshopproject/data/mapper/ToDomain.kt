@@ -63,3 +63,26 @@ fun ChangeImageResultDTO.toDomain() = ChangeImageResult(
     message = message,
     status = status
 )
+
+fun DataProductResponseDTO.toDomain() = DataProductResponse(
+    success = success.toDomain()
+)
+
+fun DataProductResultDTO.toDomain() = DataProductResult(
+    data = data.map { it.toDomain() },
+    message = message,
+    status = status
+)
+
+fun DataProductDTO.toDomain() = DataProduct(
+    date = date,
+    desc = desc,
+    harga = harga,
+    image = image,
+    nameProduct = nameProduct,
+    rate = rate,
+    size = size,
+    stock = stock,
+    type = type,
+    weight = weight
+)

@@ -37,4 +37,10 @@
     <style name="Ctm.AlertDialog" parent="Theme.AppCompat.Dialog.Alert">
         <item name="android:windowBackground">@drawable/bg_select_image_dialog</item>
     </style>
+
+    <style name="Ctm.SearchView" parent="Widget.AppCompat.SearchView">
+        <item name="background">@color/white</item>
+        <item name="searchIcon">@drawable/ic_search</item>
+        <item name="queryBackground">@android:color/transparent</item>
+    </style>
 </resources>

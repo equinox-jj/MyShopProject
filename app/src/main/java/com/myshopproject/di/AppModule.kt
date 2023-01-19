@@ -24,7 +24,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object NetworkModule {
+object AppModule {
 
     @Singleton
     @Provides
@@ -80,8 +80,8 @@ object NetworkModule {
         gsonConverterFactory: GsonConverterFactory
     ): Retrofit {
         return Retrofit.Builder()
-//            .baseUrl("http://172.17.20.201/training_android/public/")
-            .baseUrl("http://localhost:3001/training_android/public/")
+            .baseUrl("http://172.17.20.201/training_android/public/")
+//            .baseUrl("http://localhost:3001/training_android/public/")
             .client(okHttpClient)
             .addConverterFactory(gsonConverterFactory)
             .build()
@@ -101,7 +101,7 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun providesRepository(apiService: ApiService): AuthRepository {
+    fun providesAuthRepository(apiService: ApiService): AuthRepository {
         return AuthRepositoryImpl(apiService)
     }
 }

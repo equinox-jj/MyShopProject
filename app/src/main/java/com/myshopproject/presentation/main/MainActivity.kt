@@ -33,15 +33,15 @@ class MainActivity : AppCompatActivity() {
             when (destination.id) {
                 R.id.homeFragment -> {
                     showBottomNav()
-                    showToolbar()
+//                    showToolbar()
                 }
                 R.id.favoriteFragment -> {
                     showBottomNav()
-                    showToolbar()
+//                    showToolbar()
                 }
                 R.id.profileFragment -> {
                     showBottomNav()
-                    hideToolbar()
+//                    hideToolbar()
                 }
                 else -> hideBottomNav()
             }

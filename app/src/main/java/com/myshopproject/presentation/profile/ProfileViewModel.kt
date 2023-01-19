@@ -36,6 +36,12 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    fun saveImageUser(image: String) {
+        viewModelScope.launch {
+            pref.saveImageUser(image)
+        }
+    }
+
     fun changeImage(id: Int, image: MultipartBody.Part) {
         changeImageUseCase.invoke(id = id, image = image).onEach { response ->
             when (response) {

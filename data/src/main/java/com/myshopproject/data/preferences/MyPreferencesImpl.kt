@@ -84,13 +84,6 @@ class MyPreferencesImpl(context: Context) : MyPreferences {
 
     override fun getRefreshToken(): Flow<String> {
         return dataStore.data
-            .catch { exception ->
-                if (exception is IOException) {
-                    emit(emptyPreferences())
-                } else {
-                    throw exception
-                }
-            }
             .map { preferences ->
                 preferences[userRefreshToken] ?: ""
             }
@@ -98,13 +91,6 @@ class MyPreferencesImpl(context: Context) : MyPreferences {
 
     override fun getAccessToken(): Flow<String> {
         return dataStore.data
-            .catch { exception ->
-                if (exception is IOException) {
-                    emit(emptyPreferences())
-                } else {
-                    throw exception
-                }
-            }
             .map { preferences ->
                 preferences[userToken] ?: ""
             }
@@ -112,13 +98,6 @@ class MyPreferencesImpl(context: Context) : MyPreferences {
 
     override fun getUserId(): Flow<Int> {
         return dataStore.data
-            .catch { exception ->
-                if (exception is IOException) {
-                    emit(emptyPreferences())
-                } else {
-                    throw exception
-                }
-            }
             .map { preferences ->
                 preferences[userId] ?: 0
             }
@@ -126,13 +105,6 @@ class MyPreferencesImpl(context: Context) : MyPreferences {
 
     override fun getEmailUser(): Flow<String> {
         return dataStore.data
-            .catch { exception ->
-                if (exception is IOException) {
-                    emit(emptyPreferences())
-                } else {
-                    throw exception
-                }
-            }
             .map { preferences ->
                 preferences[userEmail] ?: ""
             }
@@ -140,13 +112,6 @@ class MyPreferencesImpl(context: Context) : MyPreferences {
 
     override fun getGenderUser(): Flow<Int> {
         return dataStore.data
-            .catch { exception ->
-                if (exception is IOException) {
-                    emit(emptyPreferences())
-                } else {
-                    throw exception
-                }
-            }
             .map { preferences ->
                 preferences[userGender] ?: 0
             }
@@ -154,13 +119,6 @@ class MyPreferencesImpl(context: Context) : MyPreferences {
 
     override fun getNameUser(): Flow<String> {
         return dataStore.data
-            .catch { exception ->
-                if (exception is IOException) {
-                    emit(emptyPreferences())
-                } else {
-                    throw exception
-                }
-            }
             .map { preferences ->
                 preferences[userName] ?: ""
             }
@@ -168,13 +126,6 @@ class MyPreferencesImpl(context: Context) : MyPreferences {
 
     override fun getPhoneNumber(): Flow<String> {
         return dataStore.data
-            .catch { exception ->
-                if (exception is IOException) {
-                    emit(emptyPreferences())
-                } else {
-                    throw exception
-                }
-            }
             .map { preferences ->
                 preferences[userPhone] ?: ""
             }
@@ -182,13 +133,6 @@ class MyPreferencesImpl(context: Context) : MyPreferences {
 
     override fun getImageUser(): Flow<String> {
         return dataStore.data
-            .catch { exception ->
-                if (exception is IOException) {
-                    emit(emptyPreferences())
-                } else {
-                    throw exception
-                }
-            }
             .map { preferences ->
                 preferences[userImage] ?: ""
             }
@@ -196,13 +140,6 @@ class MyPreferencesImpl(context: Context) : MyPreferences {
 
     override fun getLanguage(): Flow<Int> {
         return dataStore.data
-            .catch { exception ->
-                if (exception is IOException) {
-                    emit(emptyPreferences())
-                } else {
-                    throw exception
-                }
-            }
             .map { preferences ->
                 preferences[languagePref] ?: 0
             }

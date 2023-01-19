@@ -1,6 +1,5 @@
 package com.myshopproject.utils
 
-import android.content.Context
 import android.util.Log
 import com.myshopproject.data.remote.dto.RefreshTokenResponseDTO
 import com.myshopproject.data.remote.network.ApiRefreshToken
@@ -31,8 +30,6 @@ class AuthAuthentication @Inject constructor(
             newToken.body()?.let {
                 pref.saveAccessToken(it.success.accessToken)
                 pref.saveRefreshToken(it.success.refreshToken)
-                Log.d("AccessTokens", it.success.accessToken)
-                Log.d("RefreshTokens", it.success.refreshToken)
                 response.request.newBuilder()
                     .header("Authorization", it.success.accessToken) // Save New Token To Header
                     .build()

@@ -3,6 +3,7 @@ package com.myshopproject.data.repository
 import com.myshopproject.data.mapper.toDomain
 import com.myshopproject.data.remote.network.ApiService
 import com.myshopproject.domain.entities.ChangeImageResponse
+import com.myshopproject.domain.entities.DataProductResponse
 import com.myshopproject.domain.entities.LoginResult
 import com.myshopproject.domain.entities.SuccessResponseStatus
 import com.myshopproject.domain.repository.AuthRepository
@@ -109,7 +110,10 @@ class AuthRepositoryImpl @Inject constructor(
     ): Flow<Resource<ChangeImageResponse>> = flow {
         emit(Resource.Loading)
         try {
-            val response = apiService.changeImage(id = id, image = image).toDomain()
+            val response = apiService.changeImage(
+                id = id,
+                image = image
+            ).toDomain()
             emit(Resource.Success(response))
         } catch (t: Throwable) {
             if (t is HttpException) {
@@ -122,6 +126,35 @@ class AuthRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             emit(Resource.Error(e.localizedMessage, null, null))
+        }
+    }
+
+    override fun getListProduct(): Flow<Resource<DataProductResponse>> = flow {
+        emit(Resource.Loading)
+        try {
+            val response = apiService.getListProduct().toDomain()
+            emit(Resource.Success(response))
+        } catch (t: Throwable) {
+            if (t is HttpException) {
+                when (t.code()) {
+                    400 -> { emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody())) }
+                    404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                    500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                    else -> emit(Resource.Error(null, null, null))
+                }
+            }
+        }
+    }
+
+    override fun getListProductFavorite(
+        query: String,
+        userId: Int
+    ): Flow<Resource<DataProductResponse>> = flow {
+        emit(Resource.Loading)
+        try {
+
+        } catch (t: Throwable) {
+
         }
     }
 }

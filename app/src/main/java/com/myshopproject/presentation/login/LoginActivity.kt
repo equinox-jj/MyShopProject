@@ -2,7 +2,6 @@ package com.myshopproject.presentation.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -42,8 +41,9 @@ class LoginActivity : AppCompatActivity() {
                 }
                 is Resource.Success -> {
                     binding.loginCardLoading.root.setVisibilityGone()
+
                     Toast.makeText(this@LoginActivity, "Login Successfully ${response.data!!.status}", Toast.LENGTH_SHORT).show()
-                    Log.d("UserData","${response.data!!.dataUser.id}")
+
                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                     finish()
                 }

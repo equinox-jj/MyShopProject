@@ -23,7 +23,7 @@
             android:id="@+id/tvLoginStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_bold"
+            android:fontFamily="@font/poppins_extrabold"
             android:gravity="center_horizontal"
             android:text="@string/waiting"
             app:layout_constraintBottom_toBottomOf="parent"

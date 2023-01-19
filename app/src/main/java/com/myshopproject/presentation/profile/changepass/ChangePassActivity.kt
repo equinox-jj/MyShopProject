@@ -46,8 +46,10 @@ class ChangePassActivity : AppCompatActivity() {
                 }
                 is Resource.Success -> {
                     binding.changePassCardLoading.root.setVisibilityGone()
-                    finish()
+
                     Toast.makeText(this@ChangePassActivity, "${response.data!!.success.status} \n Login Successfully", Toast.LENGTH_SHORT).show()
+
+                    finish()
                 }
                 is Resource.Error -> {
                     try {

@@ -91,7 +91,9 @@ class RegisterActivity : AppCompatActivity() {
                 }
                 is Resource.Success -> {
                     binding.registerCardLoading.root.setVisibilityGone()
+
                     Toast.makeText(this@RegisterActivity, "${response.data!!.success.status} \n Login Successfully", Toast.LENGTH_SHORT).show()
+
                     alertDialogRegisSuccess()
                 }
                 is Resource.Error -> {

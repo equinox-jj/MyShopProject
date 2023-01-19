@@ -36,7 +36,7 @@
         android:contentDescription="@null"
         app:layout_constraintEnd_toEndOf="@+id/cameraPreview"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_lock_filled"
+        app:srcCompat="@drawable/ic_switch_camera"
         app:tint="@color/white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
