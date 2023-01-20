@@ -5,8 +5,10 @@ import com.myshopproject.data.BuildConfig
 import com.myshopproject.data.preferences.MyPreferencesImpl
 import com.myshopproject.data.remote.network.ApiService
 import com.myshopproject.data.repository.AuthRepositoryImpl
+import com.myshopproject.data.repository.ProductRepositoryImpl
 import com.myshopproject.domain.preferences.MyPreferences
 import com.myshopproject.domain.repository.AuthRepository
+import com.myshopproject.domain.repository.ProductRepository
 import com.myshopproject.utils.AuthAuthentication
 import com.myshopproject.utils.AuthExpiredToken
 import com.myshopproject.utils.HeaderInterceptor
@@ -103,5 +105,11 @@ object AppModule {
     @Provides
     fun providesAuthRepository(apiService: ApiService): AuthRepository {
         return AuthRepositoryImpl(apiService)
+    }
+
+    @Singleton
+    @Provides
+    fun providesProductRepository(apiService: ApiService): ProductRepository {
+        return ProductRepositoryImpl(apiService)
     }
 }

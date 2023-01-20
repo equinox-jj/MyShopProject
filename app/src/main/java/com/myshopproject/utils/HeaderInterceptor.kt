@@ -12,7 +12,7 @@ class HeaderInterceptor @Inject constructor(
     private val pref: MyPreferences
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        val accessToken = runBlocking(Dispatchers.IO) {
+        val accessToken = runBlocking {
             pref.getAccessToken().first()
         }
 

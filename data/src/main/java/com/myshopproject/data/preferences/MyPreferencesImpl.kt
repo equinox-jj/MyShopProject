@@ -4,144 +4,162 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
+import com.myshopproject.domain.entities.AuthRefreshToken
 import com.myshopproject.domain.preferences.MyPreferences
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
-import java.io.IOException
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("user_session_pref")
 
 class MyPreferencesImpl(context: Context) : MyPreferences {
 
     companion object {
-        val userRefreshToken = stringPreferencesKey("user_refresh_token")
-        val userToken = stringPreferencesKey("user_token")
-        val userId = intPreferencesKey("user_id")
-        val userEmail = stringPreferencesKey("user_email")
-        val userGender = intPreferencesKey("user_gender")
-        val userName = stringPreferencesKey("user_name")
-        val userPhone = stringPreferencesKey("user_phone")
-        val userImage = stringPreferencesKey("user_image")
-        val languagePref = intPreferencesKey("language_pref")
+        val USER_REFRESH_TOKEN = stringPreferencesKey("user_refresh_token")
+        val USER_TOKEN = stringPreferencesKey("user_token")
+        val USER_ID = intPreferencesKey("user_id")
+        val USER_EMAIL = stringPreferencesKey("user_email")
+        val USER_GENDER = intPreferencesKey("user_gender")
+        val USER_NAME = stringPreferencesKey("user_name")
+        val USER_PHONE = stringPreferencesKey("user_phone")
+        val USER_IMAGE = stringPreferencesKey("user_image")
+        val LANGUAGE_PREF = intPreferencesKey("language_pref")
     }
 
     private val dataStore = context.dataStore
 
     override suspend fun saveRefreshToken(refreshToken: String) {
         dataStore.edit { mutablePref ->
-            mutablePref[userRefreshToken] = refreshToken
+            mutablePref[USER_REFRESH_TOKEN] = refreshToken
         }
     }
 
     override suspend fun saveAccessToken(accessToken: String) {
         dataStore.edit { mutablePref ->
-            mutablePref[userToken] = accessToken
+            mutablePref[USER_TOKEN] = accessToken
         }
     }
 
     override suspend fun saveUserId(id: Int) {
         dataStore.edit { mutablePref ->
-            mutablePref[userId] = id
+            mutablePref[USER_ID] = id
         }
     }
 
     override suspend fun saveEmailUser(email: String) {
         dataStore.edit { mutablePref ->
-            mutablePref[userEmail] = email
+            mutablePref[USER_EMAIL] = email
         }
     }
 
     override suspend fun saveGenderUser(gender: Int) {
         dataStore.edit { mutablePref ->
-            mutablePref[userGender] = gender
+            mutablePref[USER_GENDER] = gender
         }
     }
 
     override suspend fun saveNameUser(name: String) {
         dataStore.edit { mutablePref ->
-            mutablePref[userName] = name
+            mutablePref[USER_NAME] = name
         }
     }
 
     override suspend fun savePhoneNumber(phone: String) {
         dataStore.edit { mutablePref ->
-            mutablePref[userPhone] = phone
+            mutablePref[USER_PHONE] = phone
         }
     }
 
     override suspend fun saveImageUser(image: String) {
         dataStore.edit { mutablePref ->
-            mutablePref[userImage] = image
+            mutablePref[USER_IMAGE] = image
         }
     }
 
     override suspend fun saveLanguage(language: Int) {
         dataStore.edit { mutablePref ->
-            mutablePref[languagePref] = language
+            mutablePref[LANGUAGE_PREF] = language
+        }
+    }
+
+    override suspend fun saveAuthRefresh(userId: Int, accessToken: String, refreshToken: String) {
+        dataStore.edit { mutablePreferences ->
+            mutablePreferences[USER_ID] = userId
+            mutablePreferences[USER_TOKEN] = accessToken
+            mutablePreferences[USER_REFRESH_TOKEN] = refreshToken
         }
     }
 
     override fun getRefreshToken(): Flow<String> {
         return dataStore.data
             .map { preferences ->
-                preferences[userRefreshToken] ?: ""
+                preferences[USER_REFRESH_TOKEN] ?: ""
             }
     }
 
     override fun getAccessToken(): Flow<String> {
         return dataStore.data
             .map { preferences ->
-                preferences[userToken] ?: ""
+                preferences[USER_TOKEN] ?: ""
             }
     }
 
     override fun getUserId(): Flow<Int> {
         return dataStore.data
             .map { preferences ->
-                preferences[userId] ?: 0
+                preferences[USER_ID] ?: 0
             }
     }
 
     override fun getEmailUser(): Flow<String> {
         return dataStore.data
             .map { preferences ->
-                preferences[userEmail] ?: ""
+                preferences[USER_EMAIL] ?: ""
             }
     }
 
     override fun getGenderUser(): Flow<Int> {
         return dataStore.data
             .map { preferences ->
-                preferences[userGender] ?: 0
+                preferences[USER_GENDER] ?: 0
             }
     }
 
     override fun getNameUser(): Flow<String> {
         return dataStore.data
             .map { preferences ->
-                preferences[userName] ?: ""
+                preferences[USER_NAME] ?: ""
             }
     }
 
     override fun getPhoneNumber(): Flow<String> {
         return dataStore.data
             .map { preferences ->
-                preferences[userPhone] ?: ""
+                preferences[USER_PHONE] ?: ""
             }
     }
 
     override fun getImageUser(): Flow<String> {
         return dataStore.data
             .map { preferences ->
-                preferences[userImage] ?: ""
+                preferences[USER_IMAGE] ?: ""
             }
     }
 
     override fun getLanguage(): Flow<Int> {
         return dataStore.data
             .map { preferences ->
-                preferences[languagePref] ?: 0
+                preferences[LANGUAGE_PREF] ?: 0
+            }
+    }
+
+    override fun getAuthRefresh(): Flow<AuthRefreshToken> {
+        return dataStore.data
+            .map { preferences ->
+                AuthRefreshToken(
+                    preferences[USER_ID] ?: 0,
+                    preferences[USER_TOKEN] ?: "",
+                    preferences[USER_REFRESH_TOKEN] ?: ""
+                )
             }
     }
 

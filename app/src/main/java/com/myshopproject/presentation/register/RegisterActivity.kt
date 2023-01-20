@@ -51,7 +51,6 @@ class RegisterActivity : AppCompatActivity() {
                 BitmapFactory.decodeFile(myFile.absolutePath),
                 isBackCamera
             )
-
             binding.apply {
                 ivPhotoProfile.visibility = View.VISIBLE
                 ivPhotoProfile.setImageBitmap(resultCamera)
@@ -205,13 +204,19 @@ class RegisterActivity : AppCompatActivity() {
     private fun alertDialogSelectImage() {
         val view = layoutInflater.inflate(R.layout.custom_dialog_select_image, null)
         val builder = AlertDialog.Builder(this, R.style.Ctm_AlertDialog)
+        val showDialog = builder.setView(view).show()
 
         val fromCamera = view.findViewById<TextView>(R.id.tvSelectCamera)
         val fromGallery = view.findViewById<TextView>(R.id.tvSelectGallery)
 
-        builder.setView(view).show()
-        fromCamera.setOnClickListener { openCamera() }
-        fromGallery.setOnClickListener { openGallery() }
+        fromCamera.setOnClickListener {
+            openCamera()
+            showDialog.dismiss()
+        }
+        fromGallery.setOnClickListener {
+            openGallery()
+            showDialog.dismiss()
+        }
     }
 
     private fun openCamera() {

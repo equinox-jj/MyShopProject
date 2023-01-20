@@ -106,15 +106,24 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private fun initDataStore() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                val userIdPref = viewModel.getUserId.first()
                 val nameUserPref = viewModel.getNameUser.first()
                 val emailUserPref = viewModel.getEmailUser.first()
                 val imageUserPref = viewModel.getImageUser.first()
-                val userIdPref = viewModel.getUserId.first()
+                val languagePref = viewModel.getLanguage.first()
 
+                userId = userIdPref
                 binding.tvUserName.text = nameUserPref
                 binding.tvUserEmail.text = emailUserPref
                 binding.ivProfile.load(imageUserPref)
-                userId = userIdPref
+                when(languagePref) {
+                    0 -> {
+                        binding.sSelectLanguage.setSelection(0)
+                    }
+                    1 -> {
+                        binding.sSelectLanguage.setSelection(1)
+                    }
+                }
             }
         }
     }
@@ -131,7 +140,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 false
             }
 
-            sSelectLanguage.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            sSelectLanguage.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
                     view: View?,
@@ -139,7 +148,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     id: Long
                 ) {
                     if (isSpinnerTouched) {
-                        when(position) {
+                        when (position) {
                             0 -> {
                                 setLanguage("en")
                                 setDialogChangeLanguage()
@@ -179,34 +188,30 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 requestBodyImage
             )
             viewModel.changeImage(userId!!, multiPartImage)
-            initObserver()
-        }
-    }
+            viewModel.state.observe(viewLifecycleOwner) { response ->
+                when (response) {
+                    is Resource.Loading -> {
+                        binding.profileCardLoading.root.setVisibilityVisible()
+                    }
+                    is Resource.Success -> {
+                        binding.profileCardLoading.root.setVisibilityGone()
 
-    private fun initObserver() {
-        viewModel.state.observe(viewLifecycleOwner) { response ->
-            when(response) {
-                is Resource.Loading -> {
-                    binding.profileCardLoading.root.setVisibilityVisible()
-                }
-                is Resource.Success -> {
-                    binding.profileCardLoading.root.setVisibilityGone()
+                        viewModel.saveImageUser(response.data!!.success.path)
 
-                    viewModel.saveImageUser(response.data!!.success.path)
+                        Toast.makeText(requireContext(), "${response.data!!.success.status} \n Login Successfully", Toast.LENGTH_SHORT).show()
+                    }
+                    is Resource.Error -> {
+                        binding.profileCardLoading.root.setVisibilityGone()
+                        try {
+                            val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
+                            val gson = Gson()
+                            val jsonObject = gson.fromJson(errors, JsonObject::class.java)
+                            val errorResponse = gson.fromJson(jsonObject, ErrorResponseDTO::class.java)
 
-                    Toast.makeText(requireContext(), "${response.data!!.success.status} \n Login Successfully", Toast.LENGTH_SHORT).show()
-                }
-                is Resource.Error -> {
-                    binding.profileCardLoading.root.setVisibilityGone()
-                    try {
-                        val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
-                        val gson = Gson()
-                        val jsonObject = gson.fromJson(errors, JsonObject::class.java)
-                        val errorResponse = gson.fromJson(jsonObject, ErrorResponseDTO::class.java)
-
-                        Toast.makeText(requireContext(), "${errorResponse.error.message} ${errorResponse.error.status}", Toast.LENGTH_SHORT).show()
-                    } catch (e: Exception) {
-                        Toast.makeText(requireContext(), "Token Has Expired", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), "${errorResponse.error.message} ${errorResponse.error.status}", Toast.LENGTH_SHORT).show()
+                        } catch (e: Exception) {
+                            Toast.makeText(requireContext(), "Token Has Expired", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
             }
@@ -243,13 +248,19 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private fun alertDialogSelectImage() {
         val view = layoutInflater.inflate(R.layout.custom_dialog_select_image, null)
         val builder = AlertDialog.Builder(requireContext(), R.style.Ctm_AlertDialog)
+        val showDialog = builder.setView(view).show()
 
         val fromCamera = view.findViewById<TextView>(R.id.tvSelectCamera)
         val fromGallery = view.findViewById<TextView>(R.id.tvSelectGallery)
 
-        builder.setView(view).show()
-        fromCamera.setOnClickListener { openCamera() }
-        fromGallery.setOnClickListener { openGallery() }
+        fromCamera.setOnClickListener {
+            openCamera()
+            showDialog.dismiss()
+        }
+        fromGallery.setOnClickListener {
+            openGallery()
+            showDialog.dismiss()
+        }
     }
 
     private fun openCamera() {

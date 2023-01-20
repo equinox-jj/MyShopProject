@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".presentation.profile.changepass.ChangePassActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarChangePass"
+        android:layout_width="match_parent"
+        android:layout_height="?android:actionBarSize"
+        android:background="@color/primaryLightColor"
+        app:contentInsetStart="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="Change Password" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilOldPass"
         android:layout_width="0dp"
@@ -17,7 +28,7 @@
         app:endIconMode="password_toggle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/toolbarChangePass">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etOldPass"

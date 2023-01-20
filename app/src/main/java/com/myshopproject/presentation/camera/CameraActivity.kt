@@ -1,10 +1,13 @@
 package com.myshopproject.presentation.camera
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.view.OrientationEventListener
+import android.view.Surface
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
@@ -35,20 +38,33 @@ class CameraActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         if (!cameraPermissionsGranted()) {
-            ActivityCompat.requestPermissions(
-                this@CameraActivity,
-                arrayOf(Manifest.permission.CAMERA),
-                10
-            )
+            ActivityCompat.requestPermissions(this@CameraActivity, arrayOf(Manifest.permission.CAMERA), 10)
         }
 
         cameraExecutor = Executors.newSingleThreadExecutor()
 
         setupListener()
+        observeOrientation()
     }
 
     private fun cameraPermissionsGranted() = arrayOf(Manifest.permission.CAMERA).all {
         ContextCompat.checkSelfPermission(this@CameraActivity, it) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun observeOrientation() {
+        val orientationEventListener = object : OrientationEventListener(this as Context) {
+            override fun onOrientationChanged(orientation : Int) {
+                val rotation : Int = when (orientation) {
+                    in 45..134 -> Surface.ROTATION_270
+                    in 135..224 -> Surface.ROTATION_180
+                    in 225..314 -> Surface.ROTATION_90
+                    else -> Surface.ROTATION_0
+                }
+
+                imageCapture?.targetRotation = rotation
+            }
+        }
+        orientationEventListener.enable()
     }
 
     private fun setupListener() {
@@ -121,10 +137,7 @@ class CameraActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.insetsController?.hide(WindowInsets.Type.statusBars())
         } else {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-            )
+            window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         }
         supportActionBar?.hide()
     }

@@ -46,6 +46,7 @@
                 android:layout_gravity="end|bottom"
                 android:contentDescription="@null"
                 app:backgroundTint="@color/white"
+                app:elevation="0dp"
                 app:srcCompat="@drawable/ic_camera_filled" />
 
         </FrameLayout>

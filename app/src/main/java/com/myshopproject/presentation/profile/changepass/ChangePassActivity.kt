@@ -1,6 +1,7 @@
 package com.myshopproject.presentation.profile.changepass
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.myshopproject.R
 import com.myshopproject.data.remote.dto.ErrorResponseDTO
 import com.myshopproject.databinding.ActivityChangePassBinding
 import com.myshopproject.domain.utils.Resource
@@ -34,8 +36,26 @@ class ChangePassActivity : AppCompatActivity() {
         binding = ActivityChangePassBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.toolbarChangePass)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         setupListener()
         initObserver()
+        initDataStore()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
+    }
+
+    private fun initDataStore() {
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                authorization = viewModel.getAuthorization.first()
+                userId = viewModel.getUserId.first()
+            }
+        }
     }
 
     private fun initObserver() {
@@ -64,12 +84,6 @@ class ChangePassActivity : AppCompatActivity() {
                         Toast.makeText(this@ChangePassActivity, "Token Has Expired", Toast.LENGTH_SHORT).show()
                     }
                 }
-            }
-        }
-        lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                authorization = viewModel.getAuthorization.first()
-                userId = viewModel.getUserId.first()
             }
         }
     }

@@ -16,6 +16,7 @@ class ProductListVH(private val binding: ItemProductListBinding) : ViewHolder(bi
             tvProductName.isSelected = true
             tvProductName.text = data.nameProduct
             tvProductPrice.text = data.harga.toIDRPrice()
+            rbProductRate.rating = data.rate.div(2).toFloat()
         }
     }
 }

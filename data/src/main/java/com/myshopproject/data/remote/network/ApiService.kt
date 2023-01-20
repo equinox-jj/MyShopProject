@@ -47,7 +47,7 @@ interface ApiService {
 
     @GET("api/ecommerce/get_list_product")
     suspend fun getListProduct(
-//        @Query("search") query: String
+        @Query("search") query: String?
     ): DataProductResponseDTO
 
     @GET("api/ecommerce/get_list_product_favorite")

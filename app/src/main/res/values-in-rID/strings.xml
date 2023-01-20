@@ -26,4 +26,5 @@
     <string name="change_language">Ubah Bahasa</string>
     <string name="change_password">Ubah Password</string>
     <string name="logout">Keluar</string>
+    <string name="sorted_by">Urutkan Berdasarkan</string>
 </resources>

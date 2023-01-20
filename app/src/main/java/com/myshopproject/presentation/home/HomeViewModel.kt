@@ -20,12 +20,8 @@ class HomeViewModel @Inject constructor(
     private val _state = MutableLiveData<Resource<DataProductResponse>>()
     val state: LiveData<Resource<DataProductResponse>> = _state
 
-    init {
-        getProductList()
-    }
-
-    private fun getProductList() {
-        getListProductUseCase.invoke().onEach { response ->
+    fun getProductList(query: String?) {
+        getListProductUseCase.invoke(query).onEach { response ->
             when (response) {
                 is Resource.Loading -> {
                     _state.value = Resource.Loading
@@ -36,7 +32,8 @@ class HomeViewModel @Inject constructor(
                     }
                 }
                 is Resource.Error -> {
-                    _state.value = Resource.Error(response.message, response.errorCode, response.errorBody)
+                    _state.value =
+                        Resource.Error(response.message, response.errorCode, response.errorBody)
                 }
             }
         }.launchIn(viewModelScope)

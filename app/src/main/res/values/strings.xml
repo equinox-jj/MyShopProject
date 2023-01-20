@@ -25,4 +25,5 @@
     <string name="change_language">Change Language</string>
     <string name="change_password">Change Password</string>
     <string name="logout">Logout</string>
+    <string name="sorted_by">Sorted By</string>
 </resources>

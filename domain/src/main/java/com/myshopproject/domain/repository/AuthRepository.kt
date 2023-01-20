@@ -14,6 +14,4 @@ interface AuthRepository {
     fun registerAccount(image: MultipartBody.Part, email: RequestBody, password: RequestBody, name: RequestBody, phone: RequestBody, gender: Int): Flow<Resource<SuccessResponseStatus>>
     fun changePassword(id: Int, password: String, newPassword: String, confirmPassword: String): Flow<Resource<SuccessResponseStatus>>
     fun changeImage(id: Int, image: MultipartBody.Part): Flow<Resource<ChangeImageResponse>>
-    fun getListProduct(): Flow<Resource<DataProductResponse>>
-    fun getListProductFavorite(query: String, userId: Int): Flow<Resource<DataProductResponse>>
 }

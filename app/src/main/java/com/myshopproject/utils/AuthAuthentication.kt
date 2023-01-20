@@ -1,6 +1,5 @@
 package com.myshopproject.utils
 
-import android.util.Log
 import com.myshopproject.data.remote.dto.RefreshTokenResponseDTO
 import com.myshopproject.data.remote.network.ApiRefreshToken
 import com.myshopproject.domain.preferences.MyPreferences
@@ -17,11 +16,13 @@ class AuthAuthentication @Inject constructor(
 ) : Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
         return runBlocking {
-            val accessToken = pref.getAccessToken().first()
-            val refreshToken = pref.getRefreshToken().first()
-            val userId = pref.getUserId().first()
+            val authRefresh = pref.getAuthRefresh().first()
 
-            val newToken = getNewToken(userId, accessToken, refreshToken)
+            val newToken = getNewToken(
+                authRefresh.userId,
+                authRefresh.accessToken,
+                authRefresh.refreshToken
+            )
 
             if (!newToken.isSuccessful || newToken.body() == null || newToken.code() == 401) {
                 pref.clearSession() // Clear Preferences
