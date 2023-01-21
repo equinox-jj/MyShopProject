@@ -9,9 +9,9 @@ import com.myshopproject.data.repository.ProductRepositoryImpl
 import com.myshopproject.domain.preferences.MyPreferences
 import com.myshopproject.domain.repository.AuthRepository
 import com.myshopproject.domain.repository.ProductRepository
-import com.myshopproject.utils.AuthAuthentication
-import com.myshopproject.utils.AuthExpiredToken
-import com.myshopproject.utils.HeaderInterceptor
+import com.myshopproject.utils.token.AuthAuthentication
+import com.myshopproject.utils.token.AuthExpiredToken
+import com.myshopproject.utils.token.HeaderInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -40,11 +40,15 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun providesAuthAuthentication(pref: MyPreferences): AuthAuthentication = AuthAuthentication(pref)
+    fun providesAuthAuthentication(pref: MyPreferences): AuthAuthentication =
+        AuthAuthentication(pref)
 
     @Singleton
     @Provides
-    fun providesAuthInterceptor(@ApplicationContext context: Context, pref: MyPreferences): AuthExpiredToken = AuthExpiredToken(context, pref)
+    fun providesAuthInterceptor(
+        @ApplicationContext context: Context,
+        pref: MyPreferences
+    ): AuthExpiredToken = AuthExpiredToken(context, pref)
 
     @Singleton
     @Provides
@@ -82,8 +86,8 @@ object AppModule {
         gsonConverterFactory: GsonConverterFactory
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://172.17.20.201/training_android/public/")
-//            .baseUrl("http://localhost:3001/training_android/public/")
+//            .baseUrl("http://172.17.20.201/training_android/public/api/ecommerce/")
+            .baseUrl("https://portlan.id/training_android/public/api/ecommerce/")
             .client(okHttpClient)
             .addConverterFactory(gsonConverterFactory)
             .build()

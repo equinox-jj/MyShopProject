@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.bottomNavigation.setupWithNavController(navController)
+
         initDataStore()
     }
 
@@ -83,7 +84,7 @@ class MainActivity : AppCompatActivity() {
         Locale.setDefault(locale)
         val config = Configuration()
         config.setLocale(locale)
-        this.resources.updateConfiguration(config, this.resources.displayMetrics)
+        this.resources.updateConfiguration(config, resources.displayMetrics)
     }
 
     private fun showBottomNav() {
@@ -94,11 +95,11 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigation.setVisibilityGone()
     }
 
-    private fun showToolbar() {
-        binding.toolbarMain.setVisibilityVisible()
-    }
+//    private fun showToolbar() {
+//        binding.toolbarMain.setVisibilityVisible()
+//    }
 
-    private fun hideToolbar() {
-        binding.toolbarMain.setVisibilityGone()
-    }
+//    private fun hideToolbar() {
+//        binding.toolbarMain.setVisibilityGone()
+//    }
 }

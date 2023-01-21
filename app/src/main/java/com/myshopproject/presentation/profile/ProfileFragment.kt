@@ -175,7 +175,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         Locale.setDefault(locale)
         val config = Configuration()
         config.setLocale(locale)
-        requireActivity().resources.updateConfiguration(config, requireActivity().resources.displayMetrics)
+        requireActivity().resources.updateConfiguration(config, resources.displayMetrics)
     }
 
     private fun postChangeImage() {

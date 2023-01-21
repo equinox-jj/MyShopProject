@@ -1,11 +1,11 @@
-package com.myshopproject.presentation.home
+package com.myshopproject.presentation.favorite
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myshopproject.domain.entities.DataProductResponse
-import com.myshopproject.domain.usecase.GetListProductUseCase
+import com.myshopproject.domain.usecase.GetListProductFavUseCase
 import com.myshopproject.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -13,33 +13,29 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
-    private val getListProductUseCase: GetListProductUseCase
+class FavoriteViewModel @Inject constructor(
+    private val getListProductFavUseCase: GetListProductFavUseCase
 ) : ViewModel() {
 
     private val _state = MutableLiveData<Resource<DataProductResponse>>()
     val state: LiveData<Resource<DataProductResponse>> = _state
 
-    init {
-        getProductList("")
-    }
-
-    fun getProductList(query: String?) {
-        getListProductUseCase.invoke(query).onEach { response ->
+    fun getProductListFav(query: String, userId: Int) {
+        getListProductFavUseCase.invoke(query, userId).onEach { response ->
             when (response) {
                 is Resource.Loading -> {
                     _state.value = Resource.Loading
                 }
                 is Resource.Success -> {
-                    response.data?.let {
-                        _state.value = Resource.Success(it)
+                    response.data?.let { result ->
+                        _state.value = Resource.Success(result)
                     }
                 }
                 is Resource.Error -> {
-                    _state.value =
-                        Resource.Error(response.message, response.errorCode, response.errorBody)
+                    _state.value = Resource.Error(response.message, response.errorCode, response.errorBody)
                 }
             }
         }.launchIn(viewModelScope)
     }
+
 }

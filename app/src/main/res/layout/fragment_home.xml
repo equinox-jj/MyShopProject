@@ -37,6 +37,17 @@
         tools:listitem="@layout/item_product_list" />
 
     <include
+        android:id="@+id/emptyHome"
+        layout="@layout/empty_state_product"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/svHome" />
+
+    <include
         android:id="@+id/shimmerHome"
         layout="@layout/shimmer_product_list"
         android:layout_width="match_parent"

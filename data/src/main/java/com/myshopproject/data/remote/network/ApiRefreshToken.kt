@@ -11,7 +11,7 @@ interface ApiRefreshToken {
 
     @FormUrlEncoded
     @Headers(*["apikey: TuIBt77u7tZHi8n7WqUC"])
-    @POST("api/ecommerce/refresh-token")
+    @POST("refresh-token")
     suspend fun getRefreshToken(
         @Field("id_user") id: Int?,
         @Field("access_token") accessToken: String?,

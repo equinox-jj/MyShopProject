@@ -1,7 +1,6 @@
 package com.myshopproject.presentation.profile.changepass
 
 import android.os.Bundle
-import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +9,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.myshopproject.R
 import com.myshopproject.data.remote.dto.ErrorResponseDTO
 import com.myshopproject.databinding.ActivityChangePassBinding
 import com.myshopproject.domain.utils.Resource

@@ -1,7 +1,6 @@
 package com.myshopproject.domain.usecase
 
 import com.myshopproject.domain.entities.DataProductResponse
-import com.myshopproject.domain.repository.AuthRepository
 import com.myshopproject.domain.repository.ProductRepository
 import com.myshopproject.domain.utils.Resource
 import kotlinx.coroutines.flow.Flow

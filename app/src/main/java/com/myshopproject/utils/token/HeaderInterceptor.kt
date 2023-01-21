@@ -1,7 +1,6 @@
-package com.myshopproject.utils
+package com.myshopproject.utils.token
 
 import com.myshopproject.domain.preferences.MyPreferences
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor

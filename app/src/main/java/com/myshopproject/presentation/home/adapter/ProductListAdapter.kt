@@ -7,8 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.myshopproject.databinding.ItemProductListBinding
 import com.myshopproject.domain.entities.DataProduct
 import com.myshopproject.utils.DiffUtilRecycler
+import com.myshopproject.utils.enumhelper.ProductType
 
-class ProductListAdapter : RecyclerView.Adapter<ProductListVH>() {
+class ProductListAdapter(private val type: ProductType) : RecyclerView.Adapter<ProductListVH>() {
 
     private var listProduct = listOf<DataProduct>()
 
@@ -18,15 +19,15 @@ class ProductListAdapter : RecyclerView.Adapter<ProductListVH>() {
     }
 
     override fun onBindViewHolder(holder: ProductListVH, position: Int) {
-        holder.bind(listProduct[position])
+        holder.bind(listProduct[position], type)
     }
 
     override fun getItemCount(): Int = listProduct.size
 
     fun submitData(newData: List<DataProduct>) {
         val diffUtilRecycler = DiffUtilRecycler(listProduct, newData)
-        val diffUtilCallback = DiffUtil.calculateDiff(diffUtilRecycler)
+        val diffResult = DiffUtil.calculateDiff(diffUtilRecycler)
         listProduct = newData
-        diffUtilCallback.dispatchUpdatesTo(this)
+        diffResult.dispatchUpdatesTo(this)
     }
 }

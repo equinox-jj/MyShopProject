@@ -36,9 +36,17 @@ class ProductRepositoryImpl @Inject constructor(
     ): Flow<Resource<DataProductResponse>> = flow {
         emit(Resource.Loading)
         try {
-
+            val response = apiService.getListProductFavorite(query, userId).toDomain()
+            emit(Resource.Success(response))
         } catch (t: Throwable) {
-
+            if (t is HttpException) {
+                when (t.code()) {
+                    400 -> { emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody())) }
+                    404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                    500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                    else -> emit(Resource.Error(null, null, null))
+                }
+            }
         }
     }
 }

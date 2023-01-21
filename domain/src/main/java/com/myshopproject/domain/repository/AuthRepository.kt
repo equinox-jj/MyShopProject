@@ -1,7 +1,6 @@
 package com.myshopproject.domain.repository
 
 import com.myshopproject.domain.entities.ChangeImageResponse
-import com.myshopproject.domain.entities.DataProductResponse
 import com.myshopproject.domain.entities.LoginResult
 import com.myshopproject.domain.entities.SuccessResponseStatus
 import com.myshopproject.domain.utils.Resource

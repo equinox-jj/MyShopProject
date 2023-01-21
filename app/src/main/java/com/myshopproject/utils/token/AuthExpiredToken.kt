@@ -1,4 +1,4 @@
-package com.myshopproject.utils
+package com.myshopproject.utils.token
 
 import android.content.Context
 import android.content.Intent

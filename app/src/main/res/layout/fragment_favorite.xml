@@ -6,18 +6,63 @@
     android:layout_height="match_parent"
     tools:context=".presentation.favorite.FavoriteFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:fontFamily="@font/poppins_extrabold"
-        android:textSize="20sp"
-        android:text="Favorite Screen"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/svFavorite"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/bg_searchview"
+        app:iconifiedByDefault="false"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5" />
+        app:queryBackground="@null"
+        app:queryHint="Search..."
+        app:searchIcon="@drawable/ic_search" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvFavorite"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="4dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/svFavorite"
+        tools:listitem="@layout/item_product_list" />
+
+    <include
+        android:id="@+id/shimmerFavorite"
+        layout="@layout/shimmer_product_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rvFavorite" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fabSortedByFav"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/primaryColor"
+        android:clickable="true"
+        android:contentDescription="@null"
+        android:focusable="true"
+        android:text="@string/sorted_by"
+        android:textSize="11sp"
+        app:icon="@drawable/ic_person_filled"
+        app:iconGravity="end"
+        app:iconSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

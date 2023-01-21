@@ -11,14 +11,14 @@ import retrofit2.http.*
 interface ApiService {
 
     @FormUrlEncoded
-    @POST("api/ecommerce/authentication")
+    @POST("authentication")
     suspend fun loginAccount(
         @Field("email") email: String,
         @Field("password") password: String
     ): LoginResponseDTO
 
     @Multipart
-    @POST("api/ecommerce/registration")
+    @POST("registration")
     suspend fun registerAccount(
         @Part image: MultipartBody.Part,
         @Part("email") email: RequestBody,
@@ -29,7 +29,7 @@ interface ApiService {
     ): SuccessResponseDTO
 
     @FormUrlEncoded
-    @PUT("api/ecommerce/change-password/{id}")
+    @PUT("change-password/{id}")
     suspend fun changePassword(
         @Path("id") id: Int,
         @Field("password") password: String,
@@ -38,19 +38,19 @@ interface ApiService {
     ): SuccessResponseDTO
 
 
-    @POST("api/ecommerce/change-image")
+    @POST("change-image")
     @Multipart
     suspend fun changeImage(
         @Part("id") id: Int,
         @Part image: MultipartBody.Part,
     ): ChangeImageResponseDTO
 
-    @GET("api/ecommerce/get_list_product")
+    @GET("get_list_product")
     suspend fun getListProduct(
         @Query("search") query: String?
     ): DataProductResponseDTO
 
-    @GET("api/ecommerce/get_list_product_favorite")
+    @GET("get_list_product_favorite")
     suspend fun getListProductFavorite(
         @Query("search") query: String,
         @Query("id_user") userId: Int

@@ -10,7 +10,11 @@
         android:id="@+id/homeFragment"
         android:name="com.myshopproject.presentation.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_detailProductFragment"
+            app:destination="@id/detailProductFragment" />
+    </fragment>
 
 
     <fragment
@@ -28,7 +32,11 @@
         android:id="@+id/favoriteFragment"
         android:name="com.myshopproject.presentation.favorite.FavoriteFragment"
         android:label="fragment_favorite"
-        tools:layout="@layout/fragment_favorite" />
+        tools:layout="@layout/fragment_favorite" >
+        <action
+            android:id="@+id/action_favoriteFragment_to_detailProductFragment"
+            app:destination="@id/detailProductFragment" />
+    </fragment>
 
 
     <activity
@@ -36,6 +44,15 @@
         android:name="com.myshopproject.presentation.profile.changepass.ChangePassActivity"
         android:label="Change Password"
         tools:layout="@layout/activity_change_pass" />
+    <fragment
+        android:id="@+id/detailProductFragment"
+        android:name="com.myshopproject.presentation.detail.DetailProductFragment"
+        android:label="fragment_detail_product"
+        tools:layout="@layout/fragment_detail_product" >
+        <argument
+            android:name="productId"
+            app:argType="integer" />
+    </fragment>
 
 
 </navigation>

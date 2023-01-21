@@ -3,7 +3,6 @@ package com.myshopproject.data.repository
 import com.myshopproject.data.mapper.toDomain
 import com.myshopproject.data.remote.network.ApiService
 import com.myshopproject.domain.entities.ChangeImageResponse
-import com.myshopproject.domain.entities.DataProductResponse
 import com.myshopproject.domain.entities.LoginResult
 import com.myshopproject.domain.entities.SuccessResponseStatus
 import com.myshopproject.domain.repository.AuthRepository

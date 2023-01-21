@@ -1,4 +1,4 @@
-package com.myshopproject.utils
+package com.myshopproject.utils.token
 
 import com.myshopproject.data.remote.dto.RefreshTokenResponseDTO
 import com.myshopproject.data.remote.network.ApiRefreshToken
