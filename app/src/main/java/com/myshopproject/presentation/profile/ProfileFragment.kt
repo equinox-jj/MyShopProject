@@ -32,7 +32,6 @@ import com.myshopproject.presentation.login.LoginActivity
 import com.myshopproject.presentation.profile.adapter.CustomSpinnerAdapter
 import com.myshopproject.utils.*
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -106,22 +105,26 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private fun initDataStore() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                val userIdPref = viewModel.getUserId.first()
-                val nameUserPref = viewModel.getNameUser.first()
-                val emailUserPref = viewModel.getEmailUser.first()
-                val imageUserPref = viewModel.getImageUser.first()
-                val languagePref = viewModel.getLanguage.first()
-
-                userId = userIdPref
-                binding.tvUserName.text = nameUserPref
-                binding.tvUserEmail.text = emailUserPref
-                binding.ivProfile.load(imageUserPref)
-                when(languagePref) {
-                    0 -> {
-                        binding.sSelectLanguage.setSelection(0)
-                    }
-                    1 -> {
-                        binding.sSelectLanguage.setSelection(1)
+                viewModel.getUserId.collect {
+                    userId = it
+                }
+                viewModel.getNameUser.collect {
+                    binding.tvUserName.text = it
+                }
+                viewModel.getEmailUser.collect {
+                    binding.tvUserEmail.text = it
+                }
+                viewModel.getImageUser.collect {
+                    binding.ivProfile.load(it)
+                }
+                viewModel.getLanguage.collect {
+                    when(it) {
+                        0 -> {
+                            binding.sSelectLanguage.setSelection(0)
+                        }
+                        1 -> {
+                            binding.sSelectLanguage.setSelection(1)
+                        }
                     }
                 }
             }

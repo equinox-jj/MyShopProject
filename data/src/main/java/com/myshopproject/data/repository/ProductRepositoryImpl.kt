@@ -31,7 +31,7 @@ class ProductRepositoryImpl @Inject constructor(
     }
 
     override fun getListProductFavorite(
-        query: String,
+        query: String?,
         userId: Int
     ): Flow<Resource<DataProductResponse>> = flow {
         emit(Resource.Loading)

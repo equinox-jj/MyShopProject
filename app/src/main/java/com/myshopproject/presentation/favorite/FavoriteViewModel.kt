@@ -20,7 +20,11 @@ class FavoriteViewModel @Inject constructor(
     private val _state = MutableLiveData<Resource<DataProductResponse>>()
     val state: LiveData<Resource<DataProductResponse>> = _state
 
-    fun getProductListFav(query: String, userId: Int) {
+    init {
+        getProductListFav("", 213)
+    }
+
+    fun getProductListFav(query: String?, userId: Int) {
         getListProductFavUseCase.invoke(query, userId).onEach { response ->
             when (response) {
                 is Resource.Loading -> {

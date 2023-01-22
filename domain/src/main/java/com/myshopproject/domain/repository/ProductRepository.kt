@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface ProductRepository {
     fun getListProduct(query: String?): Flow<Resource<DataProductResponse>>
-    fun getListProductFavorite(query: String, userId: Int): Flow<Resource<DataProductResponse>>
+    fun getListProductFavorite(query: String?, userId: Int): Flow<Resource<DataProductResponse>>
 }

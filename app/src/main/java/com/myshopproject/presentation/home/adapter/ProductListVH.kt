@@ -22,14 +22,12 @@ class ProductListVH(private val binding: ItemProductListBinding) : ViewHolder(bi
     private fun bindProductList(data: DataProduct) {
         binding.apply {
             ivProductFavIcon.setVisibilityGone()
-            ivProductImage.load(data.image) {
-                crossfade(800)
-            }
+            ivProductImage.load(data.image)
             tvProductDate.text = data.date
             tvProductName.isSelected = true
             tvProductName.text = data.nameProduct
             tvProductPrice.text = data.harga.toIDRPrice()
-            rbProductRate.rating = data.rate.div(2).toFloat()
+            rbProductRate.rating = data.rate.toFloat()
             cvProduct.setOnClickListener {
                 val productId = data.stock
                 val action = HomeFragmentDirections.actionHomeFragmentToDetailProductFragment(1)
@@ -41,14 +39,12 @@ class ProductListVH(private val binding: ItemProductListBinding) : ViewHolder(bi
     private fun bindProductFavList(data: DataProduct) {
         binding.apply {
             ivProductFavIcon.setVisibilityVisible()
-            ivProductImage.load(data.image) {
-                crossfade(800)
-            }
+            ivProductImage.load(data.image)
             tvProductDate.text = data.date
             tvProductName.isSelected = true
             tvProductName.text = data.nameProduct
             tvProductPrice.text = data.harga.toIDRPrice()
-            rbProductRate.rating = data.rate.div(2).toFloat()
+            rbProductRate.rating = data.rate.toFloat()
             cvProduct.setOnClickListener {
                 val productId = data.stock
                 val action = HomeFragmentDirections.actionHomeFragmentToDetailProductFragment(1)

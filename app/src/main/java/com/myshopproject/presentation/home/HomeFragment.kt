@@ -26,7 +26,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private val adapter by lazy { ProductListAdapter(ProductType.PRODUCT_LIST) }
+    private var adapter: ProductListAdapter? = null
     private val viewModel by viewModels<HomeViewModel>()
 
     private var job: Job? = null
@@ -77,6 +77,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun initRecyclerView() {
         binding.apply {
+            adapter = ProductListAdapter(ProductType.PRODUCT_LIST)
             rvHome.adapter = adapter
             rvHome.setHasFixedSize(true)
         }
@@ -119,25 +120,25 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         when(sortedBy) {
                             SortedBy.SortAtoZ -> {
                                 response.data?.success?.data?.let { listData ->
-                                    adapter.submitData(listData.sortedBy { it.nameProduct })
+                                    adapter?.submitData(listData.sortedBy { it.nameProduct })
                                 }
                             }
                             SortedBy.SortZtoA -> {
                                 response.data?.success?.data?.let { listData ->
-                                    adapter.submitData(listData.sortedByDescending { it.nameProduct })
+                                    adapter?.submitData(listData.sortedByDescending { it.nameProduct })
                                 }
                             }
                             SortedBy.DefaultSort -> {
                                 response.data?.success?.data?.let { listData ->
-                                    adapter.submitData(listData)
+                                    adapter?.submitData(listData)
                                 }
                             }
                         }
                     } else {
-                        isEmptyState(true)
                         binding.shimmerHome.root.stopShimmer()
                         binding.shimmerHome.root.setVisibilityGone()
                         binding.rvHome.setVisibilityGone()
+                        isEmptyState(true)
                     }
                 }
                 is Resource.Error -> {
@@ -160,6 +161,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        adapter = null
         _binding = null
     }
 }
