@@ -201,7 +201,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
                         viewModel.saveImageUser(response.data!!.success.path)
 
-                        Toast.makeText(requireContext(), "${response.data!!.success.status} \n Login Successfully", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Change image success ${response.data!!.success.status}", Toast.LENGTH_SHORT).show()
                     }
                     is Resource.Error -> {
                         binding.profileCardLoading.root.setVisibilityGone()

@@ -1,7 +1,7 @@
 package com.myshopproject.data.repository
 
 import com.myshopproject.data.mapper.toDomain
-import com.myshopproject.data.remote.network.ApiService
+import com.myshopproject.data.remote.network.ApiAuth
 import com.myshopproject.domain.entities.ChangeImageResponse
 import com.myshopproject.domain.entities.LoginResult
 import com.myshopproject.domain.entities.SuccessResponseStatus
@@ -15,13 +15,13 @@ import retrofit2.HttpException
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
-    private val apiService: ApiService
+    private val apiAuth: ApiAuth
 ) : AuthRepository {
 
     override fun loginAccount(email: String, password: String): Flow<Resource<LoginResult>> = flow {
         emit(Resource.Loading)
         try {
-            val response = apiService.loginAccount(
+            val response = apiAuth.loginAccount(
                 email = email,
                 password = password
             ).success.toDomain()
@@ -50,7 +50,7 @@ class AuthRepositoryImpl @Inject constructor(
     ): Flow<Resource<SuccessResponseStatus>> = flow {
         emit(Resource.Loading)
         try {
-            val response = apiService.registerAccount(
+            val response = apiAuth.registerAccount(
                 image = image,
                 email = email,
                 password = password,
@@ -81,7 +81,7 @@ class AuthRepositoryImpl @Inject constructor(
     ): Flow<Resource<SuccessResponseStatus>> = flow {
         emit(Resource.Loading)
         try {
-            val response = apiService.changePassword(
+            val response = apiAuth.changePassword(
                 id = id,
                 password = password,
                 newPassword = newPassword,
@@ -109,7 +109,7 @@ class AuthRepositoryImpl @Inject constructor(
     ): Flow<Resource<ChangeImageResponse>> = flow {
         emit(Resource.Loading)
         try {
-            val response = apiService.changeImage(
+            val response = apiAuth.changeImage(
                 id = id,
                 image = image
             ).toDomain()

@@ -3,7 +3,8 @@ package com.myshopproject.di
 import android.content.Context
 import com.myshopproject.data.BuildConfig
 import com.myshopproject.data.preferences.MyPreferencesImpl
-import com.myshopproject.data.remote.network.ApiService
+import com.myshopproject.data.remote.network.ApiAuth
+import com.myshopproject.data.remote.network.ApiProduct
 import com.myshopproject.data.repository.AuthRepositoryImpl
 import com.myshopproject.data.repository.ProductRepositoryImpl
 import com.myshopproject.domain.preferences.MyPreferences
@@ -95,25 +96,31 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideApiService(retrofit: Retrofit): ApiService {
-        return retrofit.create(ApiService::class.java)
+    fun provideApiAuth(retrofit: Retrofit): ApiAuth {
+        return retrofit.create(ApiAuth::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideApiProduct(retrofit: Retrofit): ApiProduct {
+        return retrofit.create(ApiProduct::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun providesAuthRepository(apiAuth: ApiAuth): AuthRepository {
+        return AuthRepositoryImpl(apiAuth)
+    }
+
+    @Singleton
+    @Provides
+    fun providesProductRepository(apiProduct: ApiProduct): ProductRepository {
+        return ProductRepositoryImpl(apiProduct)
     }
 
     @Provides
     @Singleton
     fun providesDataStore(@ApplicationContext context: Context): MyPreferences {
         return MyPreferencesImpl(context)
-    }
-
-    @Singleton
-    @Provides
-    fun providesAuthRepository(apiService: ApiService): AuthRepository {
-        return AuthRepositoryImpl(apiService)
-    }
-
-    @Singleton
-    @Provides
-    fun providesProductRepository(apiService: ApiService): ProductRepository {
-        return ProductRepositoryImpl(apiService)
     }
 }

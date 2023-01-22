@@ -1,7 +1,7 @@
 package com.myshopproject.data.repository
 
 import com.myshopproject.data.mapper.toDomain
-import com.myshopproject.data.remote.network.ApiService
+import com.myshopproject.data.remote.network.ApiProduct
 import com.myshopproject.domain.entities.DataProductResponse
 import com.myshopproject.domain.repository.ProductRepository
 import com.myshopproject.domain.utils.Resource
@@ -11,12 +11,12 @@ import retrofit2.HttpException
 import javax.inject.Inject
 
 class ProductRepositoryImpl @Inject constructor(
-    private val apiService: ApiService
+    private val apiProduct: ApiProduct
 ) : ProductRepository {
     override fun getListProduct(query: String?): Flow<Resource<DataProductResponse>> = flow {
         emit(Resource.Loading)
         try {
-            val response = apiService.getListProduct(query).toDomain()
+            val response = apiProduct.getListProduct(query).toDomain()
             emit(Resource.Success(response))
         } catch (t: Throwable) {
             if (t is HttpException) {
@@ -36,7 +36,7 @@ class ProductRepositoryImpl @Inject constructor(
     ): Flow<Resource<DataProductResponse>> = flow {
         emit(Resource.Loading)
         try {
-            val response = apiService.getListProductFavorite(query, userId).toDomain()
+            val response = apiProduct.getListProductFavorite(query, userId).toDomain()
             emit(Resource.Success(response))
         } catch (t: Throwable) {
             if (t is HttpException) {

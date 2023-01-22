@@ -1,10 +1,16 @@
 package com.myshopproject.presentation.home
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.myshopproject.R
@@ -37,8 +43,22 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         initRecyclerView()
         setupListener()
+        setupToolbarMenu()
 
         initObserver(SortedBy.DefaultSort)
+    }
+
+    private fun setupToolbarMenu() {
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object: MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_main_toolbar, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return true
+            }
+        },viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private fun setupListener() {

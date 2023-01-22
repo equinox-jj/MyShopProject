@@ -91,7 +91,7 @@ class RegisterActivity : AppCompatActivity() {
                 is Resource.Success -> {
                     binding.registerCardLoading.root.setVisibilityGone()
 
-                    Toast.makeText(this@RegisterActivity, "${response.data!!.success.status} \n Login Successfully", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@RegisterActivity, "Register Successfully ${response.data!!.success.status}", Toast.LENGTH_SHORT).show()
 
                     alertDialogRegisSuccess()
                 }
@@ -149,7 +149,7 @@ class RegisterActivity : AppCompatActivity() {
         val phone = binding.etPhoneRegister.text.toString()
         val male = binding.rbMale
         val female = binding.rbFemale
-        val genderList = listOf(male, female).firstOrNull() { it.isChecked }
+        val genderList = listOf(male, female).firstOrNull { it.isChecked }
 
         when {
             email.isEmpty() -> {
