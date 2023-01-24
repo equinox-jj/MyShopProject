@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.facebook.shimmer.ShimmerFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
     android:id="@+id/shimmerLoading"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:shimmer_duration="1000">
 
@@ -11,41 +11,53 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <View
+        <com.makeramen.roundedimageview.RoundedImageView
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_margin="10dp"
-            android:background="@drawable/bg_shimmer_product" />
+            android:scaleType="fitXY"
+            android:src="@color/shimmer_color"
+            app:riv_corner_radius="20dp" />
 
-        <View
+        <com.makeramen.roundedimageview.RoundedImageView
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_margin="10dp"
-            android:background="@drawable/bg_shimmer_product" />
+            android:scaleType="fitXY"
+            android:src="@color/shimmer_color"
+            app:riv_corner_radius="20dp" />
 
-        <View
+        <com.makeramen.roundedimageview.RoundedImageView
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_margin="10dp"
-            android:background="@drawable/bg_shimmer_product" />
+            android:scaleType="fitXY"
+            android:src="@color/shimmer_color"
+            app:riv_corner_radius="20dp" />
 
-        <View
+        <com.makeramen.roundedimageview.RoundedImageView
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_margin="10dp"
-            android:background="@drawable/bg_shimmer_product" />
+            android:scaleType="fitXY"
+            android:src="@color/shimmer_color"
+            app:riv_corner_radius="20dp" />
 
-        <View
+        <com.makeramen.roundedimageview.RoundedImageView
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_margin="10dp"
-            android:background="@drawable/bg_shimmer_product" />
+            android:scaleType="fitXY"
+            android:src="@color/shimmer_color"
+            app:riv_corner_radius="20dp" />
 
-        <View
+        <com.makeramen.roundedimageview.RoundedImageView
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_margin="10dp"
-            android:background="@drawable/bg_shimmer_product" />
+            android:scaleType="fitXY"
+            android:src="@color/shimmer_color"
+            app:riv_corner_radius="20dp" />
 
     </LinearLayout>
 

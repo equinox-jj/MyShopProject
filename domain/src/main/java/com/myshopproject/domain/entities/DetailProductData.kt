@@ -1,11 +1,12 @@
 package com.myshopproject.domain.entities
 
-data class DataProduct(
-    val id: Int,
+data class DetailProductData(
     val date: String,
     val desc: String,
     val harga: String,
+    val id: Int,
     val image: String,
+    val imageProduct: List<DetailProductImage>,
     val nameProduct: String,
     val rate: Int,
     val size: String,

@@ -75,6 +75,7 @@ fun DataProductResultDTO.toDomain() = DataProductResult(
 )
 
 fun DataProductDTO.toDomain() = DataProduct(
+    id = id,
     date = date,
     desc = desc,
     harga = harga,
@@ -85,4 +86,33 @@ fun DataProductDTO.toDomain() = DataProduct(
     stock = stock,
     type = type,
     weight = weight
+)
+
+fun DetailProductResponseDTO.toDomain() = DetailProductResponse(
+    success = success.toDomain()
+)
+
+fun DetailProductSuccessDTO.toDomain() = DetailProductSuccess(
+    data = data.toDomain(),
+    message = message,
+    status = status
+)
+
+fun DetailProductDataDTO.toDomain() = DetailProductData(
+    date = date,
+    desc = desc,
+    harga = harga,
+    id = id,
+    image = image,
+    imageProduct = imageProduct.map { it.toDomain() },
+    nameProduct = nameProduct,
+    rate = rate,
+    size = size,
+    stock = stock,
+    type = type,
+    weight = weight
+)
+
+fun DetailProductImageDTO.toDomain() = DetailProductImage(
+    imageProduct = imageProduct, titleProduct = titleProduct
 )
