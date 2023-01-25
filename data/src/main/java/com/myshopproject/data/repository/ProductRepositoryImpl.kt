@@ -51,10 +51,10 @@ class ProductRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getProductDetail(productId: Int): Flow<Resource<DetailProductResponse>> = flow {
+    override fun getProductDetail(productId: Int, userId: Int): Flow<Resource<DetailProductResponse>> = flow {
         emit(Resource.Loading)
         try {
-            val response = apiProduct.getProductDetail(productId).toDomain()
+            val response = apiProduct.getProductDetail(productId, userId).toDomain()
             emit(Resource.Success(response))
         } catch (t: Throwable) {
             if (t is HttpException) {

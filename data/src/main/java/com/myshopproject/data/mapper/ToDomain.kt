@@ -110,7 +110,8 @@ fun DetailProductDataDTO.toDomain() = DetailProductData(
     size = size,
     stock = stock,
     type = type,
-    weight = weight
+    weight = weight,
+    isFavorite = isFavorite
 )
 
 fun DetailProductImageDTO.toDomain() = DetailProductImage(

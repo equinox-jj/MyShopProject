@@ -21,6 +21,7 @@ interface ApiProduct {
     @GET("get_detail_product")
     suspend fun getProductDetail(
         @Query("id_product") productId: Int,
+        @Query("id_user") userId: Int,
     ): DetailProductResponseDTO
 
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myshopproject.domain.entities.DetailProductResponse
+import com.myshopproject.domain.preferences.MyPreferences
 import com.myshopproject.domain.usecase.GetProductDetailUseCase
 import com.myshopproject.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,14 +15,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    private val getProductDetailUseCase: GetProductDetailUseCase
+    private val getProductDetailUseCase: GetProductDetailUseCase,
+    pref: MyPreferences
 ) : ViewModel() {
 
     private val _state = MutableLiveData<Resource<DetailProductResponse>>()
     val state: LiveData<Resource<DetailProductResponse>> = _state
 
-    fun getProductList(productId: Int) {
-        getProductDetailUseCase.invoke(productId).onEach { response ->
+    val getUserId = pref.getUserId()
+
+    fun getProductList(productId: Int, userId: Int) {
+        getProductDetailUseCase.invoke(productId, userId).onEach { response ->
             when (response) {
                 is Resource.Loading -> {
                     _state.value = Resource.Loading
@@ -38,5 +42,4 @@ class DetailViewModel @Inject constructor(
             }
         }.launchIn(viewModelScope)
     }
-
 }

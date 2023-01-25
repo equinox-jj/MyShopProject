@@ -15,5 +15,6 @@ data class DetailProductDataDTO(
     @SerializedName("size") val size: String,
     @SerializedName("stock") val stock: Int,
     @SerializedName("type") val type: String,
-    @SerializedName("weight") val weight: String
+    @SerializedName("weight") val weight: String,
+    @SerializedName("isFavorite") val isFavorite: Boolean
 )

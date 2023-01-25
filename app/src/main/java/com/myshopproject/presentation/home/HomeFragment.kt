@@ -1,5 +1,6 @@
 package com.myshopproject.presentation.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -17,6 +18,7 @@ import com.myshopproject.R
 import com.myshopproject.databinding.FragmentHomeBinding
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.home.adapter.ProductListAdapter
+import com.myshopproject.presentation.trolley.TrolleyActivity
 import com.myshopproject.utils.enumhelper.ProductType
 import com.myshopproject.utils.enumhelper.SortedBy
 import com.myshopproject.utils.setVisibilityGone
@@ -56,6 +58,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                when(menuItem.itemId) {
+                    R.id.menu_cart -> {
+                        startActivity(Intent(requireContext(), TrolleyActivity::class.java))
+                    }
+                }
                 return true
             }
         },viewLifecycleOwner, Lifecycle.State.RESUMED)
@@ -108,7 +115,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         var selectedItem = ""
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Sort By")
-            .setSingleChoiceItems(items, -1){_, position ->
+            .setSingleChoiceItems(items, -1) {_, position ->
                 selectedItem = items[position]
             }
             .setPositiveButton("OK") {_,_ ->

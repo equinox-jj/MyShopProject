@@ -3,6 +3,7 @@ package com.myshopproject.utils.token
 import com.myshopproject.data.remote.dto.RefreshTokenResponseDTO
 import com.myshopproject.data.remote.network.ApiRefreshToken
 import com.myshopproject.domain.preferences.MyPreferences
+import com.myshopproject.utils.Constants.BASE_URL
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import okhttp3.*
@@ -51,7 +52,7 @@ class AuthAuthentication @Inject constructor(
             .build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://172.17.20.201/training_android/public/")
+            .baseUrl(BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

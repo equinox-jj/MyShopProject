@@ -65,12 +65,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
+        android:contentDescription="@null"
         android:src="@drawable/ic_increase_filled"
         app:layout_constraintBottom_toBottomOf="@+id/tvTotalBottSheet"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tvTotalBottSheet"
-        app:tint="@color/white"
-        android:contentDescription="@null" />
+        app:tint="@color/white" />
 
     <TextView
         android:id="@+id/tvQuantityBottSheet"
@@ -88,12 +88,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
+        android:contentDescription="@null"
         android:src="@drawable/ic_decrease_filled"
         app:layout_constraintBottom_toBottomOf="@+id/tvQuantityBottSheet"
         app:layout_constraintEnd_toStartOf="@+id/tvQuantityBottSheet"
         app:layout_constraintTop_toTopOf="@+id/tvQuantityBottSheet"
-        app:tint="@color/white"
-        android:contentDescription="@null" />
+        app:tint="@color/white" />
 
     <View
         android:id="@+id/line2"

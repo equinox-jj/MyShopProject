@@ -27,4 +27,6 @@
     <string name="logout">Logout</string>
     <string name="sorted_by">Sorted By</string>
     <string name="data_is_empty">Data is empty</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
