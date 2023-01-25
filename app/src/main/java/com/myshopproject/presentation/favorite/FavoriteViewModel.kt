@@ -5,23 +5,31 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myshopproject.domain.entities.DataProductResponse
+import com.myshopproject.domain.preferences.MyPreferences
 import com.myshopproject.domain.usecase.GetListProductFavUseCase
 import com.myshopproject.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class FavoriteViewModel @Inject constructor(
-    private val getListProductFavUseCase: GetListProductFavUseCase
+    private val getListProductFavUseCase: GetListProductFavUseCase,
+    pref: MyPreferences
 ) : ViewModel() {
 
     private val _state = MutableLiveData<Resource<DataProductResponse>>()
     val state: LiveData<Resource<DataProductResponse>> = _state
 
+    val getUserId = pref.getUserId()
+
     init {
-        getProductListFav("", 213)
+        viewModelScope.launch {
+            getProductListFav("", getUserId.first())
+        }
     }
 
     fun getProductListFav(query: String?, userId: Int) {

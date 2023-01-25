@@ -39,4 +39,80 @@
         app:layout_constraintStart_toStartOf="@+id/tvProductPriceBottSht"
         tools:text="Stock : 20" />
 
+    <View
+        android:id="@+id/line1"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_underline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivProductBottSht" />
+
+    <TextView
+        android:id="@+id/tvTotalBottSheet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/poppins"
+        android:text="Total"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/line1" />
+
+    <ImageButton
+        android:id="@+id/btnIncreaseBottSheet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_increase_filled"
+        app:layout_constraintBottom_toBottomOf="@+id/tvTotalBottSheet"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvTotalBottSheet"
+        app:tint="@color/white"
+        android:contentDescription="@null" />
+
+    <TextView
+        android:id="@+id/tvQuantityBottSheet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/poppins_bold"
+        android:text="1"
+        app:layout_constraintBottom_toBottomOf="@+id/btnIncreaseBottSheet"
+        app:layout_constraintEnd_toStartOf="@+id/btnIncreaseBottSheet"
+        app:layout_constraintTop_toTopOf="@+id/btnIncreaseBottSheet" />
+
+    <ImageButton
+        android:id="@+id/btnDecreaseBottSheet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/ic_decrease_filled"
+        app:layout_constraintBottom_toBottomOf="@+id/tvQuantityBottSheet"
+        app:layout_constraintEnd_toStartOf="@+id/tvQuantityBottSheet"
+        app:layout_constraintTop_toTopOf="@+id/tvQuantityBottSheet"
+        app:tint="@color/white"
+        android:contentDescription="@null" />
+
+    <View
+        android:id="@+id/line2"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_underline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTotalBottSheet" />
+
+    <Button
+        android:id="@+id/btnBuyNowBottSheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="Buy Now - 10.000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/line2" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

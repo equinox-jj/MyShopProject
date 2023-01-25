@@ -31,6 +31,8 @@ import com.myshopproject.presentation.camera.CameraActivity
 import com.myshopproject.presentation.login.LoginActivity
 import com.myshopproject.presentation.profile.adapter.CustomSpinnerAdapter
 import com.myshopproject.utils.*
+import com.myshopproject.utils.Constants.IS_BACK_CAMERA_INTENT
+import com.myshopproject.utils.Constants.PICTURE_INTENT
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -60,8 +62,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         ActivityResultContracts.StartActivityForResult()
     ) {
         if (it.resultCode == AppCompatActivity.RESULT_OK) {
-            val myFile = it.data?.getSerializableExtra("picture") as File
-            val isBackCamera = it.data?.getBooleanExtra("backCamera", true) as Boolean
+            val myFile = it.data?.getSerializableExtra(PICTURE_INTENT) as File
+            val isBackCamera = it.data?.getBooleanExtra(IS_BACK_CAMERA_INTENT, true) as Boolean
 
             getFile = myFile
             resultCamera = rotateBitmap(

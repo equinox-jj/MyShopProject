@@ -21,6 +21,8 @@ import com.myshopproject.databinding.ActivityRegisterBinding
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.camera.CameraActivity
 import com.myshopproject.utils.*
+import com.myshopproject.utils.Constants.IS_BACK_CAMERA_INTENT
+import com.myshopproject.utils.Constants.PICTURE_INTENT
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -43,8 +45,8 @@ class RegisterActivity : AppCompatActivity() {
         ActivityResultContracts.StartActivityForResult()
     ) {
         if (it.resultCode == RESULT_OK) {
-            val myFile = it.data?.getSerializableExtra("picture") as File
-            val isBackCamera = it.data?.getBooleanExtra("backCamera", true) as Boolean
+            val myFile = it.data?.getSerializableExtra(PICTURE_INTENT) as File
+            val isBackCamera = it.data?.getBooleanExtra(IS_BACK_CAMERA_INTENT, true) as Boolean
 
             getFile = myFile
             resultCamera = rotateBitmap(

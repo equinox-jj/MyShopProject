@@ -5,6 +5,8 @@ plugins {
     id("com.google.dagger.hilt.android")
 }
 
+apply from: '../shared_dependencies.gradle'
+
 android {
     namespace 'com.myshopproject.data'
     compileSdk 33
@@ -40,22 +42,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
-    // Dagger Hilt
-    implementation("com.google.dagger:hilt-android:2.44")
-    kapt("com.google.dagger:hilt-android-compiler:2.44")
-
-    // Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
-
-    // Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.10.0"))
-    implementation("com.squareup.okhttp3:okhttp")
-    implementation("com.squareup.okhttp3:logging-interceptor")
-
     // Data Store
     implementation("androidx.datastore:datastore-preferences:1.0.0")
-
 }

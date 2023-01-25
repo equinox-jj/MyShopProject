@@ -20,6 +20,8 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.myshopproject.databinding.ActivityCameraBinding
+import com.myshopproject.utils.Constants.IS_BACK_CAMERA_INTENT
+import com.myshopproject.utils.Constants.PICTURE_INTENT
 import com.myshopproject.utils.createTempFile
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -93,8 +95,8 @@ class CameraActivity : AppCompatActivity() {
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                     val intent = Intent()
-                    intent.putExtra("picture", photoFile)
-                    intent.putExtra("backCamera", cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA)
+                    intent.putExtra(PICTURE_INTENT, photoFile)
+                    intent.putExtra(IS_BACK_CAMERA_INTENT, cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA)
                     setResult(RESULT_OK, intent)
                     finish()
                 }

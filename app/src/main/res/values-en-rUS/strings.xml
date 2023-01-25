@@ -27,4 +27,5 @@
     <string name="change_password">Change Password</string>
     <string name="logout">Logout</string>
     <string name="sorted_by">Sorted By</string>
+    <string name="data_is_empty">Data is empty</string>
 </resources>

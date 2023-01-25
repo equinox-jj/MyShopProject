@@ -27,4 +27,5 @@
     <string name="change_password">Ubah Password</string>
     <string name="logout">Keluar</string>
     <string name="sorted_by">Urutkan Berdasarkan</string>
+    <string name="data_is_empty">Tidak Ada Data</string>
 </resources>

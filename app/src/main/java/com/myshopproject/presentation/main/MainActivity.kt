@@ -43,15 +43,12 @@ class MainActivity : AppCompatActivity() {
             when (destination.id) {
                 R.id.homeFragment -> {
                     showBottomNav()
-//                    showToolbar()
                 }
                 R.id.favoriteFragment -> {
                     showBottomNav()
-//                    showToolbar()
                 }
                 R.id.profileFragment -> {
                     showBottomNav()
-//                    hideToolbar()
                 }
                 else -> hideBottomNav()
             }
@@ -94,12 +91,4 @@ class MainActivity : AppCompatActivity() {
     private fun hideBottomNav() {
         binding.bottomNavigation.setVisibilityGone()
     }
-
-//    private fun showToolbar() {
-//        binding.toolbarMain.setVisibilityVisible()
-//    }
-
-//    private fun hideToolbar() {
-//        binding.toolbarMain.setVisibilityGone()
-//    }
 }

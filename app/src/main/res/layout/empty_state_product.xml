@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <ImageView
         android:id="@+id/ivEmptyImage"
         android:layout_width="150dp"
@@ -24,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/poppins_bold"
-        android:text="Data is empty"
+        android:text="@string/data_is_empty"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="@+id/ivEmptyImage"
         app:layout_constraintStart_toStartOf="@+id/ivEmptyImage"

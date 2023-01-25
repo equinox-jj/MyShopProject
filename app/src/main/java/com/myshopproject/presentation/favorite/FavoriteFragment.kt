@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.myshopproject.R
 import com.myshopproject.databinding.FragmentFavoriteBinding
@@ -24,6 +25,7 @@ import com.myshopproject.utils.setVisibilityVisible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -35,6 +37,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
     private var adapter: ProductListAdapter? = null
     private val viewModel by viewModels<FavoriteViewModel>()
 
+    private var userId: Int = 0
     private var job: Job? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -45,7 +48,17 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
         setupListener()
         setupToolbarMenu()
 
+        initDataStore()
         initObserver(SortedBy.DefaultSort)
+    }
+
+    private fun initDataStore() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                val id = viewModel.getUserId.first()
+                userId = id
+            }
+        }
     }
 
     private fun setupToolbarMenu() {
@@ -92,7 +105,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
         }
         job = viewLifecycleOwner.lifecycleScope.launch {
             delay(2000)
-            viewModel.getProductListFav(query, 213)
+            viewModel.getProductListFav(query, userId)
         }
     }
 

@@ -69,7 +69,7 @@
         android:focusable="true"
         android:text="@string/sorted_by"
         android:textSize="11sp"
-        app:icon="@drawable/ic_person_filled"
+        app:icon="@drawable/ic_sort_filled"
         app:iconGravity="end"
         app:iconSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"

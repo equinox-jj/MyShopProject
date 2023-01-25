@@ -10,6 +10,7 @@ import com.myshopproject.data.repository.ProductRepositoryImpl
 import com.myshopproject.domain.preferences.MyPreferences
 import com.myshopproject.domain.repository.AuthRepository
 import com.myshopproject.domain.repository.ProductRepository
+import com.myshopproject.utils.Constants.BASE_URL
 import com.myshopproject.utils.token.AuthAuthentication
 import com.myshopproject.utils.token.AuthExpiredToken
 import com.myshopproject.utils.token.HeaderInterceptor
@@ -87,8 +88,7 @@ object AppModule {
         gsonConverterFactory: GsonConverterFactory
     ): Retrofit {
         return Retrofit.Builder()
-//            .baseUrl("http://172.17.20.201/training_android/public/api/ecommerce/")
-            .baseUrl("https://portlan.id/training_android/public/api/ecommerce/")
+            .baseUrl(BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(gsonConverterFactory)
             .build()
