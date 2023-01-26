@@ -1,7 +1,7 @@
 package com.myshopproject.data.repository
 
 import com.myshopproject.data.mapper.toDomain
-import com.myshopproject.data.remote.network.ApiAuth
+import com.myshopproject.data.source.remote.network.ApiAuth
 import com.myshopproject.domain.entities.ChangeImageResponse
 import com.myshopproject.domain.entities.LoginResult
 import com.myshopproject.domain.entities.SuccessResponseStatus

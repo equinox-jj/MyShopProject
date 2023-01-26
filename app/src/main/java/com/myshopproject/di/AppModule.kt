@@ -3,13 +3,18 @@ package com.myshopproject.di
 import android.content.Context
 import com.myshopproject.data.BuildConfig
 import com.myshopproject.data.preferences.MyPreferencesImpl
-import com.myshopproject.data.remote.network.ApiAuth
-import com.myshopproject.data.remote.network.ApiProduct
 import com.myshopproject.data.repository.AuthRepositoryImpl
 import com.myshopproject.data.repository.ProductRepositoryImpl
+import com.myshopproject.data.source.local.dao.ProductCartDao
+import com.myshopproject.data.source.remote.network.ApiAuth
+import com.myshopproject.data.source.remote.network.ApiProduct
 import com.myshopproject.domain.preferences.MyPreferences
 import com.myshopproject.domain.repository.AuthRepository
 import com.myshopproject.domain.repository.ProductRepository
+import com.myshopproject.domain.usecase.LocalInteractor
+import com.myshopproject.domain.usecase.LocalUseCase
+import com.myshopproject.domain.usecase.RemoteInteractor
+import com.myshopproject.domain.usecase.RemoteUseCase
 import com.myshopproject.utils.Constants.BASE_URL
 import com.myshopproject.utils.token.AuthAuthentication
 import com.myshopproject.utils.token.AuthExpiredToken
@@ -42,8 +47,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun providesAuthAuthentication(pref: MyPreferences): AuthAuthentication =
-        AuthAuthentication(pref)
+    fun providesAuthAuthentication(pref: MyPreferences): AuthAuthentication = AuthAuthentication(pref)
 
     @Singleton
     @Provides
@@ -114,13 +118,33 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun providesProductRepository(apiProduct: ApiProduct): ProductRepository {
-        return ProductRepositoryImpl(apiProduct)
+    fun providesProductRepository(
+        apiProduct: ApiProduct,
+        cartDao: ProductCartDao
+    ): ProductRepository {
+        return ProductRepositoryImpl(apiProduct, cartDao)
     }
 
     @Provides
     @Singleton
     fun providesDataStore(@ApplicationContext context: Context): MyPreferences {
         return MyPreferencesImpl(context)
+    }
+
+    @Provides
+    @Singleton
+    fun providesRemoteUseCase(
+        authRepository: AuthRepository,
+        productRepository: ProductRepository
+    ): RemoteUseCase {
+        return RemoteInteractor(authRepository, productRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun providesLocalUseCase(
+        productRepository: ProductRepository
+    ): LocalUseCase {
+        return LocalInteractor(productRepository)
     }
 }

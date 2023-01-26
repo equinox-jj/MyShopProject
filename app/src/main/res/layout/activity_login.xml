@@ -80,21 +80,18 @@
 
         <Button
             android:id="@+id/btnLogin"
-            style="@style/Ctm.Button.Login"
             android:layout_width="200dp"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/poppins_bold"
-            android:foreground="?android:attr/selectableItemBackground"
             android:text="@string/login"
-            android:theme="@android:style/ThemeOverlay.Material.Dark"
             app:layout_constraintEnd_toEndOf="@+id/tilPasswordLogin"
             app:layout_constraintStart_toStartOf="@+id/tilPasswordLogin"
             app:layout_constraintTop_toBottomOf="@+id/tilPasswordLogin" />
 
         <Button
             android:id="@+id/btnToSignUp"
-            style="@style/Ctm.Button.SignUp"
+            style="@style/Ctm.Button.Auth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_bold"

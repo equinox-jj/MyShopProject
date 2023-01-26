@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myshopproject.domain.entities.LoginResult
 import com.myshopproject.domain.preferences.MyPreferences
-import com.myshopproject.domain.usecase.LoginUseCase
+import com.myshopproject.domain.usecase.RemoteUseCase
 import com.myshopproject.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginUseCase: LoginUseCase,
+    private val remoteUseCase: RemoteUseCase,
     private val pref: MyPreferences
 ) : ViewModel() {
 
@@ -25,7 +25,7 @@ class LoginViewModel @Inject constructor(
     val getAccessToken = pref.getAccessToken()
 
     fun loginAccount(email: String, password: String) {
-        loginUseCase.invoke(email, password).onEach { response ->
+        remoteUseCase.loginAccount(email, password).onEach { response ->
             when(response) {
                 is Resource.Loading -> {
                     _state.value = Resource.Loading

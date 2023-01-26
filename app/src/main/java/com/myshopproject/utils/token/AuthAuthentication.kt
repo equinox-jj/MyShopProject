@@ -1,7 +1,7 @@
 package com.myshopproject.utils.token
 
-import com.myshopproject.data.remote.dto.RefreshTokenResponseDTO
-import com.myshopproject.data.remote.network.ApiRefreshToken
+import com.myshopproject.data.source.remote.dto.RefreshTokenResponseDTO
+import com.myshopproject.data.source.remote.network.ApiRefreshToken
 import com.myshopproject.domain.preferences.MyPreferences
 import com.myshopproject.utils.Constants.BASE_URL
 import kotlinx.coroutines.flow.first
@@ -29,12 +29,14 @@ class AuthAuthentication @Inject constructor(
                 pref.clearSession() // Clear Preferences
             }
 
-            newToken.body()?.let {
-                pref.saveAccessToken(it.success.accessToken)
-                pref.saveRefreshToken(it.success.refreshToken)
-                response.request.newBuilder()
-                    .header("Authorization", it.success.accessToken) // Save New Token To Header
-                    .build()
+            runBlocking {
+                newToken.body()?.let {
+                    pref.saveAccessToken(it.success.accessToken)
+                    pref.saveRefreshToken(it.success.refreshToken)
+                    response.request.newBuilder()
+                        .header("Authorization", it.success.accessToken) // Save New Token To Header
+                        .build()
+                }
             }
         }
     }

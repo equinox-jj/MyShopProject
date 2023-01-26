@@ -10,8 +10,8 @@
         android:id="@+id/ivProductBottSht"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:scaleType="fitXY"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -22,29 +22,55 @@
         android:id="@+id/tvProductPriceBottSht"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="8dp"
         android:fontFamily="@font/poppins"
-        app:layout_constraintBottom_toTopOf="@+id/tvProductStockBottSht"
+        android:textColor="@color/text_black"
+        app:layout_constraintBottom_toTopOf="@+id/stockBottSht"
         app:layout_constraintStart_toEndOf="@+id/ivProductBottSht"
         tools:text="RP 10.000" />
 
     <TextView
-        android:id="@+id/tvProductStockBottSht"
+        android:id="@+id/stockBottSht"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/poppins"
+        android:text="@string/stock"
+        android:textColor="@color/text_black"
         app:layout_constraintBottom_toBottomOf="@+id/ivProductBottSht"
-        app:layout_constraintStart_toStartOf="@+id/tvProductPriceBottSht"
-        tools:text="Stock : 20" />
+        app:layout_constraintStart_toStartOf="@+id/tvProductPriceBottSht" />
+
+    <TextView
+        android:id="@+id/stockDotBottSht"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:fontFamily="@font/poppins"
+        android:text="@string/doubledot"
+        android:textColor="@color/text_black"
+        app:layout_constraintBottom_toBottomOf="@+id/stockBottSht"
+        app:layout_constraintStart_toEndOf="@+id/stockBottSht"
+        app:layout_constraintTop_toTopOf="@+id/stockBottSht" />
+
+    <TextView
+        android:id="@+id/tvStockProductBottSht"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/poppins"
+        android:textColor="@color/text_black"
+        app:layout_constraintBottom_toBottomOf="@+id/stockDotBottSht"
+        app:layout_constraintStart_toEndOf="@+id/stockDotBottSht"
+        app:layout_constraintTop_toTopOf="@+id/stockBottSht"
+        tools:text="Lorem Ipsum" />
 
     <View
         android:id="@+id/line1"
         android:layout_width="match_parent"
-        android:layout_height="5dp"
+        android:layout_height="2dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/bg_underline"
+        android:background="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivProductBottSht" />
@@ -56,7 +82,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/poppins"
-        android:text="Total"
+        android:text="@string/total"
+        android:textColor="@color/text_black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/line1" />
 
@@ -65,6 +92,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
+        android:background="@drawable/bg_button_round_black"
         android:contentDescription="@null"
         android:src="@drawable/ic_increase_filled"
         app:layout_constraintBottom_toBottomOf="@+id/tvTotalBottSheet"
@@ -76,18 +104,20 @@
         android:id="@+id/tvQuantityBottSheet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
         android:fontFamily="@font/poppins_bold"
-        android:text="1"
+        android:textColor="@color/text_black"
         app:layout_constraintBottom_toBottomOf="@+id/btnIncreaseBottSheet"
         app:layout_constraintEnd_toStartOf="@+id/btnIncreaseBottSheet"
-        app:layout_constraintTop_toTopOf="@+id/btnIncreaseBottSheet" />
+        app:layout_constraintTop_toTopOf="@+id/btnIncreaseBottSheet"
+        tools:text="1" />
 
     <ImageButton
         android:id="@+id/btnDecreaseBottSheet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/bg_button_round_black"
         android:contentDescription="@null"
         android:src="@drawable/ic_decrease_filled"
         app:layout_constraintBottom_toBottomOf="@+id/tvQuantityBottSheet"
@@ -98,9 +128,9 @@
     <View
         android:id="@+id/line2"
         android:layout_width="match_parent"
-        android:layout_height="5dp"
+        android:layout_height="2dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/bg_underline"
+        android:background="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTotalBottSheet" />
@@ -110,7 +140,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="Buy Now - 10.000"
+        android:text="@string/buy_now"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/line2" />

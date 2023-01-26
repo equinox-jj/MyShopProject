@@ -24,7 +24,6 @@ import coil.load
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.myshopproject.R
-import com.myshopproject.data.remote.dto.ErrorResponseDTO
 import com.myshopproject.databinding.FragmentProfileBinding
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.camera.CameraActivity
@@ -107,25 +106,35 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private fun initDataStore() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.getUserId.collect {
-                    userId = it
+                launch {
+                    viewModel.getUserId.collect {
+                        userId = it
+                    }
                 }
-                viewModel.getNameUser.collect {
-                    binding.tvUserName.text = it
+                launch {
+                    viewModel.getNameUser.collect {
+                        binding.tvUserName.text = it
+                    }
                 }
-                viewModel.getEmailUser.collect {
-                    binding.tvUserEmail.text = it
+                launch {
+                    viewModel.getEmailUser.collect {
+                        binding.tvUserEmail.text = it
+                    }
                 }
-                viewModel.getImageUser.collect {
-                    binding.ivProfile.load(it)
+                launch {
+                    viewModel.getImageUser.collect {
+                        binding.ivProfile.load(it)
+                    }
                 }
-                viewModel.getLanguage.collect {
-                    when(it) {
-                        0 -> {
-                            binding.sSelectLanguage.setSelection(0)
-                        }
-                        1 -> {
-                            binding.sSelectLanguage.setSelection(1)
+                launch {
+                    viewModel.getLanguage.collect {
+                        when(it) {
+                            0 -> {
+                                binding.sSelectLanguage.setSelection(0)
+                            }
+                            1 -> {
+                                binding.sSelectLanguage.setSelection(1)
+                            }
                         }
                     }
                 }
@@ -211,7 +220,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                             val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
                             val gson = Gson()
                             val jsonObject = gson.fromJson(errors, JsonObject::class.java)
-                            val errorResponse = gson.fromJson(jsonObject, ErrorResponseDTO::class.java)
+                            val errorResponse = gson.fromJson(jsonObject, com.myshopproject.data.source.remote.dto.ErrorResponseDTO::class.java)
 
                             Toast.makeText(requireContext(), "${errorResponse.error.message} ${errorResponse.error.status}", Toast.LENGTH_SHORT).show()
                         } catch (e: Exception) {

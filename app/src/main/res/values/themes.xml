@@ -24,12 +24,7 @@
         <item name="android:statusBarColor">@color/primaryLightColor</item>
     </style>
 
-    <style name="Ctm.Button.Login" parent="Widget.MaterialComponents.Button">
-        <item name="backgroundTint">@color/bg_button_pink</item>
-        <item name="android:background">@drawable/bg_button_auth_submit</item>
-    </style>
-
-    <style name="Ctm.Button.SignUp" parent="Widget.MaterialComponents.Button">
+    <style name="Ctm.Button.Auth" parent="Widget.MaterialComponents.Button">
         <item name="backgroundTint">@color/bg_button_pink</item>
         <item name="android:background">@drawable/bg_button_auth_navigate</item>
     </style>
@@ -38,9 +33,4 @@
         <item name="android:windowBackground">@drawable/bg_select_image_dialog</item>
     </style>
 
-    <style name="Ctm.SearchView" parent="Widget.AppCompat.SearchView">
-        <item name="background">@color/white</item>
-        <item name="searchIcon">@drawable/ic_search</item>
-        <item name="queryBackground">@android:color/transparent</item>
-    </style>
 </resources>

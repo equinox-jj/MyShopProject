@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myshopproject.domain.entities.SuccessResponseStatus
 import com.myshopproject.domain.preferences.MyPreferences
-import com.myshopproject.domain.usecase.ChangePassUseCase
+import com.myshopproject.domain.usecase.RemoteUseCase
 import com.myshopproject.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChangePassViewModel @Inject constructor(
-    private val changePassUseCase: ChangePassUseCase,
+    private val remoteUseCase: RemoteUseCase,
     pref: MyPreferences
 ) : ViewModel() {
 
@@ -31,7 +31,7 @@ class ChangePassViewModel @Inject constructor(
         newPassword: String,
         confirmPassword: String
     ) {
-        changePassUseCase.invoke(
+        remoteUseCase.changePassword(
             id = id,
             password = password,
             newPassword = newPassword,

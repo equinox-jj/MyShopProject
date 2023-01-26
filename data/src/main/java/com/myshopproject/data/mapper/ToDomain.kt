@@ -1,6 +1,6 @@
 package com.myshopproject.data.mapper
 
-import com.myshopproject.data.remote.dto.*
+import com.myshopproject.data.source.remote.dto.*
 import com.myshopproject.domain.entities.*
 
 fun LoginResponseDTO.toDomain() = LoginResponse(
@@ -117,3 +117,16 @@ fun DetailProductDataDTO.toDomain() = DetailProductData(
 fun DetailProductImageDTO.toDomain() = DetailProductImage(
     imageProduct = imageProduct, titleProduct = titleProduct
 )
+
+//fun UpdateRateDTO.toDomain() = UpdateRate(
+//    updateRate = updateRate
+//)
+//
+//fun UpdateStockProductDTO.toDomain() = UpdateStockProduct(
+//    data_stock = data_stock.map { it.toDomain() }
+//)
+//
+//fun UpdateStockItemDTO.toDomain() = UpdateStockItem(
+//    id_product = id_product,
+//    stock = stock
+//)

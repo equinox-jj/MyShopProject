@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myshopproject.domain.entities.ChangeImageResponse
 import com.myshopproject.domain.preferences.MyPreferences
-import com.myshopproject.domain.usecase.ChangeImageUseCase
+import com.myshopproject.domain.usecase.RemoteUseCase
 import com.myshopproject.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val changeImageUseCase: ChangeImageUseCase,
+    private val remoteUseCase: RemoteUseCase,
     private val pref: MyPreferences
 ) : ViewModel() {
 
@@ -43,7 +43,7 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun changeImage(id: Int, image: MultipartBody.Part) {
-        changeImageUseCase.invoke(id = id, image = image).onEach { response ->
+        remoteUseCase.changeImage(id = id, image = image).onEach { response ->
             when (response) {
                 is Resource.Loading -> {
                     _state.value = Resource.Loading

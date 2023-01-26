@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myshopproject.domain.entities.DataProductResponse
-import com.myshopproject.domain.usecase.GetListProductUseCase
+import com.myshopproject.domain.usecase.RemoteUseCase
 import com.myshopproject.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getListProductUseCase: GetListProductUseCase
+    private val remoteUseCase: RemoteUseCase
 ) : ViewModel() {
 
     private val _state = MutableLiveData<Resource<DataProductResponse>>()
@@ -25,7 +25,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getProductList(query: String?) {
-        getListProductUseCase.invoke(query).onEach { response ->
+        remoteUseCase.getListProduct(query).onEach { response ->
             when (response) {
                 is Resource.Loading -> {
                     _state.value = Resource.Loading

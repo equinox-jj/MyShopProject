@@ -16,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.myshopproject.R
-import com.myshopproject.data.remote.dto.ErrorResponseDTO
 import com.myshopproject.databinding.ActivityRegisterBinding
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.camera.CameraActivity
@@ -102,7 +101,7 @@ class RegisterActivity : AppCompatActivity() {
                     val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
                     val gson = Gson()
                     val jsonObject = gson.fromJson(errors, JsonObject::class.java)
-                    val errorResponse = gson.fromJson(jsonObject, ErrorResponseDTO::class.java)
+                    val errorResponse = gson.fromJson(jsonObject, com.myshopproject.data.source.remote.dto.ErrorResponseDTO::class.java)
 
                     Toast.makeText(this@RegisterActivity, "${errorResponse.error.message} ${errorResponse.error.status}", Toast.LENGTH_SHORT).show()
                 }

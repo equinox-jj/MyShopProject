@@ -24,23 +24,27 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NoActionBar"
         tools:targetApi="31">
+
         <activity
-            android:name=".BuySuccessActivity"
-            android:exported="false">
+            android:name=".presentation.buysuccess.BuySuccessActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MyShopProject">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".presentation.trolley.TrolleyActivity"
-            android:exported="false">
+            android:exported="false"
+            android:theme="@style/Theme.MyShopProject">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".presentation.detail.DetailActivity"
-            android:exported="false">
+            android:exported="false"
+            android:theme="@style/Theme.MyShopProject">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

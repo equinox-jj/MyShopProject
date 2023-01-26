@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myshopproject.domain.entities.SuccessResponseStatus
-import com.myshopproject.domain.usecase.RegisterUseCase
+import com.myshopproject.domain.usecase.RemoteUseCase
 import com.myshopproject.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val registerUseCase: RegisterUseCase
+    private val remoteUseCase: RemoteUseCase
 ) : ViewModel() {
 
     private val _state = MutableLiveData<Resource<SuccessResponseStatus>>()
@@ -30,7 +30,7 @@ class RegisterViewModel @Inject constructor(
         phone: RequestBody,
         gender: Int
     ) {
-        registerUseCase.invoke(
+        remoteUseCase.registerAccount(
             image = image,
             email = email,
             password = password,

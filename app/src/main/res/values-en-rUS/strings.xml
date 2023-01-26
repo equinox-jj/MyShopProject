@@ -28,4 +28,15 @@
     <string name="logout">Logout</string>
     <string name="sorted_by">Sorted By</string>
     <string name="data_is_empty">Data is empty</string>
+    <string name="buy">Buy</string>
+    <string name="trolley">Trolley</string>
+    <string name="doubledot">:</string>
+    <string name="detail_product">Detail Product</string>
+    <string name="stock">Stock</string>
+    <string name="size">Size</string>
+    <string name="weight">Weight</string>
+    <string name="type">Type</string>
+    <string name="description">Description</string>
+    <string name="buy_now">Buy Now -</string>
+    <string name="total">Total</string>
 </resources>

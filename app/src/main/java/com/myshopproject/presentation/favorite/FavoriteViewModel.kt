@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myshopproject.domain.entities.DataProductResponse
 import com.myshopproject.domain.preferences.MyPreferences
-import com.myshopproject.domain.usecase.GetListProductFavUseCase
+import com.myshopproject.domain.usecase.RemoteUseCase
 import com.myshopproject.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FavoriteViewModel @Inject constructor(
-    private val getListProductFavUseCase: GetListProductFavUseCase,
+    private val remoteUseCase: RemoteUseCase,
     pref: MyPreferences
 ) : ViewModel() {
 
@@ -33,7 +33,7 @@ class FavoriteViewModel @Inject constructor(
     }
 
     fun getProductListFav(query: String?, userId: Int) {
-        getListProductFavUseCase.invoke(query, userId).onEach { response ->
+        remoteUseCase.getListProductFavorite(query, userId).onEach { response ->
             when (response) {
                 is Resource.Loading -> {
                     _state.value = Resource.Loading
