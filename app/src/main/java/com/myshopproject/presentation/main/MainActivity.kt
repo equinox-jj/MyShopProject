@@ -12,10 +12,11 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.myshopproject.R
 import com.myshopproject.databinding.ActivityMainBinding
-import com.myshopproject.presentation.profile.ProfileViewModel
+import com.myshopproject.presentation.DataStoreViewModel
 import com.myshopproject.utils.setVisibilityGone
 import com.myshopproject.utils.setVisibilityVisible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var navHostFragment: NavHostFragment
 
-    private val viewModel by viewModels<ProfileViewModel>()
+    private val prefViewModel by viewModels<DataStoreViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,15 +42,9 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.homeFragment -> {
-                    showBottomNav()
-                }
-                R.id.favoriteFragment -> {
-                    showBottomNav()
-                }
-                R.id.profileFragment -> {
-                    showBottomNav()
-                }
+                R.id.homeFragment -> showBottomNav()
+                R.id.favoriteFragment -> showBottomNav()
+                R.id.profileFragment -> showBottomNav()
                 else -> hideBottomNav()
             }
         }
@@ -62,15 +57,9 @@ class MainActivity : AppCompatActivity() {
     private fun initDataStore() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.getLanguage.collect {
-                    when (it) {
-                        0 -> {
-                            setLanguage("en")
-                        }
-                        1 -> {
-                            setLanguage("in")
-                        }
-                    }
+                when(prefViewModel.getLanguage.first()) {
+                    0 -> setLanguage("en")
+                    1 -> setLanguage("in")
                 }
             }
         }

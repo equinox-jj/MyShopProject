@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myshopproject.domain.entities.DetailProductResponse
 import com.myshopproject.domain.entities.SuccessResponseStatus
-import com.myshopproject.domain.preferences.MyPreferences
 import com.myshopproject.domain.usecase.RemoteUseCase
 import com.myshopproject.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,8 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    private val remoteUseCase: RemoteUseCase,
-    pref: MyPreferences
+    private val remoteUseCase: RemoteUseCase
 ) : ViewModel() {
 
     private val _state = MutableLiveData<Resource<DetailProductResponse>>()
@@ -28,8 +26,6 @@ class DetailViewModel @Inject constructor(
 
     private val _unFavState = MutableLiveData<Resource<SuccessResponseStatus>>()
     val unFavState: LiveData<Resource<SuccessResponseStatus>> = _unFavState
-
-    val getUserId = pref.getUserId()
 
     fun getProductDetail(productId: Int, userId: Int) {
         remoteUseCase.getProductDetail(productId, userId).onEach { response ->

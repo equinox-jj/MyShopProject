@@ -11,6 +11,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.myshopproject.databinding.ActivityChangePassBinding
 import com.myshopproject.domain.utils.Resource
+import com.myshopproject.presentation.DataStoreViewModel
 import com.myshopproject.utils.setVisibilityGone
 import com.myshopproject.utils.setVisibilityVisible
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,6 +25,7 @@ class ChangePassActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChangePassBinding
 
     private val viewModel by viewModels<ChangePassViewModel>()
+    private val prefViewModel by viewModels<DataStoreViewModel>()
 
     private var userId: Int? = null
     private var authorization: String? = null
@@ -36,7 +38,11 @@ class ChangePassActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbarChangePass)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        setupListener()
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                setupListener()
+            }
+        }
         initObserver()
         initDataStore()
     }
@@ -49,8 +55,8 @@ class ChangePassActivity : AppCompatActivity() {
     private fun initDataStore() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                authorization = viewModel.getAuthorization.first()
-                userId = viewModel.getUserId.first()
+                authorization = prefViewModel.getRefreshToken.first()
+                userId = prefViewModel.getUserId.first()
             }
         }
     }

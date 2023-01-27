@@ -11,8 +11,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.myshopproject.databinding.ActivitySplashBinding
+import com.myshopproject.presentation.DataStoreViewModel
 import com.myshopproject.presentation.login.LoginActivity
-import com.myshopproject.presentation.login.LoginViewModel
 import com.myshopproject.presentation.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -22,7 +22,8 @@ import kotlinx.coroutines.launch
 class SplashActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySplashBinding
-    private val viewModel by viewModels<LoginViewModel>()
+
+    private val prefViewModel by viewModels<DataStoreViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +33,7 @@ class SplashActivity : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             lifecycleScope.launch {
                 lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    viewModel.getAccessToken.collect {
+                    prefViewModel.getAccessToken.collect {
                         if (it.isNotEmpty()) {
                             startActivity(Intent(this@SplashActivity, MainActivity::class.java))
                             finish()

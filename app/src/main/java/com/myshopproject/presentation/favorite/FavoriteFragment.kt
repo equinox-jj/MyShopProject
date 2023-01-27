@@ -17,13 +17,13 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.myshopproject.R
 import com.myshopproject.databinding.FragmentFavoriteBinding
 import com.myshopproject.domain.utils.Resource
+import com.myshopproject.presentation.DataStoreViewModel
 import com.myshopproject.presentation.home.adapter.ProductListAdapter
 import com.myshopproject.utils.enumhelper.ProductType
 import com.myshopproject.utils.enumhelper.SortedBy
 import com.myshopproject.utils.setVisibilityGone
 import com.myshopproject.utils.setVisibilityVisible
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -36,9 +36,9 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
 
     private var adapter: ProductListAdapter? = null
     private val viewModel by viewModels<FavoriteViewModel>()
+    private val prefViewModel by viewModels<DataStoreViewModel>()
 
     private var userId: Int = 0
-    private var job: Job? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -50,12 +50,18 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
 
         initDataStore()
         initObserver(SortedBy.DefaultSort)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.getProductListFav("", userId)
+            }
+        }
     }
 
     private fun initDataStore() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                val id = viewModel.getUserId.first()
+                val id = prefViewModel.getUserId.first()
                 userId = id
             }
         }
@@ -84,7 +90,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
 
                 override fun onQueryTextChange(newText: String?): Boolean {
                     if (newText?.length == 0 || newText.toString() == "") {
-                        performSearch(null)
+                        performSearch("")
                     } else {
                         performSearch(newText)
                     }
@@ -98,14 +104,11 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
     }
 
     private fun performSearch(query: String?) {
-        job?.run {
-            if (this.isActive) {
-                this.cancel()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                delay(2000)
+                viewModel.getProductListFav(query, userId)
             }
-        }
-        job = viewLifecycleOwner.lifecycleScope.launch {
-            delay(2000)
-            viewModel.getProductListFav(query, userId)
         }
     }
 

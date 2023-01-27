@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cvTrolley"
         android:layout_width="0dp"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
         app:cardCornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -62,38 +62,43 @@
                 android:contentDescription="@null"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tvTrolleyProductPrice"
-                app:srcCompat="@drawable/ic_world_filled" />
+                app:srcCompat="@drawable/ic_delete_filled" />
 
             <ImageButton
                 android:id="@+id/btnTrolleyIncrease"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bg_button_round_black"
                 android:contentDescription="@null"
                 android:src="@drawable/ic_increase_filled"
                 app:layout_constraintBottom_toBottomOf="@+id/btnTrolleyDelete"
                 app:layout_constraintEnd_toEndOf="@+id/tvTrolleyProductPrice"
-                app:layout_constraintTop_toTopOf="@+id/btnTrolleyDelete" />
+                app:layout_constraintTop_toTopOf="@+id/btnTrolleyDelete"
+                app:tint="@color/white_background" />
 
             <TextView
                 android:id="@+id/tvTrolleyQuantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="1"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/poppins_bold"
                 app:layout_constraintBottom_toBottomOf="@+id/btnTrolleyIncrease"
                 app:layout_constraintEnd_toStartOf="@+id/btnTrolleyIncrease"
-                app:layout_constraintTop_toTopOf="@+id/btnTrolleyIncrease" />
+                app:layout_constraintTop_toTopOf="@+id/btnTrolleyIncrease"
+                tools:text="1" />
 
             <ImageButton
                 android:id="@+id/btnTrolleyDecrease"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/bg_button_round_black"
                 android:contentDescription="@null"
                 android:src="@drawable/ic_decrease_filled"
                 app:layout_constraintBottom_toBottomOf="@+id/btnTrolleyIncrease"
                 app:layout_constraintEnd_toStartOf="@+id/tvTrolleyQuantity"
-                app:layout_constraintTop_toTopOf="@+id/btnTrolleyIncrease" />
+                app:layout_constraintTop_toTopOf="@+id/btnTrolleyIncrease"
+                app:tint="@color/white_background" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

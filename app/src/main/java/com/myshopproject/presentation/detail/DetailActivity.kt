@@ -1,19 +1,23 @@
 package com.myshopproject.presentation.detail
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.google.gson.Gson
-import com.google.gson.JsonObject
 import com.myshopproject.R
-import com.myshopproject.data.source.remote.dto.ErrorResponseDTO
 import com.myshopproject.databinding.ActivityDetailBinding
 import com.myshopproject.domain.entities.DetailProductData
 import com.myshopproject.domain.utils.Resource
+import com.myshopproject.presentation.DataStoreViewModel
 import com.myshopproject.presentation.detail.adapter.ImageSliderAdapter
 import com.myshopproject.presentation.detail.bottomsheet.DetailBottomSheet
 import com.myshopproject.utils.Constants.PRODUCT_ID
@@ -21,9 +25,7 @@ import com.myshopproject.utils.setVisibilityGone
 import com.myshopproject.utils.setVisibilityVisible
 import com.myshopproject.utils.toIDRPrice
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 
 @AndroidEntryPoint
 class DetailActivity : AppCompatActivity() {
@@ -33,6 +35,7 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var imageSliderAdapter: ImageSliderAdapter
 
     private val viewModel by viewModels<DetailViewModel>()
+    private val prefViewModel by viewModels<DataStoreViewModel>()
 
     private var productId: Int = 0
     private var userId: Int = 0
@@ -41,17 +44,59 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        setSupportActionBar(binding.toolbarDetail)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         productId = intent.getIntExtra(PRODUCT_ID, 0)
 
+        if(productId == 0) {
+            val uri: Uri? = intent.data
+            val id = uri?.getQueryParameter("id")
+            if (id != null) {
+                productId = id.toInt()
+            }
+        }
+
         initDataStore()
-        initObserver()
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                initObserver()
+            }
+        }
+        setupToolbarMenu()
+    }
+
+    private fun setupToolbarMenu() {
+        addMenuProvider(object  : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_detail_toolbar, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                when(menuItem.itemId) {
+                    android.R.id.home -> {
+                        finish()
+                    }
+                    R.id.menu_share -> {
+                        val shareDeeplink = Intent(Intent.ACTION_SEND)
+                        shareDeeplink.type = "text/plain"
+                        shareDeeplink.putExtra(Intent.EXTRA_TEXT, "https://joshuaj.com/deeplink?id=$productId")
+                        startActivity(Intent.createChooser(shareDeeplink, "Share link using"))
+                    }
+                }
+                return true
+            }
+
+        })
     }
 
     private fun initDataStore() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                val userid = viewModel.getUserId.first()
-                userId = userid
+                prefViewModel.getUserId.collect {
+                    userId = it
+                }
             }
         }
     }
@@ -80,6 +125,7 @@ class DetailActivity : AppCompatActivity() {
 
     private fun initView(data: DetailProductData) {
         binding.apply {
+            toolbarDetail.title = data.nameProduct
             imageSliderAdapter = ImageSliderAdapter(data.imageProduct)
             vpImageSliderProductDtl.adapter = imageSliderAdapter
             indicatorSlider.setViewPager(vpImageSliderProductDtl)
@@ -93,62 +139,9 @@ class DetailActivity : AppCompatActivity() {
             tvTypeProductDtl.text = data.type
             tvDescProductDtl.text = data.desc
             if (data.isFavorite) {
-                binding.ivImageFavProductDtl.setImageResource(R.drawable.ic_favorite_filled)
+                ivImageFavProductDtl.setImageResource(R.drawable.ic_favorite_filled)
             } else {
-                binding.ivImageFavProductDtl.setImageResource(R.drawable.ic_favorite_outlined)
-            }
-            binding.ivImageFavProductDtl.setOnClickListener {
-                if (data.isFavorite) {
-                    removeFavorite()
-                } else {
-                    addFavorite()
-                }
-            }
-        }
-    }
-
-    private fun addFavorite() {
-        viewModel.addProductFavorite(productId, userId)
-        viewModel.favState.observe(this@DetailActivity) { response ->
-            when (response) {
-                is Resource.Loading -> {
-
-                }
-                is Resource.Success -> {
-                    binding.ivImageFavProductDtl.setImageResource(R.drawable.ic_favorite_filled)
-                    Toast.makeText(this, "Success add to favorite", Toast.LENGTH_SHORT).show()
-                }
-                is Resource.Error -> {
-                    val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
-                    val gson = Gson()
-                    val jsonObject = gson.fromJson(errors, JsonObject::class.java)
-                    val errorResponse = gson.fromJson(jsonObject, ErrorResponseDTO::class.java)
-
-                    Toast.makeText(this@DetailActivity, "${errorResponse.error.message} ${errorResponse.error.status}", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
-
-    private fun removeFavorite() {
-        viewModel.removeProductFavorite(productId, userId)
-        viewModel.unFavState.observe(this@DetailActivity) { response ->
-            when (response) {
-                is Resource.Loading -> {
-
-                }
-                is Resource.Success -> {
-                    binding.ivImageFavProductDtl.setImageResource(R.drawable.ic_favorite_outlined)
-                    Toast.makeText(this, "Success remove from favorite", Toast.LENGTH_SHORT).show()
-                }
-                is Resource.Error -> {
-                    val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
-                    val gson = Gson()
-                    val jsonObject = gson.fromJson(errors, JsonObject::class.java)
-                    val errorResponse = gson.fromJson(jsonObject, ErrorResponseDTO::class.java)
-
-                    Toast.makeText(this@DetailActivity, "${errorResponse.error.message} ${errorResponse.error.status}", Toast.LENGTH_SHORT).show()
-                }
+                ivImageFavProductDtl.setImageResource(R.drawable.ic_favorite_outlined)
             }
         }
     }
@@ -162,6 +155,46 @@ class DetailActivity : AppCompatActivity() {
             btnDtlTrolley.setOnClickListener {
 
             }
+            ivImageFavProductDtl.setOnClickListener {
+                if (data.isFavorite) {
+                    viewModel.removeProductFavorite(productId, userId)
+                    removeFavorite()
+                } else {
+                    viewModel.addProductFavorite(productId, userId)
+                    addFavorite()
+                }
+            }
         }
     }
+
+    private fun addFavorite() {
+        viewModel.favState.observe(this@DetailActivity) { response ->
+            when (response) {
+                is Resource.Loading -> {}
+                is Resource.Success -> {
+                    binding.ivImageFavProductDtl.setImageResource(R.drawable.ic_favorite_filled)
+                    Toast.makeText(this, "Success add to favorite.", Toast.LENGTH_SHORT).show()
+                }
+                is Resource.Error -> {
+                    Toast.makeText(this@DetailActivity, response.errorBody.toString(), Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun removeFavorite() {
+        viewModel.unFavState.observe(this@DetailActivity) { response ->
+            when (response) {
+                is Resource.Loading -> {}
+                is Resource.Success -> {
+                    binding.ivImageFavProductDtl.setImageResource(R.drawable.ic_favorite_outlined)
+                    Toast.makeText(this, "Success remove from favorite.", Toast.LENGTH_SHORT).show()
+                }
+                is Resource.Error -> {
+                    Toast.makeText(this@DetailActivity, response.errorBody.toString(), Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
 }

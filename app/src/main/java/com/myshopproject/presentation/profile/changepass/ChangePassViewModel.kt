@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myshopproject.domain.entities.SuccessResponseStatus
-import com.myshopproject.domain.preferences.MyPreferences
 import com.myshopproject.domain.usecase.RemoteUseCase
 import com.myshopproject.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,15 +14,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChangePassViewModel @Inject constructor(
-    private val remoteUseCase: RemoteUseCase,
-    pref: MyPreferences
+    private val remoteUseCase: RemoteUseCase
 ) : ViewModel() {
 
     private val _state = MutableLiveData<Resource<SuccessResponseStatus>>()
     val state: LiveData<Resource<SuccessResponseStatus>> = _state
-
-    val getAuthorization = pref.getRefreshToken()
-    val getUserId = pref.getUserId()
 
     fun changePassword(
         id: Int,

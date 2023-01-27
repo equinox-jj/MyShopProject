@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.TextView
@@ -26,6 +27,7 @@ import com.google.gson.JsonObject
 import com.myshopproject.R
 import com.myshopproject.databinding.FragmentProfileBinding
 import com.myshopproject.domain.utils.Resource
+import com.myshopproject.presentation.DataStoreViewModel
 import com.myshopproject.presentation.camera.CameraActivity
 import com.myshopproject.presentation.login.LoginActivity
 import com.myshopproject.presentation.profile.adapter.CustomSpinnerAdapter
@@ -33,6 +35,7 @@ import com.myshopproject.utils.*
 import com.myshopproject.utils.Constants.IS_BACK_CAMERA_INTENT
 import com.myshopproject.utils.Constants.PICTURE_INTENT
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -48,6 +51,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private val binding get() = _binding!!
 
     private val viewModel by viewModels<ProfileViewModel>()
+    private val prefViewModel by viewModels<DataStoreViewModel>()
 
     private var listLanguage = arrayOf("EN", "IN")
     private var listFlag = intArrayOf(R.drawable.ic_us_flag, R.drawable.ic_indonesia_flag)
@@ -73,7 +77,11 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             binding.apply {
                 ivProfile.visibility = View.VISIBLE
                 ivProfile.setImageBitmap(resultCamera)
-                postChangeImage()
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        postChangeImage()
+                    }
+                }
             }
         }
     }
@@ -89,7 +97,11 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             binding.apply {
                 ivProfile.visibility = View.VISIBLE
                 ivProfile.setImageURI(uri)
-                postChangeImage()
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        postChangeImage()
+                    }
+                }
             }
         }
     }
@@ -106,38 +118,26 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private fun initDataStore() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    viewModel.getUserId.collect {
-                        userId = it
-                    }
+                val idUser = prefViewModel.getUserId.first()
+                val nameUser = prefViewModel.getNameUser.first()
+                val emailUser = prefViewModel.getEmailUser.first()
+                val languagePref = prefViewModel.getLanguage.first()
+                val imageUser = prefViewModel.getImageUser.first()
+
+                userId = idUser
+                binding.tvUserName.text = nameUser
+                binding.tvUserEmail.text = emailUser
+                binding.ivProfile.load(imageUser)
+                when(languagePref) {
+                    0 -> binding.sSelectLanguage.setSelection(0)
+                    1 -> binding.sSelectLanguage.setSelection(1)
                 }
-                launch {
-                    viewModel.getNameUser.collect {
-                        binding.tvUserName.text = it
-                    }
-                }
-                launch {
-                    viewModel.getEmailUser.collect {
-                        binding.tvUserEmail.text = it
-                    }
-                }
-                launch {
-                    viewModel.getImageUser.collect {
-                        binding.ivProfile.load(it)
-                    }
-                }
-                launch {
-                    viewModel.getLanguage.collect {
-                        when(it) {
-                            0 -> {
-                                binding.sSelectLanguage.setSelection(0)
-                            }
-                            1 -> {
-                                binding.sSelectLanguage.setSelection(1)
-                            }
-                        }
-                    }
-                }
+
+                Log.d("ProfilePref", "UserId = $idUser")
+                Log.d("ProfilePref", "Name = $nameUser")
+                Log.d("ProfilePref", "Email = $emailUser")
+                Log.d("ProfilePref", "Language = $languagePref")
+                Log.d("ProfilePref", "Image = $imageUser")
             }
         }
     }
@@ -166,12 +166,12 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                             0 -> {
                                 setLanguage("en")
                                 setDialogChangeLanguage()
-                                viewModel.saveLanguagePref(position)
+                                prefViewModel.saveLanguage(position)
                             }
                             1 -> {
                                 setLanguage("in")
                                 setDialogChangeLanguage()
-                                viewModel.saveLanguagePref(position)
+                                prefViewModel.saveLanguage(position)
                             }
                         }
                     } else {
@@ -208,10 +208,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                         binding.profileCardLoading.root.setVisibilityVisible()
                     }
                     is Resource.Success -> {
+                        val imageUser = response.data?.success?.path
                         binding.profileCardLoading.root.setVisibilityGone()
-
-                        viewModel.saveImageUser(response.data!!.success.path)
-
+                        prefViewModel.saveImageUser(imageUser!!)
                         Toast.makeText(requireContext(), "Change image success ${response.data!!.success.status}", Toast.LENGTH_SHORT).show()
                     }
                     is Resource.Error -> {
@@ -235,7 +234,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private fun setupListener() {
         binding.apply {
             cvLogout.setOnClickListener {
-                viewModel.removeSession()
+                prefViewModel.clearSession()
                 startActivity(Intent(requireContext(), LoginActivity::class.java))
                 activity?.finish()
             }

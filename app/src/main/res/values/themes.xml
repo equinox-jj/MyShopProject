@@ -25,7 +25,7 @@
     </style>
 
     <style name="Ctm.Button.Auth" parent="Widget.MaterialComponents.Button">
-        <item name="backgroundTint">@color/bg_button_pink</item>
+        <item name="backgroundTint">@color/button_color</item>
         <item name="android:background">@drawable/bg_button_auth_navigate</item>
     </style>
 

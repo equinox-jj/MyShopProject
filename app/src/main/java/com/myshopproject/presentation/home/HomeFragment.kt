@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.myshopproject.R
 import com.myshopproject.databinding.FragmentHomeBinding
@@ -24,7 +25,6 @@ import com.myshopproject.utils.enumhelper.SortedBy
 import com.myshopproject.utils.setVisibilityGone
 import com.myshopproject.utils.setVisibilityVisible
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -36,8 +36,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private var adapter: ProductListAdapter? = null
     private val viewModel by viewModels<HomeViewModel>()
-
-    private var job: Job? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -91,14 +89,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun performSearch(query: String?) {
-        job?.run {
-            if (this.isActive) {
-                this.cancel()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                delay(2000)
+                viewModel.getProductList(query)
             }
-        }
-        job = viewLifecycleOwner.lifecycleScope.launch {
-            delay(2000)
-            viewModel.getProductList(query)
         }
     }
 

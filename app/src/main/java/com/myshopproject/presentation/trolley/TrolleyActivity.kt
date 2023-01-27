@@ -12,5 +12,8 @@ class TrolleyActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityTrolleyBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+
     }
 }

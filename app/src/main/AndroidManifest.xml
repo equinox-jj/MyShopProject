@@ -43,11 +43,27 @@
         </activity>
         <activity
             android:name=".presentation.detail.DetailActivity"
-            android:exported="false"
-            android:theme="@style/Theme.MyShopProject">
+            android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https"
+                    android:host="joshuaj.com"
+                    android:pathPrefix="/deeplink" />
+                <data android:scheme="app" android:host="www.joshuaj.com" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http"
+                    android:host="joshuaj" />
+            </intent-filter>
+
         </activity>
         <activity
             android:name=".presentation.profile.changepass.ChangePassActivity"

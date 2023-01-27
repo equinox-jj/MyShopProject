@@ -2,6 +2,7 @@ package com.myshopproject.presentation.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -10,6 +11,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.myshopproject.databinding.ActivityLoginBinding
 import com.myshopproject.domain.utils.Resource
+import com.myshopproject.presentation.DataStoreViewModel
 import com.myshopproject.presentation.main.MainActivity
 import com.myshopproject.presentation.register.RegisterActivity
 import com.myshopproject.utils.setVisibilityGone
@@ -21,7 +23,9 @@ import org.json.JSONObject
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
+
     private val viewModel by viewModels<LoginViewModel>()
+    private val prefViewModel by viewModels<DataStoreViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,8 +43,26 @@ class LoginActivity : AppCompatActivity() {
                     binding.loginCardLoading.root.setVisibilityVisible()
                 }
                 is Resource.Success -> {
-                    binding.loginCardLoading.root.setVisibilityGone()
+                    val refreshToken = response.data?.refreshToken
+                    val accessToken = response.data?.accessToken
+                    val idUser = response.data?.dataUser?.id
+                    val emailUser = response.data?.dataUser?.email
+                    val nameUser = response.data?.dataUser?.name
+                    val imageUser = response.data?.dataUser?.path
 
+                    binding.loginCardLoading.root.setVisibilityGone()
+                    prefViewModel.saveAuthRefresh(
+                        idUser!!,
+                        accessToken!!,
+                        refreshToken!!
+                    )
+                    prefViewModel.saveEmailUser(emailUser!!)
+                    prefViewModel.saveNameUser(nameUser!!)
+                    Log.d("SaveDataUser", "AccessToken = $accessToken")
+                    Log.d("SaveDataUser", "RefreshToken = $refreshToken")
+                    Log.d("SaveDataUser", "ImageUser = $imageUser")
+                    Log.d("SaveDataUser", "NameUser = $nameUser")
+                    Log.d("SaveDataUser", "EmailUser = $emailUser")
                     Toast.makeText(this@LoginActivity, "Login Successfully ${response.data!!.status}", Toast.LENGTH_SHORT).show()
 
                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))

@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myshopproject.domain.entities.LoginResult
-import com.myshopproject.domain.preferences.MyPreferences
 import com.myshopproject.domain.usecase.RemoteUseCase
 import com.myshopproject.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,14 +14,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val remoteUseCase: RemoteUseCase,
-    private val pref: MyPreferences
+    private val remoteUseCase: RemoteUseCase
 ) : ViewModel() {
 
     private val _state = MutableLiveData<Resource<LoginResult>>()
     val state: LiveData<Resource<LoginResult>> = _state
-
-    val getAccessToken = pref.getAccessToken()
 
     fun loginAccount(email: String, password: String) {
         remoteUseCase.loginAccount(email, password).onEach { response ->
@@ -33,16 +29,6 @@ class LoginViewModel @Inject constructor(
                 is Resource.Success -> {
                     response.data?.let {
                         _state.value = Resource.Success(it)
-                        pref.saveAuthRefresh(
-                            it.dataUser.id,
-                            it.accessToken,
-                            it.refreshToken
-                        )
-                        pref.saveEmailUser(it.dataUser.email)
-                        pref.saveGenderUser(it.dataUser.gender)
-                        pref.saveNameUser(it.dataUser.name)
-                        pref.savePhoneNumber(it.dataUser.phone)
-                        pref.saveImageUser(it.dataUser.path)
                     }
                 }
                 is Resource.Error -> {

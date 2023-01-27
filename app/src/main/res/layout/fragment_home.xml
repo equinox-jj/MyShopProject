@@ -19,8 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:queryBackground="@null"
-        app:queryHint="Search..."
-        app:searchIcon="@drawable/ic_search" />
+        app:queryHint="Search..."/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvHome"
