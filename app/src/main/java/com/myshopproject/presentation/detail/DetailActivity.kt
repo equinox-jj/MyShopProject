@@ -15,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.myshopproject.R
 import com.myshopproject.databinding.ActivityDetailBinding
+import com.myshopproject.domain.entities.CartEntity
 import com.myshopproject.domain.entities.DetailProductData
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.DataStoreViewModel
@@ -61,7 +62,7 @@ class DetailActivity : AppCompatActivity() {
         initDataStore()
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                initObserver()
+                getDetailProducts()
             }
         }
         setupToolbarMenu()
@@ -101,9 +102,9 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun initObserver() {
+    private fun getDetailProducts() {
         viewModel.getProductDetail(productId, userId)
-        viewModel.state.observe(this@DetailActivity) { response ->
+        viewModel.detailState.observe(this@DetailActivity) { response ->
             when (response) {
                 is Resource.Loading -> {
                     binding.shimmerDetail.root.setVisibilityVisible()
@@ -153,7 +154,15 @@ class DetailActivity : AppCompatActivity() {
                 bottSheet.show(supportFragmentManager, DetailActivity::class.java.simpleName)
             }
             btnDtlTrolley.setOnClickListener {
-
+                viewModel.insertCart(
+                    CartEntity(
+                        id = data.id,
+                        product_name = data.nameProduct,
+                        price = data.harga,
+                        image = data.image,
+                        quantity = 1
+                    )
+                )
             }
             ivImageFavProductDtl.setOnClickListener {
                 if (data.isFavorite) {
@@ -166,6 +175,8 @@ class DetailActivity : AppCompatActivity() {
             }
         }
     }
+
+
 
     private fun addFavorite() {
         viewModel.favState.observe(this@DetailActivity) { response ->
