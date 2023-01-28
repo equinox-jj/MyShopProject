@@ -1,4 +1,4 @@
-package com.myshopproject.utils.enumhelper
+package com.myshopproject.utils.enums
 
 enum class ProductType {
     PRODUCT_LIST,

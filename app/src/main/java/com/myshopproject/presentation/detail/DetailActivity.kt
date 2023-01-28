@@ -1,7 +1,6 @@
 package com.myshopproject.presentation.detail
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -18,9 +17,9 @@ import com.myshopproject.databinding.ActivityDetailBinding
 import com.myshopproject.domain.entities.CartEntity
 import com.myshopproject.domain.entities.DetailProductData
 import com.myshopproject.domain.utils.Resource
-import com.myshopproject.presentation.DataStoreViewModel
 import com.myshopproject.presentation.detail.adapter.ImageSliderAdapter
 import com.myshopproject.presentation.detail.bottomsheet.DetailBottomSheet
+import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.utils.Constants.PRODUCT_ID
 import com.myshopproject.utils.setVisibilityGone
 import com.myshopproject.utils.setVisibilityVisible
@@ -47,25 +46,27 @@ class DetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbarDetail)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         productId = intent.getIntExtra(PRODUCT_ID, 0)
 
-        if(productId == 0) {
-            val uri: Uri? = intent.data
-            val id = uri?.getQueryParameter("id")
-            if (id != null) {
-                productId = id.toInt()
-            }
-        }
-
         initDataStore()
+        setupToolbarMenu()
+
+//        if(productId == 0) {
+//            val uri: Uri? = intent.data
+//            val id = uri?.getQueryParameter("id")
+//            if (id != null) {
+//                productId = id.toInt()
+//            }
+//        }
+
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 getDetailProducts()
             }
         }
-        setupToolbarMenu()
     }
 
     private fun setupToolbarMenu() {
@@ -109,6 +110,7 @@ class DetailActivity : AppCompatActivity() {
                 is Resource.Loading -> {
                     binding.shimmerDetail.root.setVisibilityVisible()
                     binding.nestedScrollDtl.setVisibilityGone()
+                    binding.toolbarDetail.title
                 }
                 is Resource.Success -> {
                     binding.shimmerDetail.root.setVisibilityGone()
@@ -175,8 +177,6 @@ class DetailActivity : AppCompatActivity() {
             }
         }
     }
-
-
 
     private fun addFavorite() {
         viewModel.favState.observe(this@DetailActivity) { response ->

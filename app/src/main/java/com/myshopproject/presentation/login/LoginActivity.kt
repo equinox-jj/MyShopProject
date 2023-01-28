@@ -2,7 +2,6 @@ package com.myshopproject.presentation.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -11,7 +10,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.myshopproject.databinding.ActivityLoginBinding
 import com.myshopproject.domain.utils.Resource
-import com.myshopproject.presentation.DataStoreViewModel
+import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.presentation.main.MainActivity
 import com.myshopproject.presentation.register.RegisterActivity
 import com.myshopproject.utils.setVisibilityGone
@@ -50,7 +49,6 @@ class LoginActivity : AppCompatActivity() {
                     val nameUser = response.data?.dataUser?.name
                     val imageUser = response.data?.dataUser?.path
 
-                    binding.loginCardLoading.root.setVisibilityGone()
                     prefViewModel.saveAuthRefresh(
                         idUser!!,
                         accessToken!!,
@@ -58,13 +56,9 @@ class LoginActivity : AppCompatActivity() {
                     )
                     prefViewModel.saveEmailUser(emailUser!!)
                     prefViewModel.saveNameUser(nameUser!!)
-                    Log.d("SaveDataUser", "AccessToken = $accessToken")
-                    Log.d("SaveDataUser", "RefreshToken = $refreshToken")
-                    Log.d("SaveDataUser", "ImageUser = $imageUser")
-                    Log.d("SaveDataUser", "NameUser = $nameUser")
-                    Log.d("SaveDataUser", "EmailUser = $emailUser")
+                    prefViewModel.saveImageUser(imageUser!!)
+                    binding.loginCardLoading.root.setVisibilityGone()
                     Toast.makeText(this@LoginActivity, "Login Successfully ${response.data!!.status}", Toast.LENGTH_SHORT).show()
-
                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                     finish()
                 }

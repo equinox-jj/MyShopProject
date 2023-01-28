@@ -14,7 +14,7 @@
         app:contentInsetStart="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <include
         android:id="@+id/shimmerDetail"
@@ -55,7 +55,8 @@
                 android:id="@+id/indicatorSlider"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                app:ci_drawable="@color/primaryColor"
+                app:ci_width="10dp"
+                app:ci_drawable="@drawable/bg_indicator_dot"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/vpImageSliderProductDtl" />
@@ -68,10 +69,10 @@
                 android:layout_marginEnd="16dp"
                 android:ellipsize="marquee"
                 android:fadingEdge="horizontal"
-                android:scrollHorizontally="true"
-                android:singleLine="true"
                 android:fontFamily="@font/poppins"
                 android:maxLines="1"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
                 app:layout_constraintEnd_toStartOf="@+id/tvPriceProductDtl"
                 app:layout_constraintStart_toStartOf="@+id/indicatorSlider"
                 app:layout_constraintTop_toBottomOf="@+id/indicatorSlider"

@@ -1,4 +1,4 @@
-package com.myshopproject.presentation
+package com.myshopproject.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

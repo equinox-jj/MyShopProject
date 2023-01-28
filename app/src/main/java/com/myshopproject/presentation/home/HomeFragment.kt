@@ -20,8 +20,8 @@ import com.myshopproject.databinding.FragmentHomeBinding
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.home.adapter.ProductListAdapter
 import com.myshopproject.presentation.trolley.TrolleyActivity
-import com.myshopproject.utils.enumhelper.ProductType
-import com.myshopproject.utils.enumhelper.SortedBy
+import com.myshopproject.utils.enums.ProductType
+import com.myshopproject.utils.enums.SortedBy
 import com.myshopproject.utils.setVisibilityGone
 import com.myshopproject.utils.setVisibilityVisible
 import dagger.hilt.android.AndroidEntryPoint

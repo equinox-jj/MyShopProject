@@ -7,7 +7,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.TextView
@@ -27,7 +26,7 @@ import com.google.gson.JsonObject
 import com.myshopproject.R
 import com.myshopproject.databinding.FragmentProfileBinding
 import com.myshopproject.domain.utils.Resource
-import com.myshopproject.presentation.DataStoreViewModel
+import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.presentation.camera.CameraActivity
 import com.myshopproject.presentation.login.LoginActivity
 import com.myshopproject.presentation.profile.adapter.CustomSpinnerAdapter
@@ -128,16 +127,11 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 binding.tvUserName.text = nameUser
                 binding.tvUserEmail.text = emailUser
                 binding.ivProfile.load(imageUser)
+
                 when(languagePref) {
                     0 -> binding.sSelectLanguage.setSelection(0)
                     1 -> binding.sSelectLanguage.setSelection(1)
                 }
-
-                Log.d("ProfilePref", "UserId = $idUser")
-                Log.d("ProfilePref", "Name = $nameUser")
-                Log.d("ProfilePref", "Email = $emailUser")
-                Log.d("ProfilePref", "Language = $languagePref")
-                Log.d("ProfilePref", "Image = $imageUser")
             }
         }
     }

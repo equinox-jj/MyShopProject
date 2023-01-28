@@ -12,7 +12,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.myshopproject.R
 import com.myshopproject.databinding.ActivityMainBinding
-import com.myshopproject.presentation.DataStoreViewModel
+import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.utils.setVisibilityGone
 import com.myshopproject.utils.setVisibilityVisible
 import dagger.hilt.android.AndroidEntryPoint

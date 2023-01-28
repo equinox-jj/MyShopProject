@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.myshopproject.databinding.ItemProductListBinding
 import com.myshopproject.domain.entities.DataProduct
 import com.myshopproject.utils.DiffUtilRecycler
-import com.myshopproject.utils.enumhelper.ProductType
+import com.myshopproject.utils.enums.ProductType
 
 class ProductListAdapter(private val type: ProductType) : RecyclerView.Adapter<ProductListVH>() {
 

@@ -17,10 +17,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.myshopproject.R
 import com.myshopproject.databinding.FragmentFavoriteBinding
 import com.myshopproject.domain.utils.Resource
-import com.myshopproject.presentation.DataStoreViewModel
+import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.presentation.home.adapter.ProductListAdapter
-import com.myshopproject.utils.enumhelper.ProductType
-import com.myshopproject.utils.enumhelper.SortedBy
+import com.myshopproject.utils.enums.ProductType
+import com.myshopproject.utils.enums.SortedBy
 import com.myshopproject.utils.setVisibilityGone
 import com.myshopproject.utils.setVisibilityVisible
 import dagger.hilt.android.AndroidEntryPoint

@@ -7,7 +7,7 @@ import com.myshopproject.databinding.ItemProductListBinding
 import com.myshopproject.domain.entities.DataProduct
 import com.myshopproject.presentation.detail.DetailActivity
 import com.myshopproject.utils.Constants.PRODUCT_ID
-import com.myshopproject.utils.enumhelper.ProductType
+import com.myshopproject.utils.enums.ProductType
 import com.myshopproject.utils.setVisibilityGone
 import com.myshopproject.utils.setVisibilityVisible
 import com.myshopproject.utils.toIDRPrice

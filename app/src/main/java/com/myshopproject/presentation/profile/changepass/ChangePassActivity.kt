@@ -11,7 +11,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.myshopproject.databinding.ActivityChangePassBinding
 import com.myshopproject.domain.utils.Resource
-import com.myshopproject.presentation.DataStoreViewModel
+import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.utils.setVisibilityGone
 import com.myshopproject.utils.setVisibilityVisible
 import dagger.hilt.android.AndroidEntryPoint

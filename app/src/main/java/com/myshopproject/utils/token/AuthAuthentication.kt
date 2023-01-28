@@ -29,14 +29,12 @@ class AuthAuthentication @Inject constructor(
                 pref.clearSession() // Clear Preferences
             }
 
-            runBlocking {
-                newToken.body()?.let {
-                    pref.saveAccessToken(it.success.accessToken)
-                    pref.saveRefreshToken(it.success.refreshToken)
-                    response.request.newBuilder()
-                        .header("Authorization", it.success.accessToken) // Save New Token To Header
-                        .build()
-                }
+            newToken.body()?.let {
+                pref.saveAccessToken(it.success.accessToken)
+                pref.saveRefreshToken(it.success.refreshToken)
+                response.request.newBuilder()
+                    .header("Authorization", it.success.accessToken) // Save New Token To Header
+                    .build()
             }
         }
     }
