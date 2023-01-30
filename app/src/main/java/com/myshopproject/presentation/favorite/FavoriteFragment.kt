@@ -11,21 +11,16 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.myshopproject.R
 import com.myshopproject.databinding.FragmentFavoriteBinding
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.home.adapter.ProductListAdapter
-import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.utils.enums.ProductType
 import com.myshopproject.utils.enums.SortedBy
 import com.myshopproject.utils.setVisibilityGone
 import com.myshopproject.utils.setVisibilityVisible
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.first
 
 @AndroidEntryPoint
 class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
@@ -35,12 +30,6 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
 
     private var adapter: ProductListAdapter? = null
     private val viewModel by viewModels<FavoriteViewModel>()
-    private val prefViewModel by viewModels<DataStoreViewModel>()
-
-    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
-    private var searchJob: Job? = null
-
-    private var userId: Int = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -50,10 +39,9 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
         setupListener()
         setupToolbarMenu()
 
-        initDataStore()
         initObserver(SortedBy.DefaultSort)
 
-        viewModel.getProductListFav("", userId)
+        viewModel.onSearch("")
     }
 
     private fun setupToolbarMenu() {
@@ -68,15 +56,6 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
             }
 
         },viewLifecycleOwner, Lifecycle.State.RESUMED)
-    }
-
-    private fun initDataStore() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                val id = prefViewModel.getUserId.first()
-                userId = id
-            }
-        }
     }
 
     private fun initRecyclerView() {
@@ -94,27 +73,15 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
                     return false
                 }
 
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    searchJob?.isActive
-                    searchJob = coroutineScope.launch {
-                        delay(2000)
-                        if (newText?.length == 0 || newText.toString() == "") {
-                            performSearch("")
-                        } else {
-                            performSearch(newText)
-                        }
-                    }
-                    return false
+                override fun onQueryTextChange(newText: String): Boolean {
+                    viewModel.onSearch(newText)
+                    return true
                 }
             })
             fabSortedByFav.setOnClickListener {
                 dialogSortedBy()
             }
         }
-    }
-
-    private fun performSearch(query: String?) {
-        viewModel.getProductListFav(query, userId)
     }
 
     private fun dialogSortedBy() {

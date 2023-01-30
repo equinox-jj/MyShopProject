@@ -11,6 +11,7 @@ import coil.load
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.myshopproject.R
 import com.myshopproject.data.source.remote.dto.ErrorResponseDTO
 import com.myshopproject.databinding.BottomSheetProductDetailBinding
 import com.myshopproject.domain.entities.DetailProductData
@@ -47,6 +48,7 @@ class DetailBottomSheet(private val data: DetailProductData) : BottomSheetDialog
             ivProductBottSht.load(data.image)
             tvProductPriceBottSht.text = data.harga.toIDRPrice()
             tvStockProductBottSht.text = data.stock.toString()
+            (resources.getString(R.string.buy_now) + data.harga.toIDRPrice()).also { btnBuyNowBottSheet.text = it }
         }
     }
 
@@ -88,9 +90,15 @@ class DetailBottomSheet(private val data: DetailProductData) : BottomSheetDialog
     private fun setupListener() {
         binding.btnIncreaseBottSheet.setOnClickListener {
             viewModel.increaseQuantity(data.stock)
+            val sum = binding.tvQuantityBottSheet.text.toString()
+            val total = (sum.toInt() * data.harga.toInt())
+            (resources.getString(R.string.buy_now) + total.toString().toIDRPrice()).also { binding.btnBuyNowBottSheet.text = it }
         }
         binding.btnDecreaseBottSheet.setOnClickListener {
             viewModel.decreaseQuantity()
+            val sum = binding.tvQuantityBottSheet.text.toString()
+            val total = (sum.toInt() * data.harga.toInt())
+            (resources.getString(R.string.buy_now) + total.toString().toIDRPrice()).also { binding.btnBuyNowBottSheet.text = it }
         }
     }
 
@@ -98,9 +106,7 @@ class DetailBottomSheet(private val data: DetailProductData) : BottomSheetDialog
         viewModel.updateStock(idProduct, stock)
         viewModel.updateStockState.observe(viewLifecycleOwner) { response ->
             when (response) {
-                is Resource.Loading -> {
-
-                }
+                is Resource.Loading -> {}
                 is Resource.Success -> {
                     val intent = Intent(context, BuySuccessActivity::class.java)
                     intent.putExtra(Constants.PRODUCT_ID, data.id)

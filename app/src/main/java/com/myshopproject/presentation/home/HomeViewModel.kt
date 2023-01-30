@@ -8,8 +8,12 @@ import com.myshopproject.domain.entities.DataProductResponse
 import com.myshopproject.domain.usecase.RemoteUseCase
 import com.myshopproject.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,11 +24,20 @@ class HomeViewModel @Inject constructor(
     private val _state = MutableLiveData<Resource<DataProductResponse>>()
     val state: LiveData<Resource<DataProductResponse>> = _state
 
-    init {
-        getProductList("")
-    }
+    private var searchJob: Job? = null
 
-    fun getProductList(query: String?) {
+    fun onSearch(query: String) {
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch(Dispatchers.IO) {
+            delay(2000)
+            if (query.isEmpty()) {
+                getProductList("")
+            } else {
+                getProductList(query)
+            }
+        }
+    }
+    private fun getProductList(query: String?) {
         remoteUseCase.getListProduct(query).onEach { response ->
             when (response) {
                 is Resource.Loading -> {

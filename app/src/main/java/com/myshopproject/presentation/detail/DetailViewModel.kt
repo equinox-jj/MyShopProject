@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.myshopproject.domain.entities.CartEntity
 import com.myshopproject.domain.entities.DetailProductResponse
 import com.myshopproject.domain.entities.SuccessResponseStatus
-import com.myshopproject.domain.entities.UpdateStockProduct
 import com.myshopproject.domain.usecase.LocalUseCase
 import com.myshopproject.domain.usecase.RemoteUseCase
 import com.myshopproject.domain.utils.Resource

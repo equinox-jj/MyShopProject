@@ -26,10 +26,10 @@ import com.google.gson.JsonObject
 import com.myshopproject.R
 import com.myshopproject.databinding.FragmentProfileBinding
 import com.myshopproject.domain.utils.Resource
-import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.presentation.camera.CameraActivity
 import com.myshopproject.presentation.login.LoginActivity
 import com.myshopproject.presentation.profile.adapter.CustomSpinnerAdapter
+import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.utils.*
 import com.myshopproject.utils.Constants.IS_BACK_CAMERA_INTENT
 import com.myshopproject.utils.Constants.PICTURE_INTENT

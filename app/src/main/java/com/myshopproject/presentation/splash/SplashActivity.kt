@@ -11,9 +11,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.myshopproject.databinding.ActivitySplashBinding
-import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.presentation.login.LoginActivity
 import com.myshopproject.presentation.main.MainActivity
+import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

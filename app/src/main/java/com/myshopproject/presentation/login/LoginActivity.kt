@@ -10,9 +10,9 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.myshopproject.databinding.ActivityLoginBinding
 import com.myshopproject.domain.utils.Resource
-import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.presentation.main.MainActivity
 import com.myshopproject.presentation.register.RegisterActivity
+import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.utils.setVisibilityGone
 import com.myshopproject.utils.setVisibilityVisible
 import dagger.hilt.android.AndroidEntryPoint

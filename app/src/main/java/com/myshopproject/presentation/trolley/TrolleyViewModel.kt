@@ -1,7 +1,6 @@
 package com.myshopproject.presentation.trolley
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.myshopproject.domain.usecase.LocalUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,4 +19,5 @@ class TrolleyViewModel @Inject constructor(
             localUseCase.deleteCart(id)
         }
     }
+    
 }

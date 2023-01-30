@@ -23,7 +23,6 @@ import com.myshopproject.utils.enums.SortedBy
 import com.myshopproject.utils.setVisibilityGone
 import com.myshopproject.utils.setVisibilityVisible
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -34,9 +33,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private var adapter: ProductListAdapter? = null
     private val viewModel by viewModels<HomeViewModel>()
 
-    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
-    private var searchJob: Job? = null
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentHomeBinding.bind(view)
@@ -46,6 +42,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         setupToolbarMenu()
 
         initObserver(SortedBy.DefaultSort)
+        viewModel.onSearch("")
     }
 
     private fun setupToolbarMenu() {
@@ -81,27 +78,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     return false
                 }
 
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    searchJob?.cancel()
-                    searchJob = coroutineScope.launch {
-                        delay(2000)
-                        if (newText?.length == 0 || newText.toString() == "") {
-                            performSearch("")
-                        } else {
-                            performSearch(newText)
-                        }
-                    }
-                    return false
+                override fun onQueryTextChange(newText: String): Boolean {
+                    viewModel.onSearch(newText)
+                    return true
                 }
             })
             fabSortedBy.setOnClickListener {
                 dialogSortedBy()
             }
         }
-    }
-
-    private fun performSearch(query: String?) {
-        viewModel.getProductList(query)
     }
 
     private fun dialogSortedBy() {
