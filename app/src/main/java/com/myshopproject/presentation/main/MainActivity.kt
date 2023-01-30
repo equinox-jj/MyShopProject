@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initDataStore() {
         lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 when(prefViewModel.getLanguage.first()) {
                     0 -> setLanguage("en")
                     1 -> setLanguage("in")

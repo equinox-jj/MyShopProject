@@ -48,10 +48,9 @@
                 android:id="@+id/etEmailLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins"
+                android:fontFamily="@font/poppins_regular"
                 android:hint="@string/email"
-                android:inputType="textEmailAddress"
-                android:textStyle="bold" />
+                android:inputType="textEmailAddress" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -71,10 +70,9 @@
                 android:id="@+id/etPasswordLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins"
+                android:fontFamily="@font/poppins_regular"
                 android:hint="@string/password"
-                android:inputType="textPassword"
-                android:textStyle="bold" />
+                android:inputType="textPassword" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

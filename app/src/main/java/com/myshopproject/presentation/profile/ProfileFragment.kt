@@ -77,7 +77,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 ivProfile.visibility = View.VISIBLE
                 ivProfile.setImageBitmap(resultCamera)
                 viewLifecycleOwner.lifecycleScope.launch {
-                    viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    repeatOnLifecycle(Lifecycle.State.STARTED) {
                         postChangeImage()
                     }
                 }
@@ -97,7 +97,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 ivProfile.visibility = View.VISIBLE
                 ivProfile.setImageURI(uri)
                 viewLifecycleOwner.lifecycleScope.launch {
-                    viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    repeatOnLifecycle(Lifecycle.State.STARTED) {
                         postChangeImage()
                     }
                 }
@@ -116,7 +116,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private fun initDataStore() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 val idUser = prefViewModel.getUserId.first()
                 val nameUser = prefViewModel.getNameUser.first()
                 val emailUser = prefViewModel.getEmailUser.first()

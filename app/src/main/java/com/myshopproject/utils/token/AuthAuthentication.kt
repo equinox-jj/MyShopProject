@@ -30,8 +30,10 @@ class AuthAuthentication @Inject constructor(
             }
 
             newToken.body()?.let {
-                pref.saveAccessToken(it.success.accessToken)
-                pref.saveRefreshToken(it.success.refreshToken)
+                val accessToken = it.success.accessToken
+                val refreshToken = it.success.refreshToken
+                pref.saveAccessToken(accessToken)
+                pref.saveRefreshToken(refreshToken)
                 response.request.newBuilder()
                     .header("Authorization", it.success.accessToken) // Save New Token To Header
                     .build()

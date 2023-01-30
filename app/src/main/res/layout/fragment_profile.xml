@@ -65,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:fontFamily="@font/poppins"
+            android:fontFamily="@font/poppins_regular"
             tools:text="johndoe@gmail.com"
             app:layout_constraintEnd_toEndOf="@+id/tvUserName"
             app:layout_constraintStart_toStartOf="@+id/tvUserName"

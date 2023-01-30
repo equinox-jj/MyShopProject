@@ -12,6 +12,7 @@ import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.navArgs
 import com.myshopproject.R
 import com.myshopproject.databinding.ActivityDetailBinding
 import com.myshopproject.domain.entities.CartEntity
@@ -20,7 +21,6 @@ import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.detail.adapter.ImageSliderAdapter
 import com.myshopproject.presentation.detail.bottomsheet.DetailBottomSheet
 import com.myshopproject.presentation.viewmodel.DataStoreViewModel
-import com.myshopproject.utils.Constants.PRODUCT_ID
 import com.myshopproject.utils.setVisibilityGone
 import com.myshopproject.utils.setVisibilityVisible
 import com.myshopproject.utils.toIDRPrice
@@ -37,6 +37,8 @@ class DetailActivity : AppCompatActivity() {
     private val viewModel by viewModels<DetailViewModel>()
     private val prefViewModel by viewModels<DataStoreViewModel>()
 
+    private val args by navArgs<DetailActivityArgs>()
+
     private var productId: Int = 0
     private var userId: Int = 0
 
@@ -49,22 +51,14 @@ class DetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        productId = intent.getIntExtra(PRODUCT_ID, 0)
+        productId = args.productId
 
         initDataStore()
         setupToolbarMenu()
 
-//        if(productId == 0) {
-//            val uri: Uri? = intent.data
-//            val id = uri?.getQueryParameter("id")
-//            if (id != null) {
-//                productId = id.toInt()
-//            }
-//        }
-
         lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                getDetailProducts()
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                initObserver()
             }
         }
     }
@@ -95,7 +89,7 @@ class DetailActivity : AppCompatActivity() {
 
     private fun initDataStore() {
         lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 prefViewModel.getUserId.collect {
                     userId = it
                 }
@@ -103,7 +97,7 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun getDetailProducts() {
+    private fun initObserver() {
         viewModel.getProductDetail(productId, userId)
         viewModel.detailState.observe(this@DetailActivity) { response ->
             when (response) {

@@ -21,7 +21,7 @@ class HomeViewModel @Inject constructor(
     val state: LiveData<Resource<DataProductResponse>> = _state
 
     init {
-        getProductList("")
+        getProductList(null)
     }
 
     fun getProductList(query: String?) {

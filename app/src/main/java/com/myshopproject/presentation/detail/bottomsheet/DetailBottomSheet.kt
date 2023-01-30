@@ -16,6 +16,7 @@ import com.myshopproject.databinding.BottomSheetProductDetailBinding
 import com.myshopproject.domain.entities.DetailProductData
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.buysuccess.BuySuccessActivity
+import com.myshopproject.utils.Constants
 import com.myshopproject.utils.toIDRPrice
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
@@ -68,17 +69,17 @@ class DetailBottomSheet(private val data: DetailProductData) : BottomSheetDialog
 
         when {
             stock == buy -> {
-                binding.btnBuyNowBottSheet.isClickable = false
-                binding.btnBuyNowBottSheet.setOnClickListener {
-                    Toast.makeText(requireContext(), "Out of Stock", Toast.LENGTH_SHORT).show()
-                }
-            }
-            stock != buy -> {
                 binding.btnBuyNowBottSheet.isClickable = true
                 binding.btnBuyNowBottSheet.setOnClickListener {
                     val idProduct = data.id.toString()
                     val stockProduct = binding.tvQuantityBottSheet.text.toString()
                     updateStock(idProduct, stockProduct.toInt())
+                }
+            }
+            stock != buy -> {
+                binding.btnBuyNowBottSheet.isClickable = false
+                binding.btnBuyNowBottSheet.setOnClickListener {
+                    Toast.makeText(requireContext(), "Out of Stock", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -102,6 +103,7 @@ class DetailBottomSheet(private val data: DetailProductData) : BottomSheetDialog
                 }
                 is Resource.Success -> {
                     val intent = Intent(context, BuySuccessActivity::class.java)
+                    intent.putExtra(Constants.PRODUCT_ID, data.id)
                     startActivity(intent)
                 }
                 is Resource.Error -> {

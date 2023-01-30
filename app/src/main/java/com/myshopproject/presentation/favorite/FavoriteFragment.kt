@@ -13,12 +13,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.myshopproject.R
 import com.myshopproject.databinding.FragmentFavoriteBinding
 import com.myshopproject.domain.utils.Resource
-import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.presentation.home.adapter.ProductListAdapter
+import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.utils.enums.ProductType
 import com.myshopproject.utils.enums.SortedBy
 import com.myshopproject.utils.setVisibilityGone
@@ -52,15 +53,15 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
         initObserver(SortedBy.DefaultSort)
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.getProductListFav("", userId)
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.getProductListFav(null, userId)
             }
         }
     }
 
     private fun initDataStore() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 val id = prefViewModel.getUserId.first()
                 userId = id
             }
@@ -105,7 +106,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
 
     private fun performSearch(query: String?) {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 delay(2000)
                 viewModel.getProductListFav(query, userId)
             }
@@ -115,6 +116,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
     private fun initRecyclerView() {
         binding.apply {
             adapter = ProductListAdapter(ProductType.PRODUCT_FAV_LIST)
+            rvFavorite.layoutManager = LinearLayoutManager(context)
             rvFavorite.adapter = adapter
             rvFavorite.setHasFixedSize(true)
         }

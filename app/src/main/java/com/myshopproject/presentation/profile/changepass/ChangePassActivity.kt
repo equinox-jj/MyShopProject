@@ -39,7 +39,7 @@ class ChangePassActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 setupListener()
             }
         }
@@ -54,7 +54,7 @@ class ChangePassActivity : AppCompatActivity() {
 
     private fun initDataStore() {
         lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 authorization = prefViewModel.getRefreshToken.first()
                 userId = prefViewModel.getUserId.first()
             }

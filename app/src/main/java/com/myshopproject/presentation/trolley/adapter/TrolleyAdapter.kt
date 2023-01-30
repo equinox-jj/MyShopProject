@@ -4,13 +4,31 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.myshopproject.databinding.ItemProductCartBinding
 import com.myshopproject.domain.entities.CartEntity
 import com.myshopproject.utils.DiffUtilRecycler
+import com.myshopproject.utils.toIDRPrice
 
-class TrolleyAdapter: RecyclerView.Adapter<TrolleyVH>() {
+class TrolleyAdapter(
+    val onDeleteClick: (Int) -> Unit
+): RecyclerView.Adapter<TrolleyAdapter.TrolleyVH>() {
 
     private var data = listOf<CartEntity>()
+
+    inner class TrolleyVH(private val binding: ItemProductCartBinding): RecyclerView.ViewHolder(binding.root) {
+        fun bind(cartEntity: CartEntity) {
+            binding.apply {
+                ivTrolleyProduct.load(cartEntity.image)
+                tvTrolleyProductName.text = cartEntity.product_name
+                tvTrolleyProductPrice.text = cartEntity.price.toIDRPrice()
+                tvTrolleyQuantity.text = cartEntity.quantity.toString()
+                btnTrolleyDelete.setOnClickListener {
+                    onDeleteClick.invoke(cartEntity.id)
+                }
+            }
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrolleyVH {
         val binding = ItemProductCartBinding.inflate(LayoutInflater.from(parent.context), parent, false)

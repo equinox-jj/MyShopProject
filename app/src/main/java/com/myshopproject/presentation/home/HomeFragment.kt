@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.myshopproject.R
 import com.myshopproject.databinding.FragmentHomeBinding
@@ -90,7 +91,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun performSearch(query: String?) {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 delay(2000)
                 viewModel.getProductList(query)
             }
@@ -100,6 +101,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun initRecyclerView() {
         binding.apply {
             adapter = ProductListAdapter(ProductType.PRODUCT_LIST)
+            rvHome.layoutManager = LinearLayoutManager(context)
             rvHome.adapter = adapter
             rvHome.setHasFixedSize(true)
         }

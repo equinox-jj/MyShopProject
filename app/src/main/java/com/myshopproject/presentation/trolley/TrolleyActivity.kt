@@ -31,7 +31,11 @@ class TrolleyActivity : AppCompatActivity() {
 
     private fun initRecyclerView() {
         binding.apply {
-            trolleyAdapter = TrolleyAdapter()
+            trolleyAdapter = TrolleyAdapter(
+                onDeleteClick = {
+                    viewModel.deleteSingleProduct(it)
+                }
+            )
             rvTrolley.adapter = trolleyAdapter
             rvTrolley.setHasFixedSize(true)
         }
