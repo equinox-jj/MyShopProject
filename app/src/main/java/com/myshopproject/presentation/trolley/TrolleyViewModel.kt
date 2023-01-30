@@ -13,8 +13,8 @@ class TrolleyViewModel @Inject constructor(
     private val localUseCase: LocalUseCase
 ) : ViewModel() {
 
-    val getAllCarts = localUseCase.getAllCarts().asLiveData()
-//    val getAllCartss = localUseCase.getAllCarts().asLiveData()
+    val getAllCarts = localUseCase.getAllCarts()
+
     fun deleteSingleProduct(id: Int) {
         viewModelScope.launch {
             localUseCase.deleteCart(id)

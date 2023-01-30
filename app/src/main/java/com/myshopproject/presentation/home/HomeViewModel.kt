@@ -21,7 +21,7 @@ class HomeViewModel @Inject constructor(
     val state: LiveData<Resource<DataProductResponse>> = _state
 
     init {
-        getProductList(null)
+        getProductList("")
     }
 
     fun getProductList(query: String?) {
@@ -36,8 +36,7 @@ class HomeViewModel @Inject constructor(
                     }
                 }
                 is Resource.Error -> {
-                    _state.value =
-                        Resource.Error(response.message, response.errorCode, response.errorBody)
+                    _state.value = Resource.Error(response.message, response.errorCode, response.errorBody)
                 }
             }
         }.launchIn(viewModelScope)

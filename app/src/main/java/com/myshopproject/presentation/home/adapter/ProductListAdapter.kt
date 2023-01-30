@@ -20,8 +20,8 @@ class ProductListAdapter(private val type: ProductType) : RecyclerView.Adapter<P
 
     private var listProduct = listOf<DataProduct>()
 
-    class ProductListVH(private val binding: ItemProductListBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: DataProduct, type: ProductType) {
+    inner class ProductListVH(private val binding: ItemProductListBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(data: DataProduct) {
             when(type) {
                 ProductType.PRODUCT_LIST -> {
                     bindProductList(data)
@@ -71,7 +71,7 @@ class ProductListAdapter(private val type: ProductType) : RecyclerView.Adapter<P
     }
 
     override fun onBindViewHolder(holder: ProductListVH, position: Int) {
-        holder.bind(listProduct[position], type)
+        holder.bind(listProduct[position])
     }
 
     override fun getItemCount(): Int = listProduct.size

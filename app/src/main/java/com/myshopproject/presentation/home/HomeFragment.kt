@@ -12,9 +12,6 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.myshopproject.R
 import com.myshopproject.databinding.FragmentHomeBinding
@@ -26,8 +23,7 @@ import com.myshopproject.utils.enums.SortedBy
 import com.myshopproject.utils.setVisibilityGone
 import com.myshopproject.utils.setVisibilityVisible
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -37,6 +33,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private var adapter: ProductListAdapter? = null
     private val viewModel by viewModels<HomeViewModel>()
+
+    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
+    private var searchJob: Job? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -67,6 +66,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         },viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
+    private fun initRecyclerView() {
+        binding.apply {
+            adapter = ProductListAdapter(ProductType.PRODUCT_LIST)
+            rvHome.adapter = adapter
+            rvHome.setHasFixedSize(true)
+        }
+    }
+
     private fun setupListener() {
         binding.apply {
             svHome.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -75,12 +82,16 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    if (newText?.length == 0 || newText.toString() == "") {
-                        performSearch(null)
-                    } else {
-                        performSearch(newText)
+                    searchJob?.cancel()
+                    searchJob = coroutineScope.launch {
+                        delay(2000)
+                        if (newText?.length == 0 || newText.toString() == "") {
+                            performSearch("")
+                        } else {
+                            performSearch(newText)
+                        }
                     }
-                    return true
+                    return false
                 }
             })
             fabSortedBy.setOnClickListener {
@@ -90,21 +101,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun performSearch(query: String?) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                delay(2000)
-                viewModel.getProductList(query)
-            }
-        }
-    }
-
-    private fun initRecyclerView() {
-        binding.apply {
-            adapter = ProductListAdapter(ProductType.PRODUCT_LIST)
-            rvHome.layoutManager = LinearLayoutManager(context)
-            rvHome.adapter = adapter
-            rvHome.setHasFixedSize(true)
-        }
+        viewModel.getProductList(query)
     }
 
     private fun dialogSortedBy() {

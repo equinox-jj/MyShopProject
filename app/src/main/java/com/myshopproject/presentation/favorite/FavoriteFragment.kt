@@ -13,7 +13,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.myshopproject.R
 import com.myshopproject.databinding.FragmentFavoriteBinding
@@ -25,9 +24,8 @@ import com.myshopproject.utils.enums.SortedBy
 import com.myshopproject.utils.setVisibilityGone
 import com.myshopproject.utils.setVisibilityVisible
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
@@ -38,6 +36,9 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
     private var adapter: ProductListAdapter? = null
     private val viewModel by viewModels<FavoriteViewModel>()
     private val prefViewModel by viewModels<DataStoreViewModel>()
+
+    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
+    private var searchJob: Job? = null
 
     private var userId: Int = 0
 
@@ -52,20 +53,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
         initDataStore()
         initObserver(SortedBy.DefaultSort)
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.getProductListFav(null, userId)
-            }
-        }
-    }
-
-    private fun initDataStore() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                val id = prefViewModel.getUserId.first()
-                userId = id
-            }
-        }
+        viewModel.getProductListFav("", userId)
     }
 
     private fun setupToolbarMenu() {
@@ -82,6 +70,23 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
         },viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
+    private fun initDataStore() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                val id = prefViewModel.getUserId.first()
+                userId = id
+            }
+        }
+    }
+
+    private fun initRecyclerView() {
+        binding.apply {
+            adapter = ProductListAdapter(ProductType.PRODUCT_FAV_LIST)
+            rvFavorite.adapter = adapter
+            rvFavorite.setHasFixedSize(true)
+        }
+    }
+
     private fun setupListener() {
         binding.apply {
             svFavorite.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -90,12 +95,16 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    if (newText?.length == 0 || newText.toString() == "") {
-                        performSearch("")
-                    } else {
-                        performSearch(newText)
+                    searchJob?.isActive
+                    searchJob = coroutineScope.launch {
+                        delay(2000)
+                        if (newText?.length == 0 || newText.toString() == "") {
+                            performSearch("")
+                        } else {
+                            performSearch(newText)
+                        }
                     }
-                    return true
+                    return false
                 }
             })
             fabSortedByFav.setOnClickListener {
@@ -105,21 +114,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
     }
 
     private fun performSearch(query: String?) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                delay(2000)
-                viewModel.getProductListFav(query, userId)
-            }
-        }
-    }
-
-    private fun initRecyclerView() {
-        binding.apply {
-            adapter = ProductListAdapter(ProductType.PRODUCT_FAV_LIST)
-            rvFavorite.layoutManager = LinearLayoutManager(context)
-            rvFavorite.adapter = adapter
-            rvFavorite.setHasFixedSize(true)
-        }
+        viewModel.getProductListFav(query, userId)
     }
 
     private fun dialogSortedBy() {
