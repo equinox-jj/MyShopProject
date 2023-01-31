@@ -29,6 +29,7 @@ class DetailBottomSheet(private val data: DetailProductData) : BottomSheetDialog
     private val binding get() = _binding!!
 
     private val viewModel by viewModels<DetailBottomSheetViewModel>()
+    private var quantity: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,6 +58,7 @@ class DetailBottomSheet(private val data: DetailProductData) : BottomSheetDialog
         val buy = binding.tvQuantityBottSheet.text
 
         viewModel.quantity.observe(viewLifecycleOwner) {
+            quantity = it
             binding.tvQuantityBottSheet.text = it.toString()
             if (it == data.stock) {
 //                binding.btnIncreaseBottSheet.background = ContextCompat.getDrawable(requireContext(), R.color.text_grey)
@@ -69,22 +71,25 @@ class DetailBottomSheet(private val data: DetailProductData) : BottomSheetDialog
             binding.tvProductPriceBottSht.text = it.toString().toIDRPrice()
         }
 
-        when {
-            stock == buy -> {
-                binding.btnBuyNowBottSheet.isClickable = true
-                binding.btnBuyNowBottSheet.setOnClickListener {
-                    val idProduct = data.id.toString()
-                    val stockProduct = binding.tvQuantityBottSheet.text.toString()
-                    updateStock(idProduct, stockProduct.toInt())
-                }
-            }
-            stock != buy -> {
-                binding.btnBuyNowBottSheet.isClickable = false
-                binding.btnBuyNowBottSheet.setOnClickListener {
-                    Toast.makeText(requireContext(), "Out of Stock", Toast.LENGTH_SHORT).show()
-                }
-            }
+        binding.btnBuyNowBottSheet.setOnClickListener {
+            updateStock(data.id.toString(), quantity)
         }
+//        when {
+//            stock == buy -> {
+//                binding.btnBuyNowBottSheet.isClickable = false
+//                binding.btnBuyNowBottSheet.setOnClickListener {
+//                    Toast.makeText(requireContext(), "Out of Stock", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//            stock != buy -> {
+//                binding.btnBuyNowBottSheet.isClickable = true
+//                binding.btnBuyNowBottSheet.setOnClickListener {
+//                    val idProduct = data.id.toString()
+//                    val stockProduct = binding.tvQuantityBottSheet.text.toString()
+//                    updateStock(idProduct, stockProduct.toInt())
+//                }
+//            }
+//        }
     }
 
     private fun setupListener() {

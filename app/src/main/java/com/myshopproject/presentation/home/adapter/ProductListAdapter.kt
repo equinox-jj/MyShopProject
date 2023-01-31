@@ -12,8 +12,8 @@ import com.myshopproject.presentation.favorite.FavoriteFragmentDirections
 import com.myshopproject.presentation.home.HomeFragmentDirections
 import com.myshopproject.utils.DiffUtilRecycler
 import com.myshopproject.utils.enums.ProductType
-import com.myshopproject.utils.setVisibilityGone
-import com.myshopproject.utils.setVisibilityVisible
+import com.myshopproject.utils.hide
+import com.myshopproject.utils.show
 import com.myshopproject.utils.toIDRPrice
 
 class ProductListAdapter(private val type: ProductType) : RecyclerView.Adapter<ProductListAdapter.ProductListVH>() {
@@ -42,7 +42,7 @@ class ProductListAdapter(private val type: ProductType) : RecyclerView.Adapter<P
 
         private fun bindProductList(data: DataProduct) {
             binding.apply {
-                ivProductFavIcon.setVisibilityGone()
+                ivProductFavIcon.hide()
                 ivProductImage.load(data.image)
                 tvProductDate.text = data.date
                 tvProductName.isSelected = true
@@ -54,7 +54,7 @@ class ProductListAdapter(private val type: ProductType) : RecyclerView.Adapter<P
 
         private fun bindProductFavList(data: DataProduct) {
             binding.apply {
-                ivProductFavIcon.setVisibilityVisible()
+                ivProductFavIcon.show()
                 ivProductImage.load(data.image)
                 tvProductDate.text = data.date
                 tvProductName.isSelected = true

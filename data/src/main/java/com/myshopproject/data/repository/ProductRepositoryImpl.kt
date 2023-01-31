@@ -144,7 +144,27 @@ class ProductRepositoryImpl @Inject constructor(
         cartDao.deleteCart(id)
     }
 
+    override suspend fun updateCartData(q: Int?, totalPriceCart: Int?, id: Int?) {
+        cartDao.updateCartData(q, totalPriceCart, id)
+    }
+
+    override suspend fun updateCartIsCheckedAll(isChecked: Boolean) {
+        cartDao.updateCartIsCheckedAll(isChecked)
+    }
+
+    override suspend fun updateCartIsCheckedById(isChecked: Boolean, id: Int?) {
+        cartDao.updateCartIsCheckedById(isChecked, id)
+    }
+
     override fun getAllCarts(): Flow<List<CartEntity>> {
         return cartDao.getAllCarts()
+    }
+
+    override fun getCartIsChecked(): Flow<List<CartEntity>> {
+        return cartDao.getCartIsChecked()
+    }
+
+    override fun getCartById(id: Int): Flow<List<CartEntity>> {
+        return cartDao.getCartById(id)
     }
 }

@@ -4,11 +4,11 @@ import android.view.View
 import java.text.NumberFormat
 import java.util.*
 
-fun View.setVisibilityVisible() {
+fun View.show() {
     this.visibility = View.VISIBLE
 }
 
-fun View.setVisibilityGone() {
+fun View.hide() {
     this.visibility = View.GONE
 }
 

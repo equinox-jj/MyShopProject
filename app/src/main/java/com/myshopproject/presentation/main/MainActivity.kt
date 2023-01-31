@@ -13,8 +13,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.myshopproject.R
 import com.myshopproject.databinding.ActivityMainBinding
 import com.myshopproject.presentation.viewmodel.DataStoreViewModel
-import com.myshopproject.utils.setVisibilityGone
-import com.myshopproject.utils.setVisibilityVisible
+import com.myshopproject.utils.hide
+import com.myshopproject.utils.show
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -74,10 +74,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showBottomNav() {
-        binding.bottomNavigation.setVisibilityVisible()
+        binding.bottomNavigation.show()
     }
 
     private fun hideBottomNav() {
-        binding.bottomNavigation.setVisibilityGone()
+        binding.bottomNavigation.hide()
     }
 }

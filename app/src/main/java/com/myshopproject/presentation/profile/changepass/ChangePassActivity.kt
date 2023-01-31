@@ -12,8 +12,8 @@ import com.google.gson.JsonObject
 import com.myshopproject.databinding.ActivityChangePassBinding
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.viewmodel.DataStoreViewModel
-import com.myshopproject.utils.setVisibilityGone
-import com.myshopproject.utils.setVisibilityVisible
+import com.myshopproject.utils.hide
+import com.myshopproject.utils.show
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -65,10 +65,10 @@ class ChangePassActivity : AppCompatActivity() {
         viewModel.state.observe(this@ChangePassActivity) { response ->
             when (response) {
                 is Resource.Loading -> {
-                    binding.changePassCardLoading.root.setVisibilityVisible()
+                    binding.changePassCardLoading.root.show()
                 }
                 is Resource.Success -> {
-                    binding.changePassCardLoading.root.setVisibilityGone()
+                    binding.changePassCardLoading.root.hide()
 
                     Toast.makeText(this@ChangePassActivity, "Change password success ${response.data!!.success.status}", Toast.LENGTH_SHORT).show()
 
@@ -76,7 +76,7 @@ class ChangePassActivity : AppCompatActivity() {
                 }
                 is Resource.Error -> {
                     try {
-                        binding.changePassCardLoading.root.setVisibilityGone()
+                        binding.changePassCardLoading.root.hide()
                         val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
                         val gson = Gson()
                         val jsonObject = gson.fromJson(errors, JsonObject::class.java)

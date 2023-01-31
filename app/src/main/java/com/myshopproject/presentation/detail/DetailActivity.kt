@@ -21,8 +21,8 @@ import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.detail.adapter.ImageSliderAdapter
 import com.myshopproject.presentation.detail.bottomsheet.DetailBottomSheet
 import com.myshopproject.presentation.viewmodel.DataStoreViewModel
-import com.myshopproject.utils.setVisibilityGone
-import com.myshopproject.utils.setVisibilityVisible
+import com.myshopproject.utils.hide
+import com.myshopproject.utils.show
 import com.myshopproject.utils.toIDRPrice
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -102,19 +102,19 @@ class DetailActivity : AppCompatActivity() {
         viewModel.detailState.observe(this@DetailActivity) { response ->
             when (response) {
                 is Resource.Loading -> {
-                    binding.shimmerDetail.root.setVisibilityVisible()
-                    binding.nestedScrollDtl.setVisibilityGone()
+                    binding.shimmerDetail.root.show()
+                    binding.nestedScrollDtl.hide()
                     binding.toolbarDetail.title
                 }
                 is Resource.Success -> {
-                    binding.shimmerDetail.root.setVisibilityGone()
-                    binding.nestedScrollDtl.setVisibilityVisible()
+                    binding.shimmerDetail.root.hide()
+                    binding.nestedScrollDtl.show()
                     response.data?.success?.data?.let { initView(it) }
                     response.data?.success?.data?.let { setupListener(it) }
                 }
                 is Resource.Error -> {
-                    binding.shimmerDetail.root.setVisibilityGone()
-                    binding.nestedScrollDtl.setVisibilityGone()
+                    binding.shimmerDetail.root.hide()
+                    binding.nestedScrollDtl.hide()
                 }
             }
         }
@@ -153,7 +153,7 @@ class DetailActivity : AppCompatActivity() {
                 viewModel.insertCart(
                     CartEntity(
                         id = data.id,
-                        product_name = data.nameProduct,
+                        productName = data.nameProduct,
                         price = data.harga,
                         image = data.image,
                         quantity = 1

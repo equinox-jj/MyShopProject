@@ -20,7 +20,7 @@ class TrolleyAdapter(
         fun bind(cartEntity: CartEntity) {
             binding.apply {
                 ivTrolleyProduct.load(cartEntity.image)
-                tvTrolleyProductName.text = cartEntity.product_name
+                tvTrolleyProductName.text = cartEntity.productName
                 tvTrolleyProductPrice.text = cartEntity.price.toIDRPrice()
                 tvTrolleyQuantity.text = cartEntity.quantity.toString()
                 btnTrolleyDelete.setOnClickListener {

@@ -87,17 +87,17 @@ class RegisterActivity : AppCompatActivity() {
         viewModel.state.observe(this@RegisterActivity) { response ->
             when (response) {
                 is Resource.Loading -> {
-                    binding.registerCardLoading.root.setVisibilityVisible()
+                    binding.registerCardLoading.root.show()
                 }
                 is Resource.Success -> {
-                    binding.registerCardLoading.root.setVisibilityGone()
+                    binding.registerCardLoading.root.hide()
 
                     Toast.makeText(this@RegisterActivity, "Register Successfully ${response.data!!.success.status}", Toast.LENGTH_SHORT).show()
 
                     alertDialogRegisSuccess()
                 }
                 is Resource.Error -> {
-                    binding.registerCardLoading.root.setVisibilityGone()
+                    binding.registerCardLoading.root.hide()
                     val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
                     val gson = Gson()
                     val jsonObject = gson.fromJson(errors, JsonObject::class.java)

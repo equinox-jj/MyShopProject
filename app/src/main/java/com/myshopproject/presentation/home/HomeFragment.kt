@@ -20,8 +20,8 @@ import com.myshopproject.presentation.home.adapter.ProductListAdapter
 import com.myshopproject.presentation.trolley.TrolleyActivity
 import com.myshopproject.utils.enums.ProductType
 import com.myshopproject.utils.enums.SortedBy
-import com.myshopproject.utils.setVisibilityGone
-import com.myshopproject.utils.setVisibilityVisible
+import com.myshopproject.utils.hide
+import com.myshopproject.utils.show
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -112,15 +112,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             when (response) {
                 is Resource.Loading -> {
                     binding.shimmerHome.root.startShimmer()
-                    binding.shimmerHome.root.setVisibilityVisible()
-                    binding.rvHome.setVisibilityGone()
+                    binding.shimmerHome.root.show()
+                    binding.rvHome.hide()
                     isEmptyState(false)
                 }
                 is Resource.Success -> {
                     if (response.data?.success?.data?.isNotEmpty() == true) {
                         binding.shimmerHome.root.stopShimmer()
-                        binding.shimmerHome.root.setVisibilityGone()
-                        binding.rvHome.setVisibilityVisible()
+                        binding.shimmerHome.root.hide()
+                        binding.rvHome.show()
                         isEmptyState(false)
 
                         when(sortedBy) {
@@ -142,15 +142,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         }
                     } else {
                         binding.shimmerHome.root.stopShimmer()
-                        binding.shimmerHome.root.setVisibilityGone()
-                        binding.rvHome.setVisibilityGone()
+                        binding.shimmerHome.root.hide()
+                        binding.rvHome.hide()
                         isEmptyState(true)
                     }
                 }
                 is Resource.Error -> {
                     binding.shimmerHome.root.stopShimmer()
-                    binding.shimmerHome.root.setVisibilityGone()
-                    binding.rvHome.setVisibilityGone()
+                    binding.shimmerHome.root.hide()
+                    binding.rvHome.hide()
                     isEmptyState(false)
                 }
             }
@@ -159,9 +159,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun isEmptyState(empty: Boolean) {
         if (empty) {
-            binding.emptyHome.root.setVisibilityVisible()
+            binding.emptyHome.root.show()
         } else {
-            binding.emptyHome.root.setVisibilityGone()
+            binding.emptyHome.root.hide()
         }
     }
 

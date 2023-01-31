@@ -8,13 +8,14 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.myshopproject.data.source.remote.dto.ErrorResponseDTO
 import com.myshopproject.databinding.ActivityLoginBinding
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.main.MainActivity
 import com.myshopproject.presentation.register.RegisterActivity
 import com.myshopproject.presentation.viewmodel.DataStoreViewModel
-import com.myshopproject.utils.setVisibilityGone
-import com.myshopproject.utils.setVisibilityVisible
+import com.myshopproject.utils.hide
+import com.myshopproject.utils.show
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
 
@@ -39,7 +40,7 @@ class LoginActivity : AppCompatActivity() {
         viewModel.state.observe(this@LoginActivity) { response ->
             when (response) {
                 is Resource.Loading -> {
-                    binding.loginCardLoading.root.setVisibilityVisible()
+                    binding.loginCardLoading.root.show()
                 }
                 is Resource.Success -> {
                     val refreshToken = response.data?.refreshToken
@@ -57,17 +58,17 @@ class LoginActivity : AppCompatActivity() {
                     prefViewModel.saveEmailUser(emailUser!!)
                     prefViewModel.saveNameUser(nameUser!!)
                     prefViewModel.saveImageUser(imageUser!!)
-                    binding.loginCardLoading.root.setVisibilityGone()
+                    binding.loginCardLoading.root.hide()
                     Toast.makeText(this@LoginActivity, "Login Successfully ${response.data!!.status}", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                     finish()
                 }
                 is Resource.Error -> {
-                    binding.loginCardLoading.root.setVisibilityGone()
+                    binding.loginCardLoading.root.hide()
                     val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
                     val gson = Gson()
                     val jsonObject = gson.fromJson(errors, JsonObject::class.java)
-                    val errorResponse = gson.fromJson(jsonObject, com.myshopproject.data.source.remote.dto.ErrorResponseDTO::class.java)
+                    val errorResponse = gson.fromJson(jsonObject, ErrorResponseDTO::class.java)
 
                     Toast.makeText(this@LoginActivity, "${errorResponse.error.message} ${errorResponse.error.status}", Toast.LENGTH_SHORT).show()
                 }

@@ -8,8 +8,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.myshopproject.databinding.ActivityTrolleyBinding
 import com.myshopproject.presentation.trolley.adapter.TrolleyAdapter
-import com.myshopproject.utils.setVisibilityGone
-import com.myshopproject.utils.setVisibilityVisible
+import com.myshopproject.utils.hide
+import com.myshopproject.utils.show
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -51,10 +51,10 @@ class TrolleyActivity : AppCompatActivity() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.getAllCarts.collectLatest { entity ->
                     if (entity.isNotEmpty()) {
-                        binding.rvTrolley.setVisibilityVisible()
+                        binding.rvTrolley.show()
                         trolleyAdapter?.submitData(entity)
                     } else {
-                        binding.rvTrolley.setVisibilityGone()
+                        binding.rvTrolley.hide()
                     }
                 }
             }

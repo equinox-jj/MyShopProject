@@ -18,8 +18,8 @@ import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.home.adapter.ProductListAdapter
 import com.myshopproject.utils.enums.ProductType
 import com.myshopproject.utils.enums.SortedBy
-import com.myshopproject.utils.setVisibilityGone
-import com.myshopproject.utils.setVisibilityVisible
+import com.myshopproject.utils.hide
+import com.myshopproject.utils.show
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -107,15 +107,15 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
             when (response) {
                 is Resource.Loading -> {
                     binding.shimmerFavorite.root.startShimmer()
-                    binding.shimmerFavorite.root.setVisibilityVisible()
-                    binding.rvFavorite.setVisibilityGone()
+                    binding.shimmerFavorite.root.show()
+                    binding.rvFavorite.hide()
                     isEmptyState(false)
                 }
                 is Resource.Success -> {
                     if (response.data?.success?.data?.isNotEmpty() == true) {
                         binding.shimmerFavorite.root.stopShimmer()
-                        binding.shimmerFavorite.root.setVisibilityGone()
-                        binding.rvFavorite.setVisibilityVisible()
+                        binding.shimmerFavorite.root.hide()
+                        binding.rvFavorite.show()
                         isEmptyState(false)
 
                         when(sortedBy) {
@@ -137,15 +137,15 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
                         }
                     } else {
                         binding.shimmerFavorite.root.stopShimmer()
-                        binding.shimmerFavorite.root.setVisibilityGone()
-                        binding.rvFavorite.setVisibilityGone()
+                        binding.shimmerFavorite.root.hide()
+                        binding.rvFavorite.hide()
                         isEmptyState(true)
                     }
                 }
                 is Resource.Error -> {
                     binding.shimmerFavorite.root.stopShimmer()
-                    binding.shimmerFavorite.root.setVisibilityGone()
-                    binding.rvFavorite.setVisibilityGone()
+                    binding.shimmerFavorite.root.hide()
+                    binding.rvFavorite.hide()
                     isEmptyState(false)
                 }
             }
@@ -154,9 +154,9 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
 
     private fun isEmptyState(empty: Boolean) {
         if (empty) {
-            binding.emptyFavorite.root.setVisibilityVisible()
+            binding.emptyFavorite.root.show()
         } else {
-            binding.emptyFavorite.root.setVisibilityGone()
+            binding.emptyFavorite.root.hide()
         }
     }
 

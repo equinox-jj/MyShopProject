@@ -199,16 +199,16 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             viewModel.state.observe(viewLifecycleOwner) { response ->
                 when (response) {
                     is Resource.Loading -> {
-                        binding.profileCardLoading.root.setVisibilityVisible()
+                        binding.profileCardLoading.root.show()
                     }
                     is Resource.Success -> {
                         val imageUser = response.data?.success?.path
-                        binding.profileCardLoading.root.setVisibilityGone()
+                        binding.profileCardLoading.root.hide()
                         prefViewModel.saveImageUser(imageUser!!)
                         Toast.makeText(requireContext(), "Change image success ${response.data!!.success.status}", Toast.LENGTH_SHORT).show()
                     }
                     is Resource.Error -> {
-                        binding.profileCardLoading.root.setVisibilityGone()
+                        binding.profileCardLoading.root.hide()
                         try {
                             val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
                             val gson = Gson()
