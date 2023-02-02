@@ -85,6 +85,12 @@ dependencies {
     //CircleIndicator
     implementation 'me.relex:circleindicator:2.1.6'
 
-//    // Leak Canary
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
+    // Swipe Refresh
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+
+    // Picasso
+    implementation 'com.squareup.picasso:picasso:2.8'
+
+    // Leak Canary
+//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
 }

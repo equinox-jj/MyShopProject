@@ -11,6 +11,7 @@ import com.myshopproject.domain.usecase.LocalUseCase
 import com.myshopproject.domain.usecase.RemoteUseCase
 import com.myshopproject.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -30,6 +31,10 @@ class DetailViewModel @Inject constructor(
 
     private val _unFavState = MutableLiveData<Resource<SuccessResponseStatus>>()
     val unFavState: LiveData<Resource<SuccessResponseStatus>> = _unFavState
+
+    fun onRefresh(productId: Int, userId: Int) {
+        getProductDetail(productId, userId)
+    }
 
     fun getProductDetail(productId: Int, userId: Int) {
         remoteUseCase.getProductDetail(productId, userId).onEach { response ->
@@ -86,8 +91,8 @@ class DetailViewModel @Inject constructor(
     }
 
     fun insertCart(cartEntity: CartEntity) {
-        viewModelScope.launch {
-            localUseCase.insertCart(cartEntity)
+        viewModelScope.launch(Dispatchers.IO) {
+            localUseCase.addProductToTrolley(cartEntity)
         }
     }
 }

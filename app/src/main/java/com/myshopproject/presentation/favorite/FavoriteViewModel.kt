@@ -29,19 +29,28 @@ class FavoriteViewModel @Inject constructor(
 
     private var searchJob: Job? = null
 
+    init {
+        onSearch("")
+    }
+
+    fun onRefresh() {
+        viewModelScope.launch {
+            getProductListFav("", pref.getUserId().first())
+        }
+    }
     fun onSearch(query: String) {
         searchJob?.cancel()
         searchJob = viewModelScope.launch(Dispatchers.IO) {
-            delay(2000)
             if (query.isEmpty()) {
                 getProductListFav("", pref.getUserId().first())
             } else {
+                delay(2000)
                 getProductListFav(query, pref.getUserId().first())
             }
         }
     }
 
-    private fun getProductListFav(query: String?, userId: Int) {
+    fun getProductListFav(query: String?, userId: Int) {
         remoteUseCase.getListProductFavorite(query, userId).onEach { response ->
             when (response) {
                 is Resource.Loading -> {

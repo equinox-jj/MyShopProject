@@ -26,18 +26,26 @@ class HomeViewModel @Inject constructor(
 
     private var searchJob: Job? = null
 
+    init {
+        onSearch("")
+    }
+
+    fun onRefresh() {
+        getProductList("")
+    }
     fun onSearch(query: String) {
         searchJob?.cancel()
         searchJob = viewModelScope.launch(Dispatchers.IO) {
-            delay(2000)
             if (query.isEmpty()) {
                 getProductList("")
             } else {
+                delay(2000)
                 getProductList(query)
             }
         }
     }
-    private fun getProductList(query: String?) {
+
+    fun getProductList(query: String?) {
         remoteUseCase.getListProduct(query).onEach { response ->
             when (response) {
                 is Resource.Loading -> {

@@ -23,6 +23,7 @@ class BuySuccessActivity : AppCompatActivity() {
     private val viewModel by viewModels<BuySuccessViewModel>()
 
     private var productId: Int = 0
+    private var listProductId: List<String>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +31,7 @@ class BuySuccessActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         productId = intent.getIntExtra(Constants.PRODUCT_ID, 0)
+        listProductId = intent.getStringArrayListExtra(Constants.LIST_PRODUCT_ID)
 
         setupListener()
     }
@@ -44,25 +46,51 @@ class BuySuccessActivity : AppCompatActivity() {
 
     private fun initObserver() {
         val rate = binding.rbBuySccss.rating
-        viewModel.updateRate(id = productId, updateRate = UpdateRate(rate = rate.toString()))
-        viewModel.state.observe(this@BuySuccessActivity) { response ->
-            when (response) {
-                is Resource.Loading -> {
+        if (productId != 0) {
+            viewModel.updateRate(id = productId, updateRate = UpdateRate(rate = rate.toString()))
+            viewModel.state.observe(this@BuySuccessActivity) { response ->
+                when (response) {
+                    is Resource.Loading -> {
 
-                }
-                is Resource.Success -> {
-                    startActivity(Intent(this@BuySuccessActivity, MainActivity::class.java))
-                    finishAffinity()
-                }
-                is Resource.Error -> {
-                    val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
-                    val gson = Gson()
-                    val jsonObject = gson.fromJson(errors, JsonObject::class.java)
-                    val errorResponse = gson.fromJson(jsonObject, com.myshopproject.data.source.remote.dto.ErrorResponseDTO::class.java)
+                    }
+                    is Resource.Success -> {
+                        startActivity(Intent(this@BuySuccessActivity, MainActivity::class.java))
+                        finishAffinity()
+                    }
+                    is Resource.Error -> {
+                        val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
+                        val gson = Gson()
+                        val jsonObject = gson.fromJson(errors, JsonObject::class.java)
+                        val errorResponse = gson.fromJson(jsonObject, com.myshopproject.data.source.remote.dto.ErrorResponseDTO::class.java)
 
-                    Toast.makeText(this@BuySuccessActivity, "${errorResponse.error.message} ${errorResponse.error.status}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@BuySuccessActivity, "${errorResponse.error.message} ${errorResponse.error.status}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        } else {
+            for (i in listProductId!!.indices) {
+                viewModel.updateRate(id = listProductId!![i].toInt(), updateRate = UpdateRate(rate = rate.toString()))
+                viewModel.state.observe(this@BuySuccessActivity) { response ->
+                    when (response) {
+                        is Resource.Loading -> {
+
+                        }
+                        is Resource.Success -> {
+                            startActivity(Intent(this@BuySuccessActivity, MainActivity::class.java))
+                            finishAffinity()
+                        }
+                        is Resource.Error -> {
+                            val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
+                            val gson = Gson()
+                            val jsonObject = gson.fromJson(errors, JsonObject::class.java)
+                            val errorResponse = gson.fromJson(jsonObject, com.myshopproject.data.source.remote.dto.ErrorResponseDTO::class.java)
+
+                            Toast.makeText(this@BuySuccessActivity, "${errorResponse.error.message} ${errorResponse.error.status}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
             }
         }
+
     }
 }

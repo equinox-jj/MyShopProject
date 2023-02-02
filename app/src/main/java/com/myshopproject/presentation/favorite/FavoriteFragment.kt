@@ -11,16 +11,21 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.myshopproject.R
 import com.myshopproject.databinding.FragmentFavoriteBinding
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.home.adapter.ProductListAdapter
+import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.utils.enums.ProductType
 import com.myshopproject.utils.enums.SortedBy
 import com.myshopproject.utils.hide
 import com.myshopproject.utils.show
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
@@ -30,6 +35,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
 
     private var adapter: ProductListAdapter? = null
     private val viewModel by viewModels<FavoriteViewModel>()
+    private val prefViewModel by viewModels<DataStoreViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -40,8 +46,26 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
         setupToolbarMenu()
 
         initObserver(SortedBy.DefaultSort)
+        launchCoroutines()
+        refreshListener()
+    }
 
-        viewModel.onSearch("")
+    private fun refreshListener() {
+        binding.refreshFavorite.setOnRefreshListener {
+            binding.refreshFavorite.isRefreshing = false
+            binding.svFavorite.setQuery("", false)
+            binding.svFavorite.clearFocus()
+            viewModel.onRefresh()
+        }
+    }
+
+    private fun launchCoroutines() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                val userId = prefViewModel.getUserId.first()
+                viewModel.getProductListFav(null, userId)
+            }
+        }
     }
 
     private fun setupToolbarMenu() {

@@ -21,7 +21,7 @@ object DatabaseModule {
         context,
         ProductCartDatabase::class.java,
         CART_DATABASE
-    ).build()
+    ).allowMainThreadQueries().build()
 
     @Singleton
     @Provides

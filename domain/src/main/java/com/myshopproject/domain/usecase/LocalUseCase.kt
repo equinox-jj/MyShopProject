@@ -4,12 +4,13 @@ import com.myshopproject.domain.entities.CartEntity
 import kotlinx.coroutines.flow.Flow
 
 interface LocalUseCase {
-    suspend fun insertCart(cartEntity: CartEntity)
-    suspend fun deleteCart(id: Int)
-    suspend fun updateCartData(q: Int?, totalPriceCart: Int?, id: Int?)
-    suspend fun updateCartIsCheckedAll(isChecked: Boolean)
-    suspend fun updateCartIsCheckedById(isChecked: Boolean, id: Int?)
-    fun getAllCarts(): Flow<List<CartEntity>>
-    fun getCartIsChecked(): Flow<List<CartEntity>>
-    fun getCartById(id: Int): Flow<List<CartEntity>>
+    fun getAllProduct(): Flow<List<CartEntity>>
+    fun getAllCheckedProduct(): Flow<List<CartEntity>>
+    fun getProductById(id: Int?): Flow<List<CartEntity>>
+    suspend fun addProductToTrolley(trolley: CartEntity)
+    suspend fun updateProductData(quantity: Int?, itemTotalPrice: Int?, id: Int?)
+    suspend fun updateProductIsCheckedAll(isChecked: Boolean)
+    suspend fun updateProductIsCheckedById(isChecked: Boolean, id: Int?)
+    suspend fun deleteProductByIdFromTrolley(id: Int?)
+    suspend fun deleteAllProductFromTrolley(trolley: CartEntity)
 }

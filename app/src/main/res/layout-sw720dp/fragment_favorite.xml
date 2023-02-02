@@ -2,17 +2,16 @@
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/refreshHome"
+    android:id="@+id/refreshFavorite"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".presentation.home.HomeFragment">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.appcompat.widget.SearchView
-            android:id="@+id/svHome"
+            android:id="@+id/svFavorite"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -27,21 +26,22 @@
             app:queryHint="Search..." />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvHome"
+            android:id="@+id/rvFavorite"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
             android:orientation="vertical"
             android:visibility="gone"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/svHome"
+            app:layout_constraintTop_toBottomOf="@+id/svFavorite"
+            app:spanCount="2"
             tools:listitem="@layout/item_product_list" />
 
         <include
-            android:id="@+id/emptyHome"
+            android:id="@+id/emptyFavorite"
             layout="@layout/empty_state_product"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -49,10 +49,10 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/svHome" />
+            app:layout_constraintTop_toBottomOf="@+id/svFavorite" />
 
         <include
-            android:id="@+id/shimmerHome"
+            android:id="@+id/shimmerFavorite"
             layout="@layout/shimmer_product_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -60,10 +60,10 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/svHome" />
+            app:layout_constraintTop_toBottomOf="@+id/svFavorite" />
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/fabSortedBy"
+            android:id="@+id/fabSortedByFav"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_marginBottom="16dp"

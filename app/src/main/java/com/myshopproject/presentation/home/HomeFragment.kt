@@ -42,7 +42,17 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         setupToolbarMenu()
 
         initObserver(SortedBy.DefaultSort)
-        viewModel.onSearch("")
+        refreshListener()
+        viewModel.getProductList("")
+    }
+
+    private fun refreshListener() {
+        binding.refreshHome.setOnRefreshListener {
+            binding.refreshHome.isRefreshing = false
+            binding.svHome.setQuery("", false)
+            binding.svHome.clearFocus()
+            viewModel.onRefresh()
+        }
     }
 
     private fun setupToolbarMenu() {

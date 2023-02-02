@@ -136,35 +136,40 @@ class ProductRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun insertCart(cartEntity: CartEntity) {
-        cartDao.insertCart(cartEntity)
+    override fun getAllProduct(): Flow<List<CartEntity>> {
+        return cartDao.getAllProduct()
     }
 
-    override suspend fun deleteCart(id: Int) {
-        cartDao.deleteCart(id)
+    override fun getAllCheckedProduct(): Flow<List<CartEntity>> {
+        return cartDao.getAllCheckedProduct()
     }
 
-    override suspend fun updateCartData(q: Int?, totalPriceCart: Int?, id: Int?) {
-        cartDao.updateCartData(q, totalPriceCart, id)
+    override fun getProductById(id: Int?): Flow<List<CartEntity>> {
+        return cartDao.getProductById(id)
     }
 
-    override suspend fun updateCartIsCheckedAll(isChecked: Boolean) {
-        cartDao.updateCartIsCheckedAll(isChecked)
+    override suspend fun addProductToTrolley(trolley: CartEntity) {
+        cartDao.addProductToTrolley(trolley)
     }
 
-    override suspend fun updateCartIsCheckedById(isChecked: Boolean, id: Int?) {
-        cartDao.updateCartIsCheckedById(isChecked, id)
+    override suspend fun updateProductData(quantity: Int?, itemTotalPrice: Int?, id: Int?) {
+        cartDao.updateProductData(quantity, itemTotalPrice, id)
     }
 
-    override fun getAllCarts(): Flow<List<CartEntity>> {
-        return cartDao.getAllCarts()
+    override suspend fun updateProductIsCheckedAll(isChecked: Boolean) {
+        cartDao.updateProductIsCheckedAll(isChecked)
     }
 
-    override fun getCartIsChecked(): Flow<List<CartEntity>> {
-        return cartDao.getCartIsChecked()
+    override suspend fun updateProductIsCheckedById(isChecked: Boolean, id: Int?) {
+        cartDao.updateProductIsCheckedById(isChecked, id)
     }
 
-    override fun getCartById(id: Int): Flow<List<CartEntity>> {
-        return cartDao.getCartById(id)
+    override suspend fun deleteProductByIdFromTrolley(id: Int?) {
+        cartDao.deleteProductByIdFromTrolley(id)
     }
+
+    override suspend fun deleteAllProductFromTrolley(trolley: CartEntity) {
+        cartDao.deleteAllProductFromTrolley(trolley)
+    }
+
 }

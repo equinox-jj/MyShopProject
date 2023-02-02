@@ -37,7 +37,7 @@
     <string name="weight">Weight</string>
     <string name="type">Type</string>
     <string name="description">Description</string>
-    <string name="buy_now">Buy Now -</string>
+    <string name="buy_now">Buy Now - </string>
     <string name="total">Total</string>
     <string name="share">Share</string>
     <string name="shopping_cart">Shopping Cart</string>

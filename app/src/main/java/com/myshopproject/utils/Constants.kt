@@ -6,5 +6,7 @@ object Constants {
 
     const val PICTURE_INTENT = "picture"
     const val IS_BACK_CAMERA_INTENT = "back_camera"
+
+    const val LIST_PRODUCT_ID = "list_product_id"
     const val PRODUCT_ID = "product_id"
 }

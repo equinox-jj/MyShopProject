@@ -37,7 +37,8 @@
             android:id="@+id/shDtlThree"
             android:layout_width="140dp"
             android:layout_height="20dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:scaleType="fitXY"
             android:src="@color/shimmer_color"
             app:layout_constraintStart_toStartOf="@+id/shDtlOne"
@@ -48,6 +49,7 @@
             android:id="@+id/shDtlFour"
             android:layout_width="100dp"
             android:layout_height="30dp"
+            android:layout_marginEnd="16dp"
             android:scaleType="fitXY"
             android:src="@color/shimmer_color"
             app:layout_constraintBottom_toBottomOf="@+id/shDtlThree"
@@ -75,6 +77,122 @@
             android:src="@color/shimmer_color"
             app:layout_constraintStart_toStartOf="@+id/shDtlFive"
             app:layout_constraintTop_toBottomOf="@+id/shDtlFive"
+            app:riv_corner_radius="15dp" />
+
+        <View
+            android:id="@+id/lineOne"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/black"
+            app:layout_constraintTop_toBottomOf="@+id/shDtlSix" />
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/shDtlSeven"
+            android:layout_width="70dp"
+            android:layout_height="15dp"
+            android:layout_marginTop="32dp"
+            android:scaleType="fitXY"
+            android:src="@color/shimmer_color"
+            app:layout_constraintStart_toStartOf="@+id/shDtlSix"
+            app:layout_constraintTop_toBottomOf="@+id/lineOne"
+            app:riv_corner_radius="15dp" />
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/shDtlEight"
+            android:layout_width="70dp"
+            android:layout_height="15dp"
+            android:layout_marginStart="32dp"
+            android:scaleType="fitXY"
+            android:src="@color/shimmer_color"
+            app:layout_constraintStart_toEndOf="@+id/shDtlSeven"
+            app:layout_constraintTop_toTopOf="@+id/shDtlSeven"
+            app:riv_corner_radius="15dp" />
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/shDtlNine"
+            android:layout_width="70dp"
+            android:layout_height="15dp"
+            android:layout_marginTop="32dp"
+            android:scaleType="fitXY"
+            android:src="@color/shimmer_color"
+            app:layout_constraintStart_toStartOf="@+id/shDtlSeven"
+            app:layout_constraintTop_toBottomOf="@+id/shDtlSeven"
+            app:riv_corner_radius="15dp" />
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/shDtlTen"
+            android:layout_width="70dp"
+            android:layout_height="15dp"
+            android:scaleType="fitXY"
+            android:src="@color/shimmer_color"
+            app:layout_constraintStart_toStartOf="@+id/shDtlEight"
+            app:layout_constraintTop_toTopOf="@+id/shDtlNine"
+            app:riv_corner_radius="15dp" />
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/shDtlEleven"
+            android:layout_width="70dp"
+            android:layout_height="15dp"
+            android:layout_marginTop="32dp"
+            android:scaleType="fitXY"
+            android:src="@color/shimmer_color"
+            app:layout_constraintStart_toStartOf="@+id/shDtlNine"
+            app:layout_constraintTop_toBottomOf="@+id/shDtlNine"
+            app:riv_corner_radius="15dp" />
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/shDtlTwelve"
+            android:layout_width="70dp"
+            android:layout_height="15dp"
+            android:scaleType="fitXY"
+            android:src="@color/shimmer_color"
+            app:layout_constraintStart_toStartOf="@+id/shDtlTen"
+            app:layout_constraintTop_toTopOf="@+id/shDtlEleven"
+            app:riv_corner_radius="15dp" />
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/shDtlThirteen"
+            android:layout_width="70dp"
+            android:layout_height="15dp"
+            android:layout_marginTop="32dp"
+            android:scaleType="fitXY"
+            android:src="@color/shimmer_color"
+            app:layout_constraintStart_toStartOf="@+id/shDtlEleven"
+            app:layout_constraintTop_toBottomOf="@+id/shDtlEleven"
+            app:riv_corner_radius="15dp" />
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/shDtlFourteen"
+            android:layout_width="70dp"
+            android:layout_height="15dp"
+            android:scaleType="fitXY"
+            android:src="@color/shimmer_color"
+            app:layout_constraintStart_toStartOf="@+id/shDtlTwelve"
+            app:layout_constraintTop_toTopOf="@+id/shDtlThirteen"
+            app:riv_corner_radius="15dp" />
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/shDtlFiveteen"
+            android:layout_width="70dp"
+            android:layout_height="15dp"
+            android:layout_marginTop="32dp"
+            android:scaleType="fitXY"
+            android:src="@color/shimmer_color"
+            app:layout_constraintStart_toStartOf="@+id/shDtlThirteen"
+            app:layout_constraintTop_toBottomOf="@+id/shDtlThirteen"
+            app:riv_corner_radius="15dp" />
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/shDtlSixteen"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="32dp"
+            android:scaleType="fitXY"
+            android:src="@color/shimmer_color"
+            app:layout_constraintEnd_toEndOf="@+id/shDtlFour"
+            app:layout_constraintStart_toStartOf="@+id/shDtlFiveteen"
+            app:layout_constraintTop_toBottomOf="@+id/shDtlFiveteen"
             app:riv_corner_radius="15dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

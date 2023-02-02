@@ -7,17 +7,40 @@ import javax.inject.Inject
 
 class LocalInteractor @Inject constructor(
     private val productRepository: ProductRepository
-): LocalUseCase {
-    override suspend fun insertCart(cartEntity: CartEntity) = productRepository.insertCart(cartEntity)
-    override suspend fun deleteCart(id: Int) = productRepository.deleteCart(id)
-    override suspend fun updateCartData(q: Int?, totalPriceCart: Int?, id: Int?) = productRepository.updateCartData(q, totalPriceCart, id)
+) : LocalUseCase {
+    override fun getAllProduct(): Flow<List<CartEntity>> {
+        return productRepository.getAllProduct()
+    }
 
-    override suspend fun updateCartIsCheckedAll(isChecked: Boolean) = productRepository.updateCartIsCheckedAll(isChecked)
+    override fun getAllCheckedProduct(): Flow<List<CartEntity>> {
+        return productRepository.getAllCheckedProduct()
+    }
 
-    override suspend fun updateCartIsCheckedById(isChecked: Boolean, id: Int?) = productRepository.updateCartIsCheckedById(isChecked, id)
+    override fun getProductById(id: Int?): Flow<List<CartEntity>> {
+        return productRepository.getProductById(id)
+    }
 
-    override fun getAllCarts(): Flow<List<CartEntity>> = productRepository.getAllCarts()
-    override fun getCartIsChecked(): Flow<List<CartEntity>> = productRepository.getCartIsChecked()
+    override suspend fun addProductToTrolley(trolley: CartEntity) {
+        productRepository.addProductToTrolley(trolley)
+    }
 
-    override fun getCartById(id: Int): Flow<List<CartEntity>> = productRepository.getCartById(id)
+    override suspend fun updateProductData(quantity: Int?, itemTotalPrice: Int?, id: Int?) {
+        productRepository.updateProductData(quantity, itemTotalPrice, id)
+    }
+
+    override suspend fun updateProductIsCheckedAll(isChecked: Boolean) {
+        productRepository.updateProductIsCheckedAll(isChecked)
+    }
+
+    override suspend fun updateProductIsCheckedById(isChecked: Boolean, id: Int?) {
+        productRepository.updateProductIsCheckedById(isChecked, id)
+    }
+
+    override suspend fun deleteProductByIdFromTrolley(id: Int?) {
+        productRepository.deleteProductByIdFromTrolley(id)
+    }
+
+    override suspend fun deleteAllProductFromTrolley(trolley: CartEntity) {
+        productRepository.deleteAllProductFromTrolley(trolley)
+    }
 }
