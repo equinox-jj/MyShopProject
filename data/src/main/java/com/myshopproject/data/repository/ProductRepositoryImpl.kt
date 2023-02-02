@@ -13,8 +13,17 @@ import javax.inject.Inject
 
 class ProductRepositoryImpl @Inject constructor(
     private val apiProduct: ApiProduct,
-    private val cartDao: ProductCartDao
+    private val cartDao: ProductCartDao,
+//    private val remotePagingSource: RemotePagingSource
 ) : ProductRepository {
+
+//    override fun getListProductPaging(): Flow<PagingData<DataProduct>> {
+//        return Pager(
+//            config = PagingConfig(pageSize = 21),
+//            pagingSourceFactory = { remotePagingSource }
+//        ).flow
+//    }
+
     override fun getListProduct(query: String?): Flow<Resource<DataProductResponse>> = flow {
         emit(Resource.Loading)
         try {

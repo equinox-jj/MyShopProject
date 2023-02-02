@@ -108,6 +108,7 @@ class DetailBottomSheet(private val data: DetailProductData) : BottomSheetDialog
                     val intent = Intent(context, BuySuccessActivity::class.java)
                     intent.putExtra(Constants.PRODUCT_ID, data.id)
                     startActivity(intent)
+                    Toast.makeText(requireContext(), response.data?.success?.message, Toast.LENGTH_SHORT).show()
                 }
                 is Resource.Error -> {
                     try {

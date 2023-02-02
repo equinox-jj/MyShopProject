@@ -1,11 +1,11 @@
 package com.myshopproject.presentation.detail
 
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.StrictMode
+import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -32,9 +32,6 @@ import com.myshopproject.utils.show
 import com.myshopproject.utils.toIDRPrice
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
 
 @AndroidEntryPoint
 class DetailActivity : AppCompatActivity() {
@@ -49,7 +46,6 @@ class DetailActivity : AppCompatActivity() {
     private val args by navArgs<DetailActivityArgs>()
 
     private lateinit var dataDetailProduct: DetailProductData
-    private lateinit var productImage: String
     private var productId: Int = 0
     private var userId: Int = 0
 
@@ -84,26 +80,6 @@ class DetailActivity : AppCompatActivity() {
                         finish()
                     }
                     R.id.menu_share -> {
-//                        Picasso.get().load(productImage).into(object : com.squareup.picasso.Target {
-//                            override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-//                                val intent = Intent(Intent.ACTION_SEND)
-//                                intent.type = "image/*"
-//                                intent.putExtra(
-//                                    Intent.EXTRA_TEXT,
-//                                    "Name : ${dataDetailProduct.nameProduct}\nStock : ${dataDetailProduct.stock}\nWeight : ${dataDetailProduct.weight}\nSize : ${dataDetailProduct.size}\nLink : https://joshuaj.com/deeplink?id=$productId"
-//                                )
-//                                intent.putExtra(Intent.EXTRA_STREAM, getBitmapFromView(bitmap))
-//                                startActivity(Intent.createChooser(intent, "Share To"))
-//                            }
-//
-//                            override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
-//                                Log.v("IMG Downloader", "Bitmap Failed...");
-//                            }
-//
-//                            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-//                                Log.v("IMG Downloader", "Bitmap Preparing Load...");
-//                            }
-//                        })
                         val request = ImageRequest.Builder(this@DetailActivity)
                             .data(dataDetailProduct.image)
                             .target(
@@ -116,17 +92,22 @@ class DetailActivity : AppCompatActivity() {
                                         Intent.EXTRA_TEXT,
                                         "Name : ${dataDetailProduct.nameProduct}\nStock : ${dataDetailProduct.stock}\nWeight : ${dataDetailProduct.weight}\nSize : ${dataDetailProduct.size}\nLink : https://joshuaj.com/deeplink?id=$productId"
                                     )
-                                    intent.putExtra(Intent.EXTRA_STREAM, getBitmapFromView(bitmap))
+
+                                    val path = MediaStore.Images.Media.insertImage(
+                                        contentResolver,
+                                        bitmap,
+                                        "image desc",
+                                        null
+                                    )
+
+                                    val uri = Uri.parse(path)
+
+                                    intent.putExtra(Intent.EXTRA_STREAM, uri)
                                     startActivity(Intent.createChooser(intent, "Share To"))
                                 },
                                 onError = { }
                             ).build()
                         this@DetailActivity.imageLoader.enqueue(request)
-
-                        /*val shareDeeplink = Intent(Intent.ACTION_SEND)
-                        shareDeeplink.type = "text/plain"
-                        shareDeeplink.putExtra(Intent.EXTRA_TEXT, "https://joshuaj.com/deeplink?id=$productId")
-                        startActivity(Intent.createChooser(shareDeeplink, "Share link using"))*/
                     }
                 }
                 return true
@@ -200,7 +181,6 @@ class DetailActivity : AppCompatActivity() {
             tvWeightProductDtl.text = data.weight
             tvTypeProductDtl.text = data.type
             tvDescProductDtl.text = data.desc
-            productImage = data.image
 
             if (data.stock == 1) tvStockProductDtl.text = "Out of stock."
             else tvStockProductDtl.text = data.stock.toString()
@@ -275,20 +255,6 @@ class DetailActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    private fun getBitmapFromView(bmp: Bitmap?): Uri? {
-        var bmpUri: Uri? = null
-        try {
-            val file = File(this.externalCacheDir, System.currentTimeMillis().toString() + ".jpg")
-            val out = FileOutputStream(file)
-            bmp?.compress(Bitmap.CompressFormat.JPEG, 90, out)
-            out.close()
-            bmpUri = Uri.fromFile(file)
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        return bmpUri
     }
 
 }

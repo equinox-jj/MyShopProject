@@ -22,8 +22,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.NoActionBar"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
         <activity
@@ -49,21 +49,30 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https"
+
+                <data
                     android:host="joshuaj.com"
-                    android:pathPrefix="/deeplink" />
-                <data android:scheme="app" android:host="www.joshuaj.com" />
+                    android:pathPrefix="/deeplink"
+                    android:scheme="https" />
+                <data
+                    android:host="www.joshuaj.com"
+                    android:scheme="app" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="http"
-                    android:host="joshuaj" />
+
+                <data
+                    android:host="joshuaj"
+                    android:scheme="http" />
             </intent-filter>
 
         </activity>
@@ -116,6 +125,17 @@
         <activity
             android:name=".presentation.main.MainActivity"
             android:exported="false" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.myshopproject"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
 
     </application>
 

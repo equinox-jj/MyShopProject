@@ -21,6 +21,8 @@ class HomeViewModel @Inject constructor(
     private val remoteUseCase: RemoteUseCase
 ) : ViewModel() {
 
+//    val getProductPaging = remoteUseCase.getListProductPaging().cachedIn(viewModelScope)
+
     private val _state = MutableLiveData<Resource<DataProductResponse>>()
     val state: LiveData<Resource<DataProductResponse>> = _state
 

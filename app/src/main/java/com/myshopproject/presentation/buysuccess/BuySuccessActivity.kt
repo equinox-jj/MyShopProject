@@ -70,6 +70,7 @@ class BuySuccessActivity : AppCompatActivity() {
         } else {
             for (i in listProductId!!.indices) {
                 viewModel.updateRate(id = listProductId!![i].toInt(), updateRate = UpdateRate(rate = rate.toString()))
+                viewModel.deleteProductByIdFromTrolley(listProductId!![i].toInt())
                 viewModel.state.observe(this@BuySuccessActivity) { response ->
                     when (response) {
                         is Resource.Loading -> {

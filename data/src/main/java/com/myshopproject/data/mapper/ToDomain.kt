@@ -71,7 +71,8 @@ fun DataProductResponseDTO.toDomain() = DataProductResponse(
 fun DataProductResultDTO.toDomain() = DataProductResult(
     data = data.map { it.toDomain() },
     message = message,
-    status = status
+    status = status,
+    totalRow = totalRow
 )
 
 fun DataProductDTO.toDomain() = DataProduct(

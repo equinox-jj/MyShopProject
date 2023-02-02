@@ -7,6 +7,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
 interface RemoteUseCase {
+//    fun getListProductPaging() : Flow<PagingData<DataProduct>>
     fun loginAccount(email: String, password: String): Flow<Resource<LoginResult>>
     fun registerAccount(image: MultipartBody.Part, email: RequestBody, password: RequestBody, name: RequestBody, phone: RequestBody, gender: Int): Flow<Resource<SuccessResponseStatus>>
     fun changePassword(id: Int, password: String, newPassword: String, confirmPassword: String): Flow<Resource<SuccessResponseStatus>>
