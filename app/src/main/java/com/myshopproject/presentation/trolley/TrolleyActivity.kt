@@ -2,7 +2,6 @@ package com.myshopproject.presentation.trolley
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
@@ -13,11 +12,13 @@ import com.myshopproject.domain.entities.UpdateStockItem
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.buysuccess.BuySuccessActivity
 import com.myshopproject.presentation.trolley.adapter.TrolleyAdapter
+import com.myshopproject.presentation.viewmodel.LocalViewModel
 import com.myshopproject.utils.Constants.LIST_PRODUCT_ID
 import com.myshopproject.utils.hide
 import com.myshopproject.utils.show
 import com.myshopproject.utils.toIDRPrice
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -27,6 +28,7 @@ class TrolleyActivity : AppCompatActivity() {
 
     private var trolleyAdapter: TrolleyAdapter? = null
     private val viewModel by viewModels<TrolleyViewModel>()
+    private val localViewModel by viewModels<LocalViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,10 +43,15 @@ class TrolleyActivity : AppCompatActivity() {
         setupListener()
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
+    }
+
     private fun initObserver() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.getAllProduct().collect { result ->
+                localViewModel.getAllProduct().collect { result ->
                     var totalPrice = 0
                     val filterResult = result.filter { it.isChecked }
 
@@ -69,9 +76,9 @@ class TrolleyActivity : AppCompatActivity() {
     private fun setupListener() {
         binding.cbTrolley.setOnClickListener {
             if (binding.cbTrolley.isChecked) {
-                viewModel.updateProductIsCheckedAll(true)
+                localViewModel.updateProductIsCheckedAll(true)
             } else {
-                viewModel.updateProductIsCheckedAll(false)
+                localViewModel.updateProductIsCheckedAll(false)
             }
         }
         binding.btnBuyTrlly.setOnClickListener {
@@ -79,7 +86,7 @@ class TrolleyActivity : AppCompatActivity() {
             val listOfProductId = arrayListOf<String>()
             lifecycleScope.launch {
                 lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    viewModel.getAllCheckedProduct().collect { result ->
+                    localViewModel.getAllCheckedProduct().collectLatest { result ->
                         for (i in result.indices) {
                             dataStockItems.add(UpdateStockItem(result[i].id.toString(), result[i].quantity!!))
                             listOfProductId.add(result[i].id.toString())
@@ -100,7 +107,7 @@ class TrolleyActivity : AppCompatActivity() {
                     val intent = Intent(this@TrolleyActivity, BuySuccessActivity::class.java)
                     intent.putExtra(LIST_PRODUCT_ID, productId)
                     startActivity(intent)
-                    Toast.makeText(this@TrolleyActivity, response.data?.success?.message, Toast.LENGTH_SHORT).show()
+                    finish()
                 }
                 is Resource.Error -> {}
             }
@@ -110,31 +117,23 @@ class TrolleyActivity : AppCompatActivity() {
     private fun initRecyclerView() {
         binding.apply {
             trolleyAdapter = TrolleyAdapter(
-                onDeleteItem = { viewModel.deleteProductByIdFromTrolley(it.id) },
+                onDeleteItem = { localViewModel.deleteProductByIdFromTrolley(it.id) },
                 onAddQuantity = {
-                    val productId = it.id
-                    val quantity = it.quantity
-                    val price = it.price
-                    viewModel.updateProductData(
-                        productId,
-                        price?.toInt()?.times(quantity.toString().toInt().plus(1)),
-                        quantity?.plus(1)
-                    )
+                    val totalQty = (it.quantity?.plus(1))
+                    val id = it.id
+                    val newPrice = (totalQty?.times(it.price?.toInt()!!))
+                    localViewModel.updateProductData(totalQty, newPrice, id)
                 },
                 onMinQuantity = {
-                    val productId = it.id
-                    val quantity = it.quantity
-                    val price = it.price
-                    viewModel.updateProductData(
-                        productId,
-                        price?.toInt()?.times(quantity.toString().toInt().minus(1)),
-                        quantity?.minus(1)
-                    )
+                    val totalQty = (it.quantity?.minus(1))
+                    val id = it.id
+                    val newPrice = (totalQty?.times(it.price?.toInt()!!))
+                    localViewModel.updateProductData(totalQty, newPrice, id)
                 },
                 onCheckedItem = {
                     val productId = it.id
                     val isChecked = !it.isChecked
-                    viewModel.updateProductIsCheckedById(isChecked, productId)
+                    localViewModel.updateProductIsCheckedById(isChecked, productId)
                 },
             )
             rvTrolley.adapter = trolleyAdapter

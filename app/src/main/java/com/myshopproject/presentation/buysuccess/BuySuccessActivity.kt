@@ -55,6 +55,7 @@ class BuySuccessActivity : AppCompatActivity() {
                     }
                     is Resource.Success -> {
                         startActivity(Intent(this@BuySuccessActivity, MainActivity::class.java))
+                        Toast.makeText(this@BuySuccessActivity, response.data?.success?.message, Toast.LENGTH_SHORT).show()
                         finishAffinity()
                     }
                     is Resource.Error -> {
@@ -78,6 +79,7 @@ class BuySuccessActivity : AppCompatActivity() {
                         }
                         is Resource.Success -> {
                             startActivity(Intent(this@BuySuccessActivity, MainActivity::class.java))
+                            Toast.makeText(this@BuySuccessActivity, response.data?.success?.message, Toast.LENGTH_SHORT).show()
                             finishAffinity()
                         }
                         is Resource.Error -> {

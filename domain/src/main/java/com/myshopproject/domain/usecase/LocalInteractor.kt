@@ -16,10 +16,6 @@ class LocalInteractor @Inject constructor(
         return productRepository.getAllCheckedProduct()
     }
 
-    override fun getProductById(id: Int?): Flow<List<CartEntity>> {
-        return productRepository.getProductById(id)
-    }
-
     override suspend fun addProductToTrolley(trolley: CartEntity) {
         productRepository.addProductToTrolley(trolley)
     }
@@ -38,9 +34,5 @@ class LocalInteractor @Inject constructor(
 
     override suspend fun deleteProductByIdFromTrolley(id: Int?) {
         productRepository.deleteProductByIdFromTrolley(id)
-    }
-
-    override suspend fun deleteAllProductFromTrolley(trolley: CartEntity) {
-        productRepository.deleteAllProductFromTrolley(trolley)
     }
 }

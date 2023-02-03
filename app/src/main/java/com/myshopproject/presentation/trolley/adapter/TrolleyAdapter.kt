@@ -2,8 +2,11 @@ package com.myshopproject.presentation.trolley.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.myshopproject.R
 import com.myshopproject.databinding.ItemProductCartBinding
 import com.myshopproject.domain.entities.CartEntity
 import com.myshopproject.utils.toIDRPrice
@@ -31,15 +34,23 @@ class TrolleyAdapter(
                     onDeleteItem.invoke(cartEntity)
                 }
                 btnTrolleyIncrement.setOnClickListener {
-                    if (tvTrolleyQuantity.text.toString().toInt() < cartEntity.stock!!) {
+                    val stock = cartEntity.stock
+                    val quantity = (cartEntity.quantity)
+                    if (quantity == stock) {
+                        btnTrolleyIncrement.isClickable = false
+                        Toast.makeText(itemView.context, "Out of stock.", Toast.LENGTH_SHORT).show()
+                    } else {
                         onAddQuantity.invoke(cartEntity)
+                        binding.btnTrolleyIncrement.background = ContextCompat.getDrawable(itemView.context, R.drawable.bg_button_round_grey)
                     }
                 }
                 btnTrolleyDecrement.setOnClickListener {
-                    if (tvTrolleyQuantity.text.toString().toInt() == 1) {
-
-                    } else {
+                    val quantity = (cartEntity.quantity)
+                    if (quantity != 1) {
                         onMinQuantity.invoke(cartEntity)
+                    } else {
+                        btnTrolleyDecrement.isClickable = false
+                        binding.btnTrolleyDecrement.background = ContextCompat.getDrawable(itemView.context, R.drawable.bg_button_round_grey)
                     }
                 }
                 cbTrolleyList.setOnClickListener {
@@ -50,8 +61,7 @@ class TrolleyAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrolleyVH {
-        val binding =
-            ItemProductCartBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemProductCartBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return TrolleyVH(binding)
     }
 

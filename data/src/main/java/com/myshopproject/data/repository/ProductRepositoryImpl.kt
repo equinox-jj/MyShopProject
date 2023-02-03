@@ -153,10 +153,6 @@ class ProductRepositoryImpl @Inject constructor(
         return cartDao.getAllCheckedProduct()
     }
 
-    override fun getProductById(id: Int?): Flow<List<CartEntity>> {
-        return cartDao.getProductById(id)
-    }
-
     override suspend fun addProductToTrolley(trolley: CartEntity) {
         cartDao.addProductToTrolley(trolley)
     }
@@ -175,10 +171,6 @@ class ProductRepositoryImpl @Inject constructor(
 
     override suspend fun deleteProductByIdFromTrolley(id: Int?) {
         cartDao.deleteProductByIdFromTrolley(id)
-    }
-
-    override suspend fun deleteAllProductFromTrolley(trolley: CartEntity) {
-        cartDao.deleteAllProductFromTrolley(trolley)
     }
 
 }

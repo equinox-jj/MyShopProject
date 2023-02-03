@@ -108,7 +108,6 @@ class DetailBottomSheet(private val data: DetailProductData) : BottomSheetDialog
                     val intent = Intent(context, BuySuccessActivity::class.java)
                     intent.putExtra(Constants.PRODUCT_ID, data.id)
                     startActivity(intent)
-                    Toast.makeText(requireContext(), response.data?.success?.message, Toast.LENGTH_SHORT).show()
                 }
                 is Resource.Error -> {
                     try {
@@ -117,10 +116,7 @@ class DetailBottomSheet(private val data: DetailProductData) : BottomSheetDialog
                         val jsonObject = gson.fromJson(errors, JsonObject::class.java)
                         val errorResponse = gson.fromJson(jsonObject, ErrorResponseDTO::class.java)
                         Toast.makeText(requireContext(), "${errorResponse.error.message} ${errorResponse.error.status}", Toast.LENGTH_SHORT).show()
-                    }catch (e: Exception) {
-//                        val errors = response.errorCode
-//                        Toast.makeText(requireContext(), "$errors", Toast.LENGTH_SHORT).show()
-                    }
+                    }catch (e: Exception) { }
                 }
             }
         }

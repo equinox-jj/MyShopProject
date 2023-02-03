@@ -1,23 +1,15 @@
 package com.myshopproject.presentation.home
 
-import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.myshopproject.R
 import com.myshopproject.databinding.FragmentHomeBinding
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.home.adapter.ProductListAdapter
-import com.myshopproject.presentation.trolley.TrolleyActivity
 import com.myshopproject.utils.enums.ProductType
 import com.myshopproject.utils.enums.SortedBy
 import com.myshopproject.utils.hide
@@ -39,7 +31,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         initRecyclerView()
         setupListener()
-        setupToolbarMenu()
 
         initObserver(SortedBy.DefaultSort)
         refreshListener()
@@ -53,24 +44,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             binding.svHome.clearFocus()
             viewModel.onRefresh()
         }
-    }
-
-    private fun setupToolbarMenu() {
-        val menuHost: MenuHost = requireActivity()
-        menuHost.addMenuProvider(object: MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.menu_main_toolbar, menu)
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                when(menuItem.itemId) {
-                    R.id.menu_cart -> {
-                        startActivity(Intent(requireContext(), TrolleyActivity::class.java))
-                    }
-                }
-                return true
-            }
-        },viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private fun initRecyclerView() {

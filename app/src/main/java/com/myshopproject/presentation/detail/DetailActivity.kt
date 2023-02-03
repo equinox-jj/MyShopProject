@@ -27,6 +27,7 @@ import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.detail.adapter.ImageSliderAdapter
 import com.myshopproject.presentation.detail.bottomsheet.DetailBottomSheet
 import com.myshopproject.presentation.viewmodel.DataStoreViewModel
+import com.myshopproject.presentation.viewmodel.LocalViewModel
 import com.myshopproject.utils.hide
 import com.myshopproject.utils.show
 import com.myshopproject.utils.toIDRPrice
@@ -42,6 +43,7 @@ class DetailActivity : AppCompatActivity() {
 
     private val viewModel by viewModels<DetailViewModel>()
     private val prefViewModel by viewModels<DataStoreViewModel>()
+    private val localViewModel by viewModels<LocalViewModel>()
 
     private val args by navArgs<DetailActivityArgs>()
 
@@ -197,7 +199,7 @@ class DetailActivity : AppCompatActivity() {
             }
             btnDtlTrolley.setOnClickListener {
                 if (data.stock > 1) {
-                    viewModel.insertCart(
+                    localViewModel.insertCart(
                         CartEntity(
                             id = data.id,
                             image = data.image,
@@ -209,8 +211,8 @@ class DetailActivity : AppCompatActivity() {
                             isChecked = false
                         )
                     )
-                    finish()
                     Toast.makeText(this@DetailActivity, "Add to trolley.", Toast.LENGTH_SHORT).show()
+                    finish()
                 } else {
                     Toast.makeText(this@DetailActivity, "Failed add to trolley.", Toast.LENGTH_SHORT).show()
                 }

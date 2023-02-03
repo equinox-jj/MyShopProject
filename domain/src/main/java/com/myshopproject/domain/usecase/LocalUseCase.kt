@@ -6,11 +6,9 @@ import kotlinx.coroutines.flow.Flow
 interface LocalUseCase {
     fun getAllProduct(): Flow<List<CartEntity>>
     fun getAllCheckedProduct(): Flow<List<CartEntity>>
-    fun getProductById(id: Int?): Flow<List<CartEntity>>
     suspend fun addProductToTrolley(trolley: CartEntity)
     suspend fun updateProductData(quantity: Int?, itemTotalPrice: Int?, id: Int?)
     suspend fun updateProductIsCheckedAll(isChecked: Boolean)
     suspend fun updateProductIsCheckedById(isChecked: Boolean, id: Int?)
     suspend fun deleteProductByIdFromTrolley(id: Int?)
-    suspend fun deleteAllProductFromTrolley(trolley: CartEntity)
 }

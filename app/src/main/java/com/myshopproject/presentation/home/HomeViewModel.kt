@@ -35,6 +35,7 @@ class HomeViewModel @Inject constructor(
     fun onRefresh() {
         getProductList("")
     }
+
     fun onSearch(query: String) {
         searchJob?.cancel()
         searchJob = viewModelScope.launch(Dispatchers.IO) {

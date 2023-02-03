@@ -14,9 +14,6 @@ interface ProductCartDao {
     @Query("SELECT * FROM $CART_TABLE WHERE is_checked = '1'")
     fun getAllCheckedProduct(): Flow<List<CartEntity>>
 
-    @Query("SELECT * FROM $CART_TABLE WHERE id = :id")
-    fun getProductById(id: Int?): Flow<List<CartEntity>>
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addProductToTrolley(trolley: CartEntity)
 
@@ -31,7 +28,4 @@ interface ProductCartDao {
 
     @Query("DELETE FROM $CART_TABLE WHERE id = :id")
     suspend fun deleteProductByIdFromTrolley(id: Int?)
-
-    @Delete
-    suspend fun deleteAllProductFromTrolley(trolley: CartEntity)
 }
