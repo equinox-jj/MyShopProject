@@ -67,7 +67,6 @@ class TrolleyActivity : AppCompatActivity() {
                     } else {
                         binding.rvTrolley.hide()
                     }
-
                 }
             }
         }

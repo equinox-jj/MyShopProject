@@ -1,12 +1,13 @@
 package com.myshopproject.domain.repository
 
+import androidx.paging.PagingData
 import com.myshopproject.domain.entities.*
 import com.myshopproject.domain.utils.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface ProductRepository {
-//    fun getListProductPaging() : Flow<PagingData<DataProduct>>
-    fun getListProduct(query: String?): Flow<Resource<DataProductResponse>>
+    fun getListProductPaging(query: String?) : Flow<PagingData<DataProduct>>
+//    fun getListProduct(query: String?): Flow<Resource<DataProductResponse>>
     fun getListProductFavorite(query: String?, userId: Int): Flow<Resource<DataProductResponse>>
     fun getProductDetail(productId: Int, userId: Int): Flow<Resource<DetailProductResponse>>
     fun addProductFavorite(productId: Int, userId: Int): Flow<Resource<SuccessResponseStatus>>

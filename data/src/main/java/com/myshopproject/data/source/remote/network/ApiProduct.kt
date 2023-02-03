@@ -7,10 +7,16 @@ import retrofit2.http.*
 
 interface ApiProduct {
 
-    @GET("get_list_product")
-    suspend fun getListProduct(
+    @GET("get_list_product_paging")
+    suspend fun getListProductPaging(
         @Query("search") query: String?,
+        @Query("offset") offset: Int
     ): DataProductResponseDTO
+
+//    @GET("get_list_product")
+//    suspend fun getListProduct(
+//        @Query("search") query: String?,
+//    ): DataProductResponseDTO
 
     @GET("get_list_product_favorite")
     suspend fun getListProductFavorite(

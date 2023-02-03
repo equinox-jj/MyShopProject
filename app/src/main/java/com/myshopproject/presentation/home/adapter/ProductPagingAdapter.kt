@@ -1,0 +1,54 @@
+package com.myshopproject.presentation.home.adapter
+
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.navigation.findNavController
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import com.myshopproject.databinding.ItemProductListBinding
+import com.myshopproject.domain.entities.DataProduct
+import com.myshopproject.presentation.home.HomeFragmentDirections
+import com.myshopproject.utils.hide
+import com.myshopproject.utils.toIDRPrice
+
+class ProductPagingAdapter: PagingDataAdapter<DataProduct, ProductPagingAdapter.ProductPagingVH>(PRODUCT_COMPARATOR) {
+
+    class ProductPagingVH(private val binding: ItemProductListBinding): RecyclerView.ViewHolder(binding.root) {
+        fun bind(data: DataProduct) {
+            binding.apply {
+                ivProductFavIcon.hide()
+                ivProductImage.load(data.image)
+                tvProductDate.text = data.date
+                tvProductName.isSelected = true
+                tvProductName.text = data.nameProduct
+                tvProductPrice.text = data.harga.toIDRPrice()
+                rbProductRate.rating = data.rate.toFloat()
+                itemView.setOnClickListener {
+                    val action = HomeFragmentDirections.actionHomeFragmentToDetailActivity(data.id)
+                    it.findNavController().navigate(action)
+                }
+            }
+        }
+    }
+
+    override fun onBindViewHolder(holder: ProductPagingVH, position: Int) {
+        val result = getItem(position)
+        if (result != null) {
+            holder.bind(result)
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductPagingVH {
+        val binding = ItemProductListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ProductPagingVH(binding)
+    }
+
+    companion object {
+        private val PRODUCT_COMPARATOR = object : DiffUtil.ItemCallback<DataProduct>() {
+            override fun areItemsTheSame(oldItem: DataProduct, newItem: DataProduct) = oldItem.id == newItem.id
+            override fun areContentsTheSame(oldItem: DataProduct, newItem: DataProduct) = oldItem == newItem
+        }
+    }
+}

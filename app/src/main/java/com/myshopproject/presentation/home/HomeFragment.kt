@@ -3,18 +3,19 @@ package com.myshopproject.presentation.home
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.LoadState
 import com.myshopproject.R
 import com.myshopproject.databinding.FragmentHomeBinding
-import com.myshopproject.domain.utils.Resource
-import com.myshopproject.presentation.home.adapter.ProductListAdapter
-import com.myshopproject.utils.enums.ProductType
-import com.myshopproject.utils.enums.SortedBy
-import com.myshopproject.utils.hide
-import com.myshopproject.utils.show
+import com.myshopproject.presentation.home.adapter.ItemLoadAdapter
+import com.myshopproject.presentation.home.adapter.ProductPagingAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -22,7 +23,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private var adapter: ProductListAdapter? = null
+    private var adapter: ProductPagingAdapter? = null
+
     private val viewModel by viewModels<HomeViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -32,24 +34,29 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         initRecyclerView()
         setupListener()
 
-        initObserver(SortedBy.DefaultSort)
+        initObserver(null)
         refreshListener()
-        viewModel.getProductList("")
     }
 
     private fun refreshListener() {
         binding.refreshHome.setOnRefreshListener {
             binding.refreshHome.isRefreshing = false
-            binding.svHome.setQuery("", false)
+            binding.svHome.setQuery(null, false)
             binding.svHome.clearFocus()
-            viewModel.onRefresh()
+            initObserver(null)
         }
     }
 
     private fun initRecyclerView() {
         binding.apply {
-            adapter = ProductListAdapter(ProductType.PRODUCT_LIST)
-            rvHome.adapter = adapter
+            adapter = ProductPagingAdapter()
+            rvHome.adapter = adapter!!
+            rvHome.adapter = adapter!!.withLoadStateFooter(
+                footer = ItemLoadAdapter { adapter!!.retry() }
+            )
+            adapter!!.addLoadStateListener { loadState ->
+                shimmerHome.root.isVisible = loadState.source.refresh is LoadState.Loading
+            }
             rvHome.setHasFixedSize(true)
         }
     }
@@ -62,89 +69,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 }
 
                 override fun onQueryTextChange(newText: String): Boolean {
-                    viewModel.onSearch(newText)
+                    initObserver(newText)
                     return true
                 }
             })
-            fabSortedBy.setOnClickListener {
-                dialogSortedBy()
-            }
         }
     }
 
-    private fun dialogSortedBy() {
-        val items = arrayOf("From A to Z", "From Z to A")
-        var selectedItem = ""
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Sort By")
-            .setSingleChoiceItems(items, -1) {_, position ->
-                selectedItem = items[position]
+    private fun initObserver(query: String?) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.getListProductPaging(query).collect { adapter?.submitData(it) }
             }
-            .setPositiveButton("OK") {_,_ ->
-                when(selectedItem) {
-                    "From A to Z" -> initObserver(SortedBy.SortAtoZ)
-                    "From Z to A" -> initObserver(SortedBy.SortZtoA)
-                }
-            }
-            .setNegativeButton("Cancel"){_,_ -> }
-            .show()
-    }
-
-    private fun initObserver(sortedBy: SortedBy) {
-        viewModel.state.observe(viewLifecycleOwner) { response ->
-            when (response) {
-                is Resource.Loading -> {
-                    binding.shimmerHome.root.startShimmer()
-                    binding.shimmerHome.root.show()
-                    binding.rvHome.hide()
-                    isEmptyState(false)
-                }
-                is Resource.Success -> {
-                    if (response.data?.success?.data?.isNotEmpty() == true) {
-                        binding.shimmerHome.root.stopShimmer()
-                        binding.shimmerHome.root.hide()
-                        binding.rvHome.show()
-                        isEmptyState(false)
-
-                        when(sortedBy) {
-                            SortedBy.SortAtoZ -> {
-                                response.data?.success?.data?.let { listData ->
-                                    adapter?.submitData(listData.sortedBy { it.nameProduct })
-                                }
-                            }
-                            SortedBy.SortZtoA -> {
-                                response.data?.success?.data?.let { listData ->
-                                    adapter?.submitData(listData.sortedByDescending { it.nameProduct })
-                                }
-                            }
-                            SortedBy.DefaultSort -> {
-                                response.data?.success?.data?.let { listData ->
-                                    adapter?.submitData(listData)
-                                }
-                            }
-                        }
-                    } else {
-                        binding.shimmerHome.root.stopShimmer()
-                        binding.shimmerHome.root.hide()
-                        binding.rvHome.hide()
-                        isEmptyState(true)
-                    }
-                }
-                is Resource.Error -> {
-                    binding.shimmerHome.root.stopShimmer()
-                    binding.shimmerHome.root.hide()
-                    binding.rvHome.hide()
-                    isEmptyState(false)
-                }
-            }
-        }
-    }
-
-    private fun isEmptyState(empty: Boolean) {
-        if (empty) {
-            binding.emptyHome.root.show()
-        } else {
-            binding.emptyHome.root.hide()
         }
     }
 
