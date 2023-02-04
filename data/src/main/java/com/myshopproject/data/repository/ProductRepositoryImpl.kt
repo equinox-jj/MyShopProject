@@ -1,7 +1,11 @@
 package com.myshopproject.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.myshopproject.data.mapper.toDomain
 import com.myshopproject.data.source.local.dao.ProductCartDao
+import com.myshopproject.data.source.remote.RemotePagingSource
 import com.myshopproject.data.source.remote.network.ApiProduct
 import com.myshopproject.domain.entities.*
 import com.myshopproject.domain.repository.ProductRepository
@@ -14,32 +18,36 @@ import javax.inject.Inject
 class ProductRepositoryImpl @Inject constructor(
     private val apiProduct: ApiProduct,
     private val cartDao: ProductCartDao,
-//    private val remotePagingSource: RemotePagingSource
 ) : ProductRepository {
-
-//    override fun getListProductPaging(): Flow<PagingData<DataProduct>> {
-//        return Pager(
-//            config = PagingConfig(pageSize = 21),
-//            pagingSourceFactory = { remotePagingSource }
-//        ).flow
-//    }
-
-    override fun getListProduct(query: String?): Flow<Resource<DataProductResponse>> = flow {
-        emit(Resource.Loading)
-        try {
-            val response = apiProduct.getListProduct(query).toDomain()
-            emit(Resource.Success(response))
-        } catch (t: Throwable) {
-            if (t is HttpException) {
-                when (t.code()) {
-                    400 -> { emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody())) }
-                    404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                    500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                    else -> emit(Resource.Error(null, null, null))
-                }
-            }
-        }
+// initial 5, prefetch 1
+    override fun getListProductPaging(query: String?): Flow<PagingData<DataProduct>> {
+        return Pager(
+            config = PagingConfig(
+                enablePlaceholders = false,
+                pageSize = 5,
+                prefetchDistance = 1,
+                initialLoadSize = 5
+            ),
+            pagingSourceFactory = { RemotePagingSource(query, apiProduct) }
+        ).flow
     }
+
+//    override fun getListProduct(query: String?): Flow<Resource<DataProductResponse>> = flow {
+//        emit(Resource.Loading)
+//        try {
+//            val response = apiProduct.getListProduct(query).toDomain()
+//            emit(Resource.Success(response))
+//        } catch (t: Throwable) {
+//            if (t is HttpException) {
+//                when (t.code()) {
+//                    400 -> { emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody())) }
+//                    404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+//                    500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+//                    else -> emit(Resource.Error(null, null, null))
+//                }
+//            }
+//        }
+//    }
 
     override fun getListProductFavorite(
         query: String?,

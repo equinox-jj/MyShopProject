@@ -62,24 +62,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/svHome" />
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/fabSortedBy"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/primaryColor"
-            android:clickable="true"
-            android:contentDescription="@null"
-            android:focusable="true"
-            android:text="@string/sorted_by"
-            android:textSize="11sp"
-            app:icon="@drawable/ic_sort_filled"
-            app:iconGravity="end"
-            app:iconSize="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
