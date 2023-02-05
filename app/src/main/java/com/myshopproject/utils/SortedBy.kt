@@ -1,4 +1,4 @@
-package com.myshopproject.utils.enums
+package com.myshopproject.utils
 
 enum class SortedBy {
     SortAtoZ,

@@ -19,7 +19,6 @@ class RemoteInteractor @Inject constructor(
     override fun changePassword(id: Int, password: String, newPassword: String, confirmPassword: String): Flow<Resource<SuccessResponseStatus>> = authRepository.changePassword(id, password, newPassword, confirmPassword)
     override fun changeImage(id: Int, image: MultipartBody.Part): Flow<Resource<ChangeImageResponse>> = authRepository.changeImage(id, image)
     override fun getListProductPaging(query: String?): Flow<PagingData<DataProduct>> = productRepository.getListProductPaging(query)
-//    override fun getListProduct(query: String?): Flow<Resource<DataProductResponse>> = productRepository.getListProduct(query)
     override fun getListProductFavorite(query: String?, userId: Int): Flow<Resource<DataProductResponse>> = productRepository.getListProductFavorite(query, userId)
     override fun getProductDetail(productId: Int, userId: Int): Flow<Resource<DetailProductResponse>> = productRepository.getProductDetail(productId, userId)
     override fun addProductFavorite(productId: Int, userId: Int): Flow<Resource<SuccessResponseStatus>> = productRepository.addProductFavorite(productId, userId)

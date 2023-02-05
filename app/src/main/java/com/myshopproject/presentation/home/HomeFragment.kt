@@ -15,6 +15,7 @@ import com.myshopproject.databinding.FragmentHomeBinding
 import com.myshopproject.presentation.home.adapter.ItemLoadAdapter
 import com.myshopproject.presentation.home.adapter.ProductPagingAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -40,10 +41,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun refreshListener() {
         binding.refreshHome.setOnRefreshListener {
-            binding.refreshHome.isRefreshing = false
             binding.svHome.setQuery(null, false)
             binding.svHome.clearFocus()
-            initObserver(null)
+            binding.refreshHome.isRefreshing = false
+            adapter?.refresh()
         }
     }
 
@@ -56,6 +57,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             )
             adapter!!.addLoadStateListener { loadState ->
                 shimmerHome.root.isVisible = loadState.source.refresh is LoadState.Loading
+                rvHome.isVisible = loadState.source.refresh is LoadState.NotLoading
             }
             rvHome.setHasFixedSize(true)
         }
@@ -79,7 +81,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun initObserver(query: String?) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.getListProductPaging(query).collect { adapter?.submitData(it) }
+                viewModel.getListProductPaging(query).collectLatest { adapter?.submitData(it) }
             }
         }
     }

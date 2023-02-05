@@ -19,7 +19,7 @@ class ProductRepositoryImpl @Inject constructor(
     private val apiProduct: ApiProduct,
     private val cartDao: ProductCartDao,
 ) : ProductRepository {
-// initial 5, prefetch 1
+
     override fun getListProductPaging(query: String?): Flow<PagingData<DataProduct>> {
         return Pager(
             config = PagingConfig(
@@ -31,23 +31,6 @@ class ProductRepositoryImpl @Inject constructor(
             pagingSourceFactory = { RemotePagingSource(query, apiProduct) }
         ).flow
     }
-
-//    override fun getListProduct(query: String?): Flow<Resource<DataProductResponse>> = flow {
-//        emit(Resource.Loading)
-//        try {
-//            val response = apiProduct.getListProduct(query).toDomain()
-//            emit(Resource.Success(response))
-//        } catch (t: Throwable) {
-//            if (t is HttpException) {
-//                when (t.code()) {
-//                    400 -> { emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody())) }
-//                    404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-//                    500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-//                    else -> emit(Resource.Error(null, null, null))
-//                }
-//            }
-//        }
-//    }
 
     override fun getListProductFavorite(
         query: String?,

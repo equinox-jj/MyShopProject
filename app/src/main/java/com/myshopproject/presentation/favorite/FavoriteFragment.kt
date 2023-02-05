@@ -14,8 +14,7 @@ import com.myshopproject.databinding.FragmentFavoriteBinding
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.home.adapter.ProductListAdapter
 import com.myshopproject.presentation.viewmodel.DataStoreViewModel
-import com.myshopproject.utils.enums.ProductType
-import com.myshopproject.utils.enums.SortedBy
+import com.myshopproject.utils.SortedBy
 import com.myshopproject.utils.hide
 import com.myshopproject.utils.show
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,7 +63,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
 
     private fun initRecyclerView() {
         binding.apply {
-            adapter = ProductListAdapter(ProductType.PRODUCT_FAV_LIST)
+            adapter = ProductListAdapter()
             rvFavorite.adapter = adapter
             rvFavorite.setHasFixedSize(true)
         }

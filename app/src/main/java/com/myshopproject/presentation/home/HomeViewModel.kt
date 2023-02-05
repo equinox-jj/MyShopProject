@@ -17,10 +17,6 @@ class HomeViewModel @Inject constructor(
 
     private var searchJob: Job? = null
 
-    fun onRefresh() {
-        getListProductPaging("")
-    }
-
     fun onSearch(query: String) {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
