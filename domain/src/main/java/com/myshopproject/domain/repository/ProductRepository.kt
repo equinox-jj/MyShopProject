@@ -6,6 +6,7 @@ import com.myshopproject.domain.utils.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface ProductRepository {
+    /** API SERVICE */
     fun getListProductPaging(query: String?) : Flow<PagingData<DataProduct>>
     fun getListProductFavorite(query: String?, userId: Int): Flow<Resource<DataProductResponse>>
     fun getProductDetail(productId: Int, userId: Int): Flow<Resource<DetailProductResponse>>
@@ -13,7 +14,10 @@ interface ProductRepository {
     fun removeProductFavorite(productId: Int, userId: Int): Flow<Resource<SuccessResponseStatus>>
     fun updateStock(updateStock: UpdateStockProduct): Flow<Resource<SuccessResponseStatus>>
     fun updateRate(id: Int, updateRate: UpdateRate): Flow<Resource<SuccessResponseStatus>>
+    fun getProductOther(userId: Int): Flow<Resource<DataProductResponse>>
+    fun getProductHistory(userId: Int): Flow<Resource<DataProductResponse>>
 
+    /** ROOM DB */
     fun getAllProduct(): Flow<List<CartEntity>>
     fun getAllCheckedProduct(): Flow<List<CartEntity>>
     suspend fun addProductToTrolley(trolley: CartEntity)

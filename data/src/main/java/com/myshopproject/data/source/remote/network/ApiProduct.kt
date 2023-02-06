@@ -13,11 +13,6 @@ interface ApiProduct {
         @Query("offset") offset: Int
     ): DataProductResponseDTO
 
-//    @GET("get_list_product")
-//    suspend fun getListProduct(
-//        @Query("search") query: String?,
-//    ): DataProductResponseDTO
-
     @GET("get_list_product_favorite")
     suspend fun getListProductFavorite(
         @Query("search") query: String?,
@@ -54,4 +49,14 @@ interface ApiProduct {
         @Path("id") id: Int,
         @Body updateRate: UpdateRate
     ): SuccessResponseDTO
+
+    @GET("get_list_product_other")
+    suspend fun getProductOther(
+        @Query("id_user") userId: Int
+    ): DataProductResponseDTO
+
+    @GET("get_list_product_riwayat")
+    suspend fun getProductHistory(
+        @Query("id_user") userId: Int
+    ): DataProductResponseDTO
 }

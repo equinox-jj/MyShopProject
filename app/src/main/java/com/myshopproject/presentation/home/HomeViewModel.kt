@@ -5,8 +5,11 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.myshopproject.domain.usecase.RemoteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,17 +20,22 @@ class HomeViewModel @Inject constructor(
 
     private var searchJob: Job? = null
 
+    private val currentQuery = MutableStateFlow("")
+
     fun onSearch(query: String) {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             if (query.isEmpty()) {
-                getListProductPaging("")
+                currentQuery.value = query
             } else {
                 delay(2000)
-                getListProductPaging(query)
+                currentQuery.value = query
             }
         }
     }
 
-    fun getListProductPaging(query: String?) = remoteUseCase.getListProductPaging(query).cachedIn(viewModelScope)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val productList = currentQuery.flatMapLatest { query ->
+        remoteUseCase.getListProductPaging(query).cachedIn(viewModelScope)
+    }
 }

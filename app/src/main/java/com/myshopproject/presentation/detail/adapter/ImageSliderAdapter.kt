@@ -7,13 +7,20 @@ import coil.load
 import com.myshopproject.databinding.ItemImageSliderBinding
 import com.myshopproject.domain.entities.DetailProductImage
 
-class ImageSliderAdapter(private val listImage: List<DetailProductImage>): RecyclerView.Adapter<ImageSliderAdapter.ImageVH>() {
+class ImageSliderAdapter(
+    private val listImage: List<DetailProductImage>,
+    private val onClick: (String) -> Unit
+    ): RecyclerView.Adapter<ImageSliderAdapter.ImageVH>() {
 
-    class ImageVH(private val binding: ItemImageSliderBinding): RecyclerView.ViewHolder(binding.root) {
+    inner class ImageVH(private val binding: ItemImageSliderBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(data: DetailProductImage) {
             binding.apply {
                 ivProductDtl.load(data.imageProduct)
                 tvCarouselProductDtl.text = data.titleProduct
+
+                ivProductDtl.setOnClickListener {
+                    onClick.invoke(data.imageProduct)
+                }
             }
         }
     }

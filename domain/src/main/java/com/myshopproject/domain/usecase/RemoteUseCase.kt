@@ -19,4 +19,6 @@ interface RemoteUseCase {
     fun removeProductFavorite(productId: Int, userId: Int): Flow<Resource<SuccessResponseStatus>>
     fun updateStock(updateStock: UpdateStockProduct): Flow<Resource<SuccessResponseStatus>>
     fun updateRate(id: Int, updateRate: UpdateRate): Flow<Resource<SuccessResponseStatus>>
+    fun getProductOther(userId: Int): Flow<Resource<DataProductResponse>>
+    fun getProductHistory(userId: Int): Flow<Resource<DataProductResponse>>
 }

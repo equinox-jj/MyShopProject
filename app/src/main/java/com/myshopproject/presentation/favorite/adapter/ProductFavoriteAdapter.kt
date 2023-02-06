@@ -1,23 +1,21 @@
-package com.myshopproject.presentation.home.adapter
+package com.myshopproject.presentation.favorite.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.myshopproject.databinding.ItemProductListBinding
 import com.myshopproject.domain.entities.DataProduct
-import com.myshopproject.presentation.favorite.FavoriteFragmentDirections
 import com.myshopproject.utils.DiffUtilRecycler
 import com.myshopproject.utils.show
 import com.myshopproject.utils.toIDRPrice
 
-class ProductListAdapter : RecyclerView.Adapter<ProductListAdapter.ProductListVH>() {
+class ProductFavoriteAdapter(private val onClick: (Int) -> Unit) : RecyclerView.Adapter<ProductFavoriteAdapter.ProductFavoriteVH>() {
 
     private var listProduct = listOf<DataProduct>()
 
-    inner class ProductListVH(private val binding: ItemProductListBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ProductFavoriteVH(private val binding: ItemProductListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: DataProduct) {
             binding.apply {
                 ivProductFavIcon.show()
@@ -29,19 +27,18 @@ class ProductListAdapter : RecyclerView.Adapter<ProductListAdapter.ProductListVH
                 rbProductRate.rating = data.rate.toFloat()
 
                 itemView.setOnClickListener {
-                    val action = FavoriteFragmentDirections.actionFavoriteFragmentToDetailActivity(data.id)
-                    it.findNavController().navigate(action)
+                    onClick.invoke(data.id)
                 }
             }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductListVH {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductFavoriteVH {
         val binding = ItemProductListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ProductListVH(binding)
+        return ProductFavoriteVH(binding)
     }
 
-    override fun onBindViewHolder(holder: ProductListVH, position: Int) {
+    override fun onBindViewHolder(holder: ProductFavoriteVH, position: Int) {
         holder.bind(listProduct[position])
     }
 

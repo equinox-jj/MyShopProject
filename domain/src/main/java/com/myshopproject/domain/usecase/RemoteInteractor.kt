@@ -25,4 +25,6 @@ class RemoteInteractor @Inject constructor(
     override fun removeProductFavorite(productId: Int, userId: Int): Flow<Resource<SuccessResponseStatus>> = productRepository.removeProductFavorite(productId, userId)
     override fun updateStock(updateStock: UpdateStockProduct): Flow<Resource<SuccessResponseStatus>> = productRepository.updateStock(updateStock)
     override fun updateRate(id: Int, updateRate: UpdateRate): Flow<Resource<SuccessResponseStatus>> = productRepository.updateRate(id, updateRate)
+    override fun getProductOther(userId: Int): Flow<Resource<DataProductResponse>> = productRepository.getProductOther(userId)
+    override fun getProductHistory(userId: Int): Flow<Resource<DataProductResponse>> = productRepository.getProductHistory(userId)
 }

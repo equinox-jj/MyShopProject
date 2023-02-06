@@ -16,7 +16,6 @@ import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.navArgs
 import coil.imageLoader
 import coil.request.ImageRequest
 import com.myshopproject.R
@@ -26,8 +25,10 @@ import com.myshopproject.domain.entities.DetailProductData
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.detail.adapter.ImageSliderAdapter
 import com.myshopproject.presentation.detail.bottomsheet.DetailBottomSheet
+import com.myshopproject.presentation.favorite.adapter.ProductFavoriteAdapter
 import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.presentation.viewmodel.LocalViewModel
+import com.myshopproject.utils.Constants
 import com.myshopproject.utils.hide
 import com.myshopproject.utils.show
 import com.myshopproject.utils.toIDRPrice
@@ -40,12 +41,11 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
 
     private lateinit var imageSliderAdapter: ImageSliderAdapter
+    private var adapter: ProductFavoriteAdapter? = null
 
     private val viewModel by viewModels<DetailViewModel>()
     private val prefViewModel by viewModels<DataStoreViewModel>()
     private val localViewModel by viewModels<LocalViewModel>()
-
-    private val args by navArgs<DetailActivityArgs>()
 
     private lateinit var dataDetailProduct: DetailProductData
     private var productId: Int = 0
@@ -56,18 +56,45 @@ class DetailActivity : AppCompatActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.toolbarDetail)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        productId = args.productId
+        setupToolbar()
 
         setupToolbarMenu()
         coroutineScope()
         refreshListener()
+        checkProductId()
+        initRecyclerView()
 
         val builder: StrictMode.VmPolicy.Builder = StrictMode.VmPolicy.Builder()
         StrictMode.setVmPolicy(builder.build())
+    }
+
+    private fun initRecyclerView() {
+        binding.apply {
+            adapter = ProductFavoriteAdapter(onClick = {})
+            contentProductOther.rvProductOther.adapter = adapter
+            contentProductOther.rvProductOther.setHasFixedSize(true)
+
+            contentProductHistory.rvProductHistory.adapter = adapter
+            contentProductHistory.rvProductHistory.setHasFixedSize(true)
+        }
+    }
+
+    private fun checkProductId() {
+        val idProduct = intent.getIntExtra(Constants.PRODUCT_ID_INTENT, 0)
+        productId = idProduct
+        if (productId == 0) {
+            val data: Uri? = intent?.data
+            val id = data?.getQueryParameter("id")
+            if (id != null) {
+                productId = id.toInt()
+            }
+        }
+    }
+
+    private fun setupToolbar() {
+        setSupportActionBar(binding.toolbarDetail)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun setupToolbarMenu() {
@@ -92,7 +119,7 @@ class DetailActivity : AppCompatActivity() {
                                     intent.type = "image/*"
                                     intent.putExtra(
                                         Intent.EXTRA_TEXT,
-                                        "Name : ${dataDetailProduct.nameProduct}\nStock : ${dataDetailProduct.stock}\nWeight : ${dataDetailProduct.weight}\nSize : ${dataDetailProduct.size}\nLink : https://joshuaj.com/deeplink?id=$productId"
+                                        "Name : ${dataDetailProduct.nameProduct}\nStock : ${dataDetailProduct.stock}\nWeight : ${dataDetailProduct.weight}\nSize : ${dataDetailProduct.size}\nLink : https://joshuaj.com/detail_product?id=$productId"
                                     )
 
                                     val path = MediaStore.Images.Media.insertImage(
@@ -105,7 +132,9 @@ class DetailActivity : AppCompatActivity() {
                                     val uri = Uri.parse(path)
 
                                     intent.putExtra(Intent.EXTRA_STREAM, uri)
-                                    startActivity(Intent.createChooser(intent, "Share To"))
+                                    if (intent.resolveActivity(packageManager) != null) {
+                                        startActivity(Intent.createChooser(intent, "Share To"))
+                                    }
                                 },
                                 onError = { }
                             ).build()
@@ -167,12 +196,47 @@ class DetailActivity : AppCompatActivity() {
                 }
             }
         }
+
+        viewModel.getProductOther(userId)
+        viewModel.otherProductState.observe(this@DetailActivity) { response ->
+            when(response) {
+                is Resource.Loading -> {
+                    binding.contentProductOther.rvProductOther.hide()
+                }
+                is Resource.Success -> {
+                    binding.contentProductOther.rvProductOther.show()
+                    response.data?.success?.data?.let { adapter?.submitData(it) }
+                }
+                is Resource.Error -> {
+                    binding.contentProductOther.rvProductOther.hide()
+                }
+            }
+        }
+
+        viewModel.getProductHistory(userId)
+        viewModel.historyProductState.observe(this@DetailActivity) { response ->
+            when(response) {
+                is Resource.Loading -> {
+                    binding.contentProductHistory.rvProductHistory?.hide()
+                }
+                is Resource.Success -> {
+                    binding.contentProductHistory.rvProductHistory.show()
+                    response.data?.success?.data?.let { adapter?.submitData(it) }
+                }
+                is Resource.Error -> {
+                    binding.contentProductHistory.rvProductHistory.hide()
+                }
+            }
+        }
     }
 
     private fun initView(data: DetailProductData) {
         binding.apply {
             toolbarDetail.title = data.nameProduct
-            imageSliderAdapter = ImageSliderAdapter(data.imageProduct)
+            imageSliderAdapter = ImageSliderAdapter(
+                data.imageProduct,
+                onClick = {}
+            )
             vpImageSliderProductDtl.adapter = imageSliderAdapter
             indicatorSlider.setViewPager(vpImageSliderProductDtl)
             tvNameProductDtl.isSelected = true
@@ -184,7 +248,7 @@ class DetailActivity : AppCompatActivity() {
             tvTypeProductDtl.text = data.type
             tvDescProductDtl.text = data.desc
 
-            if (data.stock == 1) tvStockProductDtl.text = "Out of stock."
+            if (data.stock == 1) tvStockProductDtl.text = resources.getString(R.string.out_of_stock)
             else tvStockProductDtl.text = data.stock.toString()
             if (data.isFavorite) ivImageFavProductDtl.setImageResource(R.drawable.ic_favorite_filled)
             else ivImageFavProductDtl.setImageResource(R.drawable.ic_favorite_outlined)

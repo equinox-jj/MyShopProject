@@ -50,10 +50,7 @@
         android:id="@+id/detailActivity"
         android:name="com.myshopproject.presentation.detail.DetailActivity"
         android:label="activity_detail"
-        tools:layout="@layout/activity_detail" >
-        <argument android:name="productId"
-            app:argType="integer" />
-    </activity>
+        tools:layout="@layout/activity_detail" />
 
 
 </navigation>

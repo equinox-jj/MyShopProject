@@ -35,12 +35,16 @@ class TrolleyActivity : AppCompatActivity() {
         binding = ActivityTrolleyBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.toolbarTrolley)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        setupToolbar()
 
         initObserver()
         initRecyclerView()
         setupListener()
+    }
+
+    private fun setupToolbar() {
+        setSupportActionBar(binding.toolbarTrolley)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -65,6 +69,7 @@ class TrolleyActivity : AppCompatActivity() {
                         binding.rvTrolley.show()
                         trolleyAdapter?.submitData(result)
                     } else {
+                        binding.cbTrolley.isChecked = false
                         binding.rvTrolley.hide()
                     }
                 }

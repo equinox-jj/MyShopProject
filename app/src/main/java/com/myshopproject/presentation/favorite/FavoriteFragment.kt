@@ -1,5 +1,6 @@
 package com.myshopproject.presentation.favorite
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.SearchView
@@ -12,8 +13,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.myshopproject.R
 import com.myshopproject.databinding.FragmentFavoriteBinding
 import com.myshopproject.domain.utils.Resource
-import com.myshopproject.presentation.home.adapter.ProductListAdapter
+import com.myshopproject.presentation.detail.DetailActivity
+import com.myshopproject.presentation.favorite.adapter.ProductFavoriteAdapter
 import com.myshopproject.presentation.viewmodel.DataStoreViewModel
+import com.myshopproject.utils.Constants
 import com.myshopproject.utils.SortedBy
 import com.myshopproject.utils.hide
 import com.myshopproject.utils.show
@@ -27,7 +30,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
     private var _binding: FragmentFavoriteBinding? = null
     private val binding get() = _binding!!
 
-    private var adapter: ProductListAdapter? = null
+    private var adapter: ProductFavoriteAdapter? = null
     private val viewModel by viewModels<FavoriteViewModel>()
     private val prefViewModel by viewModels<DataStoreViewModel>()
 
@@ -35,21 +38,10 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentFavoriteBinding.bind(view)
 
-        initRecyclerView()
-        setupListener()
-
         initObserver(SortedBy.DefaultSort)
         launchCoroutines()
-        refreshListener()
-    }
-
-    private fun refreshListener() {
-        binding.refreshFavorite.setOnRefreshListener {
-            binding.refreshFavorite.isRefreshing = false
-            binding.svFavorite.setQuery("", false)
-            binding.svFavorite.clearFocus()
-            viewModel.onRefresh()
-        }
+        initRecyclerView()
+        setupListener()
     }
 
     private fun launchCoroutines() {
@@ -63,7 +55,13 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
 
     private fun initRecyclerView() {
         binding.apply {
-            adapter = ProductListAdapter()
+            adapter = ProductFavoriteAdapter(
+                onClick = {
+                    val intent = Intent(requireContext(), DetailActivity::class.java)
+                    intent.putExtra(Constants.PRODUCT_ID_INTENT, it)
+                    startActivity(intent)
+                }
+            )
             rvFavorite.adapter = adapter
             rvFavorite.setHasFixedSize(true)
         }
@@ -81,6 +79,14 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
                     return true
                 }
             })
+
+            refreshFavorite.setOnRefreshListener {
+                refreshFavorite.isRefreshing = false
+                svFavorite.setQuery("", false)
+                svFavorite.clearFocus()
+                viewModel.onRefresh()
+            }
+
             fabSortedByFav.setOnClickListener {
                 dialogSortedBy()
             }

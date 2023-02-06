@@ -42,4 +42,5 @@
     <string name="shopping_cart">Shopping Cart</string>
     <string name="select_all">Select All</string>
     <string name="total_price">Total Price</string>
+    <string name="out_of_stock">Out Of Stock</string>
 </resources>

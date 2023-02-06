@@ -9,4 +9,6 @@ object Constants {
 
     const val LIST_PRODUCT_ID = "list_product_id"
     const val PRODUCT_ID = "product_id"
+
+    const val PRODUCT_ID_INTENT = "product_id_intent"
 }

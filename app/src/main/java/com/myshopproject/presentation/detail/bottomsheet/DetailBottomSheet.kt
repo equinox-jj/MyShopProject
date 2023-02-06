@@ -14,7 +14,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.myshopproject.R
 import com.myshopproject.data.source.remote.dto.ErrorResponseDTO
-import com.myshopproject.databinding.BottomSheetProductDetailBinding
+import com.myshopproject.databinding.FragmentBottomSheetDetailBinding
 import com.myshopproject.domain.entities.DetailProductData
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.buysuccess.BuySuccessActivity
@@ -26,7 +26,7 @@ import org.json.JSONObject
 @AndroidEntryPoint
 class DetailBottomSheet(private val data: DetailProductData) : BottomSheetDialogFragment() {
 
-    private var _binding: BottomSheetProductDetailBinding? = null
+    private var _binding: FragmentBottomSheetDetailBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel by viewModels<DetailBottomSheetViewModel>()
@@ -37,7 +37,7 @@ class DetailBottomSheet(private val data: DetailProductData) : BottomSheetDialog
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = BottomSheetProductDetailBinding.inflate(inflater, container, false)
+        _binding = FragmentBottomSheetDetailBinding.inflate(inflater, container, false)
 
         initObserver()
         initView()
@@ -49,7 +49,7 @@ class DetailBottomSheet(private val data: DetailProductData) : BottomSheetDialog
         binding.apply {
             ivProductBottSht.load(data.image)
             tvProductPriceBottSht.text = data.harga.toIDRPrice()
-            if (data.stock == 1) tvStockProductBottSht.text = "Out of stock."
+            if (data.stock == 1) tvStockProductBottSht.text = resources.getString(R.string.out_of_stock)
             else tvStockProductBottSht.text = data.stock.toString()
             (resources.getString(R.string.buy_now) + data.harga.toIDRPrice()).also { btnBuyNowBottSheet.text = it }
         }
@@ -116,7 +116,7 @@ class DetailBottomSheet(private val data: DetailProductData) : BottomSheetDialog
                         val jsonObject = gson.fromJson(errors, JsonObject::class.java)
                         val errorResponse = gson.fromJson(jsonObject, ErrorResponseDTO::class.java)
                         Toast.makeText(requireContext(), "${errorResponse.error.message} ${errorResponse.error.status}", Toast.LENGTH_SHORT).show()
-                    }catch (e: Exception) { }
+                    } catch (e: Exception) { }
                 }
             }
         }

@@ -20,6 +20,7 @@ class ProductRepositoryImpl @Inject constructor(
     private val cartDao: ProductCartDao,
 ) : ProductRepository {
 
+    /** API SERVICE */
     override fun getListProductPaging(query: String?): Flow<PagingData<DataProduct>> {
         return Pager(
             config = PagingConfig(
@@ -136,6 +137,41 @@ class ProductRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getProductOther(userId: Int): Flow<Resource<DataProductResponse>> = flow {
+        emit(Resource.Loading)
+        try {
+            val response = apiProduct.getProductOther(userId).toDomain()
+            emit(Resource.Success(response))
+        } catch (t: Throwable) {
+            if (t is HttpException) {
+                when (t.code()) {
+                    400 -> { emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody())) }
+                    404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                    500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                    else -> emit(Resource.Error(null, null, null))
+                }
+            }
+        }
+    }
+
+    override fun getProductHistory(userId: Int): Flow<Resource<DataProductResponse>> = flow {
+        emit(Resource.Loading)
+        try {
+            val response = apiProduct.getProductHistory(userId).toDomain()
+            emit(Resource.Success(response))
+        } catch (t: Throwable) {
+            if (t is HttpException) {
+                when (t.code()) {
+                    400 -> { emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody())) }
+                    404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                    500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                    else -> emit(Resource.Error(null, null, null))
+                }
+            }
+        }
+    }
+
+    /** ROOM DB */
     override fun getAllProduct(): Flow<List<CartEntity>> {
         return cartDao.getAllProduct()
     }

@@ -4,311 +4,389 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/refreshDetail"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".presentation.detail.DetailActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbarDetail"
-            android:layout_width="match_parent"
-            android:layout_height="?android:actionBarSize"
-            android:background="@color/primaryLightColor"
-            app:contentInsetStart="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <include
-            android:id="@+id/shimmerDetail"
-            layout="@layout/shimmer_product_detail"
+        <me.didik.component.StickyNestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbarDetail" />
-
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/nestedScrollDtl"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:padding="8dp"
             app:layout_constraintBottom_toTopOf="@+id/bottomAppBarDtl"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbarDetail">
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/vpImageSliderProductDtl"
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbarDetail"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:elevation="4dp"
-                    app:cardCornerRadius="15dp"
+                    android:layout_height="?android:actionBarSize"
+                    android:background="@color/primaryLightColor"
+                    app:contentInsetStart="0dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <me.relex.circleindicator.CircleIndicator3
-                    android:id="@+id/indicatorSlider"
+                <androidx.core.widget.NestedScrollView
+                    android:id="@+id/nestedScrollDtl"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    app:ci_drawable="@drawable/bg_indicator_dot"
-                    app:ci_width="10dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/vpImageSliderProductDtl" />
-
-                <TextView
-                    android:id="@+id/tvNameProductDtl"
-                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:ellipsize="marquee"
-                    android:fadingEdge="horizontal"
-                    android:fontFamily="@font/poppins_regular"
-                    android:maxLines="1"
-                    android:scrollHorizontally="true"
-                    android:singleLine="true"
-                    app:layout_constraintEnd_toStartOf="@+id/tvPriceProductDtl"
-                    app:layout_constraintStart_toStartOf="@+id/indicatorSlider"
-                    app:layout_constraintTop_toBottomOf="@+id/indicatorSlider"
-                    tools:text="Jam Tangan" />
-
-                <TextView
-                    android:id="@+id/tvPriceProductDtl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_bold"
-                    app:layout_constraintEnd_toEndOf="@+id/indicatorSlider"
-                    app:layout_constraintTop_toTopOf="@+id/tvNameProductDtl"
-                    tools:text="RP 10.000" />
-
-                <RatingBar
-                    android:id="@+id/rbProductDtl"
-                    style="@style/Widget.AppCompat.RatingBar.Small"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    app:layout_constraintStart_toStartOf="@+id/tvNameProductDtl"
-                    app:layout_constraintTop_toBottomOf="@+id/tvNameProductDtl" />
-
-                <TextView
-                    android:id="@+id/tvDetailProductDtl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:fontFamily="@font/poppins_bold"
-                    android:text="@string/detail_product"
-                    app:layout_constraintStart_toStartOf="@+id/rbProductDtl"
-                    app:layout_constraintTop_toBottomOf="@+id/rbProductDtl" />
-
-                <ImageView
-                    android:id="@+id/ivImageFavProductDtl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@null"
-                    android:src="@drawable/ic_favorite_outlined"
-                    app:layout_constraintBottom_toBottomOf="@+id/tvDetailProductDtl"
-                    app:layout_constraintEnd_toEndOf="@+id/tvPriceProductDtl"
-                    app:layout_constraintTop_toTopOf="@+id/tvDetailProductDtl" />
-
-                <View
-                    android:id="@+id/bgUnderlineDtl"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@color/black"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvDetailProductDtl" />
-
-                <TextView
-                    android:id="@+id/stock"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="8dp"
-                    android:fontFamily="@font/poppins_regular"
-                    android:maxLines="1"
-                    android:text="@string/stock"
-                    app:layout_constraintStart_toStartOf="@+id/tvDetailProductDtl"
-                    app:layout_constraintTop_toBottomOf="@id/bgUnderlineDtl" />
-
-                <TextView
-                    android:id="@+id/stockDot"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="64dp"
-                    android:fontFamily="@font/poppins_regular"
-                    android:maxLines="1"
-                    android:text="@string/doubledot"
-                    app:layout_constraintStart_toEndOf="@+id/stock"
-                    app:layout_constraintTop_toTopOf="@+id/stock" />
-
-                <TextView
-                    android:id="@+id/tvStockProductDtl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:fontFamily="@font/poppins_regular"
-                    android:maxLines="1"
-                    app:layout_constraintStart_toEndOf="@+id/stockDot"
-                    app:layout_constraintTop_toTopOf="@+id/stock"
-                    tools:text="Lorem Ipsum" />
-
-                <TextView
-                    android:id="@+id/size"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:fontFamily="@font/poppins_regular"
-                    android:maxLines="1"
-                    android:text="@string/size"
-                    app:layout_constraintStart_toStartOf="@+id/guideline"
-                    app:layout_constraintTop_toTopOf="@+id/tvStockProductDtl" />
-
-                <TextView
-                    android:id="@+id/sizeDot"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="64dp"
-                    android:fontFamily="@font/poppins_regular"
-                    android:maxLines="1"
-                    android:text="@string/doubledot"
-                    app:layout_constraintStart_toEndOf="@+id/size"
-                    app:layout_constraintTop_toTopOf="@+id/size" />
-
-                <TextView
-                    android:id="@+id/tvSizeProductDtl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:fontFamily="@font/poppins_regular"
-                    android:maxLines="1"
-                    app:layout_constraintStart_toEndOf="@+id/sizeDot"
-                    app:layout_constraintTop_toTopOf="@+id/sizeDot"
-                    tools:text="Lorem Ipsum" />
-
-                <TextView
-                    android:id="@+id/weight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:fontFamily="@font/poppins_regular"
-                    android:maxLines="1"
-                    android:text="@string/weight"
-                    app:layout_constraintStart_toStartOf="@+id/stock"
-                    app:layout_constraintTop_toBottomOf="@+id/stock" />
-
-                <TextView
-                    android:id="@+id/weightDot"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_regular"
-                    android:maxLines="1"
-                    android:text="@string/doubledot"
-                    app:layout_constraintStart_toStartOf="@+id/stockDot"
-                    app:layout_constraintTop_toTopOf="@+id/weight" />
-
-                <TextView
-                    android:id="@+id/tvWeightProductDtl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_regular"
-                    android:maxLines="1"
-                    app:layout_constraintStart_toStartOf="@+id/tvStockProductDtl"
-                    app:layout_constraintTop_toTopOf="@+id/weightDot"
-                    tools:text="Lorem Ipsum" />
-
-                <TextView
-                    android:id="@+id/type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_regular"
-                    android:maxLines="1"
-                    android:text="@string/type"
-                    app:layout_constraintStart_toStartOf="@+id/size"
-                    app:layout_constraintTop_toTopOf="@+id/tvWeightProductDtl" />
-
-                <TextView
-                    android:id="@+id/typeDot"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_regular"
-                    android:maxLines="1"
-                    android:text="@string/doubledot"
-                    app:layout_constraintStart_toStartOf="@+id/sizeDot"
-                    app:layout_constraintTop_toTopOf="@+id/type" />
-
-                <TextView
-                    android:id="@+id/tvTypeProductDtl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_regular"
-                    android:maxLines="1"
-                    app:layout_constraintStart_toStartOf="@+id/tvSizeProductDtl"
-                    app:layout_constraintTop_toTopOf="@+id/typeDot"
-                    tools:text="Lorem Ipsum" />
-
-                <TextView
-                    android:id="@+id/description"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:fontFamily="@font/poppins_regular"
-                    android:text="@string/description"
-                    app:layout_constraintStart_toStartOf="@+id/weight"
-                    app:layout_constraintTop_toBottomOf="@+id/weight" />
-
-                <TextView
-                    android:id="@+id/descriptionDot"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_regular"
-                    android:text="@string/doubledot"
-                    app:layout_constraintStart_toStartOf="@+id/weightDot"
-                    app:layout_constraintTop_toTopOf="@+id/description" />
-
-                <TextView
-                    android:id="@+id/tvDescProductDtl"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="32dp"
-                    android:fontFamily="@font/poppins_regular"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/description"
-                    app:layout_constraintTop_toBottomOf="@+id/descriptionDot"
-                    tools:text="Lorem Ipsum" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/toolbarDetail">
 
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guideline"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.5" />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <androidx.viewpager2.widget.ViewPager2
+                            android:id="@+id/vpImageSliderProductDtl"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:layout_margin="8dp"
+                            android:elevation="4dp"
+                            app:cardCornerRadius="15dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <me.relex.circleindicator.CircleIndicator3
+                            android:id="@+id/indicatorSlider"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            app:ci_drawable="@drawable/bg_indicator_dot"
+                            app:ci_width="10dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/vpImageSliderProductDtl" />
+
+                        <TextView
+                            android:id="@+id/tvNameProductDtl"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:ellipsize="marquee"
+                            android:fadingEdge="horizontal"
+                            android:fontFamily="@font/poppins_regular"
+                            android:maxLines="1"
+                            android:scrollHorizontally="true"
+                            android:singleLine="true"
+                            app:layout_constraintEnd_toStartOf="@+id/tvPriceProductDtl"
+                            app:layout_constraintStart_toStartOf="@+id/indicatorSlider"
+                            app:layout_constraintTop_toBottomOf="@+id/indicatorSlider"
+                            tools:text="Jam Tangan" />
+
+                        <TextView
+                            android:id="@+id/tvPriceProductDtl"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:fontFamily="@font/poppins_bold"
+                            app:layout_constraintEnd_toEndOf="@+id/indicatorSlider"
+                            app:layout_constraintTop_toTopOf="@+id/tvNameProductDtl"
+                            tools:text="RP 10.000" />
+
+                        <RatingBar
+                            android:id="@+id/rbProductDtl"
+                            style="@style/Widget.AppCompat.RatingBar.Small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            app:layout_constraintStart_toStartOf="@+id/tvNameProductDtl"
+                            app:layout_constraintTop_toBottomOf="@+id/tvNameProductDtl" />
+
+                        <TextView
+                            android:id="@+id/tvDetailProductDtl"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/poppins_bold"
+                            android:text="@string/detail_product"
+                            app:layout_constraintStart_toStartOf="@+id/rbProductDtl"
+                            app:layout_constraintTop_toBottomOf="@+id/rbProductDtl" />
+
+                        <ImageView
+                            android:id="@+id/ivImageFavProductDtl"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_favorite_outlined"
+                            app:layout_constraintBottom_toBottomOf="@+id/tvDetailProductDtl"
+                            app:layout_constraintEnd_toEndOf="@+id/tvPriceProductDtl"
+                            app:layout_constraintTop_toTopOf="@+id/tvDetailProductDtl" />
+
+                        <View
+                            android:id="@+id/bgUnderlineDtl"
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:background="@color/black"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvDetailProductDtl" />
+
+                        <TextView
+                            android:id="@+id/stock"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:maxLines="1"
+                            android:text="@string/stock"
+                            app:layout_constraintStart_toStartOf="@+id/tvDetailProductDtl"
+                            app:layout_constraintTop_toBottomOf="@id/bgUnderlineDtl" />
+
+                        <TextView
+                            android:id="@+id/stockDot"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="64dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:maxLines="1"
+                            android:text="@string/doubledot"
+                            app:layout_constraintStart_toEndOf="@+id/stock"
+                            app:layout_constraintTop_toTopOf="@+id/stock" />
+
+                        <TextView
+                            android:id="@+id/tvStockProductDtl"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:maxLines="1"
+                            app:layout_constraintStart_toEndOf="@+id/stockDot"
+                            app:layout_constraintTop_toTopOf="@+id/stock"
+                            tools:text="Lorem Ipsum" />
+
+                        <TextView
+                            android:id="@+id/size"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:maxLines="1"
+                            android:text="@string/size"
+                            app:layout_constraintStart_toStartOf="@+id/stock"
+                            app:layout_constraintTop_toBottomOf="@+id/stock" />
+
+                        <TextView
+                            android:id="@+id/sizeDot"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_regular"
+                            android:maxLines="1"
+                            android:text="@string/doubledot"
+                            app:layout_constraintStart_toStartOf="@+id/stockDot"
+                            app:layout_constraintTop_toTopOf="@+id/size" />
+
+                        <TextView
+                            android:id="@+id/tvSizeProductDtl"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_regular"
+                            android:maxLines="1"
+                            app:layout_constraintStart_toStartOf="@+id/tvStockProductDtl"
+                            app:layout_constraintTop_toTopOf="@+id/sizeDot"
+                            tools:text="Lorem Ipsum" />
+
+                        <TextView
+                            android:id="@+id/weight"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:maxLines="1"
+                            android:text="@string/weight"
+                            app:layout_constraintStart_toStartOf="@+id/size"
+                            app:layout_constraintTop_toBottomOf="@+id/size" />
+
+                        <TextView
+                            android:id="@+id/weightDot"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_regular"
+                            android:maxLines="1"
+                            android:text="@string/doubledot"
+                            app:layout_constraintStart_toStartOf="@+id/sizeDot"
+                            app:layout_constraintTop_toTopOf="@+id/weight" />
+
+                        <TextView
+                            android:id="@+id/tvWeightProductDtl"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_regular"
+                            android:maxLines="1"
+                            app:layout_constraintStart_toStartOf="@+id/tvSizeProductDtl"
+                            app:layout_constraintTop_toTopOf="@+id/weightDot"
+                            tools:text="Lorem Ipsum" />
+
+                        <TextView
+                            android:id="@+id/type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:maxLines="1"
+                            android:text="@string/type"
+                            app:layout_constraintStart_toStartOf="@+id/weight"
+                            app:layout_constraintTop_toBottomOf="@+id/weight" />
+
+                        <TextView
+                            android:id="@+id/typeDot"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_regular"
+                            android:maxLines="1"
+                            android:text="@string/doubledot"
+                            app:layout_constraintStart_toStartOf="@+id/weightDot"
+                            app:layout_constraintTop_toTopOf="@+id/type" />
+
+                        <TextView
+                            android:id="@+id/tvTypeProductDtl"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_regular"
+                            android:maxLines="1"
+                            app:layout_constraintStart_toStartOf="@+id/tvWeightProductDtl"
+                            app:layout_constraintTop_toTopOf="@+id/typeDot"
+                            tools:text="Lorem Ipsum" />
+
+                        <TextView
+                            android:id="@+id/description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="@string/description"
+                            app:layout_constraintStart_toStartOf="@+id/type"
+                            app:layout_constraintTop_toBottomOf="@+id/tvTypeProductDtl" />
+
+                        <TextView
+                            android:id="@+id/descriptionDot"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="@string/doubledot"
+                            app:layout_constraintStart_toStartOf="@+id/typeDot"
+                            app:layout_constraintTop_toTopOf="@+id/description" />
+
+                        <TextView
+                            android:id="@+id/tvDescProductDtl"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_regular"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/description"
+                            app:layout_constraintTop_toBottomOf="@+id/description"
+                            tools:text="Lorem Ipsum" />
+
+                        <View
+                            android:id="@+id/view1"
+                            android:layout_width="match_parent"
+                            android:layout_height="8dp"
+                            android:background="@color/grey_background"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvDescProductDtl" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/constraintProductOther"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/view1">
+
+                            <androidx.appcompat.widget.Toolbar
+                                android:id="@+id/toolbarOtherProduct"
+                                android:layout_width="match_parent"
+                                android:layout_height="?actionBarSize"
+                                android:background="@color/white_background"
+                                android:tag="sticky"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:title="Other Product" />
+
+                            <include
+                                android:id="@+id/content_product_other"
+                                layout="@layout/content_product_other"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/toolbarOtherProduct" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <View
+                            android:id="@+id/view2"
+                            android:layout_width="match_parent"
+                            android:layout_height="8dp"
+                            android:background="@color/grey_background"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/constraintProductOther" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/constraintProductHistory"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/view2">
+
+                            <androidx.appcompat.widget.Toolbar
+                                android:id="@+id/toolbarHistoryProduct"
+                                android:layout_width="match_parent"
+                                android:layout_height="?actionBarSize"
+                                android:background="@color/white_background"
+                                android:tag="sticky"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:title="Product History" />
+
+                            <include
+                                android:id="@+id/content_product_history"
+                                layout="@layout/content_product_riwayat"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/toolbarHistoryProduct" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.core.widget.NestedScrollView>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.core.widget.NestedScrollView>
+        </me.didik.component.StickyNestedScrollView>
 
-        <com.google.android.material.bottomappbar.BottomAppBar
+        <FrameLayout
             android:id="@+id/bottomAppBarDtl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white_background"
+            android:elevation="16dp"
+            android:padding="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="BottomAppBar">
+            app:layout_constraintStart_toStartOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -329,7 +407,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/btnDtlBuy"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.button.MaterialButton
+                <Button
                     android:id="@+id/btnDtlBuy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -341,7 +419,18 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </com.google.android.material.bottomappbar.BottomAppBar>
+        </FrameLayout>
+
+        <include
+            android:id="@+id/shimmerDetail"
+            layout="@layout/shimmer_product_detail"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

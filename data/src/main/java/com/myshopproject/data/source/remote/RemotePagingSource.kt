@@ -24,11 +24,12 @@ class RemotePagingSource @Inject constructor(
             val response = apiProduct.getListProductPaging(query, productOffset)
             val productResult = response.success.data.map { it.toDomain() }
 
+            val prevKey = if (productOffset == 0) null else productOffset -1
             val nextKey = if (productResult.isEmpty()) null else productOffset + 5
 
             LoadResult.Page(
                 data = productResult,
-                prevKey = null,
+                prevKey = prevKey,
                 nextKey = nextKey
             )
         } catch (exception: IOException) {

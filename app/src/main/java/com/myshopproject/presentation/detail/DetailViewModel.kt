@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.myshopproject.domain.entities.DataProductResponse
 import com.myshopproject.domain.entities.DetailProductResponse
 import com.myshopproject.domain.entities.SuccessResponseStatus
 import com.myshopproject.domain.usecase.RemoteUseCase
@@ -27,6 +28,12 @@ class DetailViewModel @Inject constructor(
     private val _unFavState = MutableLiveData<Resource<SuccessResponseStatus>>()
     val unFavState: LiveData<Resource<SuccessResponseStatus>> = _unFavState
 
+    private val _otherProductState = MutableLiveData<Resource<DataProductResponse>>()
+    val otherProductState: LiveData<Resource<DataProductResponse>> = _otherProductState
+
+    private val _historyProductState = MutableLiveData<Resource<DataProductResponse>>()
+    val historyProductState: LiveData<Resource<DataProductResponse>> = _historyProductState
+
     fun onRefresh(productId: Int, userId: Int) {
         getProductDetail(productId, userId)
     }
@@ -44,6 +51,42 @@ class DetailViewModel @Inject constructor(
                 }
                 is Resource.Error -> {
                     _detailState.value = Resource.Error(response.message, response.errorCode, response.errorBody)
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    fun getProductOther(userId: Int) {
+        remoteUseCase.getProductOther(userId).onEach { response ->
+            when (response) {
+                is Resource.Loading -> {
+                    _otherProductState.value = Resource.Loading
+                }
+                is Resource.Success -> {
+                    response.data?.let {
+                        _otherProductState.value = Resource.Success(it)
+                    }
+                }
+                is Resource.Error -> {
+                    _otherProductState.value = Resource.Error(response.message, response.errorCode, response.errorBody)
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    fun getProductHistory(userId: Int) {
+        remoteUseCase.getProductHistory(userId).onEach { response ->
+            when (response) {
+                is Resource.Loading -> {
+                    _historyProductState.value = Resource.Loading
+                }
+                is Resource.Success -> {
+                    response.data?.let {
+                        _historyProductState.value = Resource.Success(it)
+                    }
+                }
+                is Resource.Error -> {
+                    _historyProductState.value = Resource.Error(response.message, response.errorCode, response.errorBody)
                 }
             }
         }.launchIn(viewModelScope)

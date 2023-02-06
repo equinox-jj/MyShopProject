@@ -2,20 +2,18 @@ package com.myshopproject.presentation.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.navigation.findNavController
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.myshopproject.databinding.ItemProductListBinding
 import com.myshopproject.domain.entities.DataProduct
-import com.myshopproject.presentation.home.HomeFragmentDirections
 import com.myshopproject.utils.hide
 import com.myshopproject.utils.toIDRPrice
 
-class ProductPagingAdapter: PagingDataAdapter<DataProduct, ProductPagingAdapter.ProductPagingVH>(PRODUCT_COMPARATOR) {
+class ProductPagingAdapter(private val onClick: (Int) -> Unit): PagingDataAdapter<DataProduct, ProductPagingAdapter.ProductPagingVH>(PRODUCT_COMPARATOR) {
 
-    class ProductPagingVH(private val binding: ItemProductListBinding): RecyclerView.ViewHolder(binding.root) {
+    inner class ProductPagingVH(private val binding: ItemProductListBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(data: DataProduct) {
             binding.apply {
                 ivProductFavIcon.hide()
@@ -26,8 +24,7 @@ class ProductPagingAdapter: PagingDataAdapter<DataProduct, ProductPagingAdapter.
                 tvProductPrice.text = data.harga.toIDRPrice()
                 rbProductRate.rating = data.rate.toFloat()
                 itemView.setOnClickListener {
-                    val action = HomeFragmentDirections.actionHomeFragmentToDetailActivity(data.id)
-                    it.findNavController().navigate(action)
+                    onClick.invoke(data.id)
                 }
             }
         }

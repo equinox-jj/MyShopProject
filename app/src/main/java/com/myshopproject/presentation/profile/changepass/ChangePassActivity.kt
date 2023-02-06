@@ -35,16 +35,24 @@ class ChangePassActivity : AppCompatActivity() {
         binding = ActivityChangePassBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupToolbar()
+
+        initObserver()
+        initDataStore()
+        launchCoroutines()
+    }
+
+    private fun setupToolbar() {
         setSupportActionBar(binding.toolbarChangePass)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
 
+    private fun launchCoroutines() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 setupListener()
             }
         }
-        initObserver()
-        initDataStore()
     }
 
     override fun onSupportNavigateUp(): Boolean {

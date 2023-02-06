@@ -43,4 +43,5 @@
     <string name="shopping_cart">Keranjang Belanja</string>
     <string name="select_all">Pilih Semua</string>
     <string name="total_price">Total Harga</string>
+    <string name="out_of_stock">Stock Habis</string>
 </resources>
