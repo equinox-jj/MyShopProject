@@ -87,7 +87,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 svHome.setQuery(null, false)
                 svHome.clearFocus()
                 refreshHome.isRefreshing = false
-                initObserver()
+                adapter?.retry()
             }
         }
     }

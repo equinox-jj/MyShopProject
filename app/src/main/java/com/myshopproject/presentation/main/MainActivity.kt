@@ -46,10 +46,27 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.homeFragment -> showBottomNav()
-                R.id.favoriteFragment -> showBottomNav()
-                R.id.profileFragment -> showBottomNav()
-                else -> hideBottomNav()
+                R.id.homeFragment -> {
+                    showBottomNav()
+                    binding.ivToolbarMainLogo.show()
+                    binding.icCart.show()
+//                    supportActionBar?.show()
+                }
+                R.id.favoriteFragment -> {
+                    showBottomNav()
+                    binding.ivToolbarMainLogo.show()
+                    binding.icCart.show()
+//                    supportActionBar?.show()
+                }
+                R.id.profileFragment -> {
+                    showBottomNav()
+                    binding.ivToolbarMainLogo.hide()
+                    binding.icCart.hide()
+//                    supportActionBar?.hide()
+                }
+                else -> {
+                    hideBottomNav()
+                }
             }
         }
 

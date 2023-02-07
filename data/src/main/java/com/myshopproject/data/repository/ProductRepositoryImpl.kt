@@ -6,6 +6,7 @@ import androidx.paging.PagingData
 import com.myshopproject.data.mapper.toDomain
 import com.myshopproject.data.source.local.dao.ProductCartDao
 import com.myshopproject.data.source.remote.RemotePagingSource
+import com.myshopproject.data.source.remote.RemotePagingSource.Companion.TOTAL_ITEM
 import com.myshopproject.data.source.remote.network.ApiProduct
 import com.myshopproject.domain.entities.*
 import com.myshopproject.domain.repository.ProductRepository
@@ -25,9 +26,9 @@ class ProductRepositoryImpl @Inject constructor(
         return Pager(
             config = PagingConfig(
                 enablePlaceholders = false,
-                pageSize = 5,
+                pageSize = TOTAL_ITEM,
                 prefetchDistance = 1,
-                initialLoadSize = 5
+                initialLoadSize = TOTAL_ITEM
             ),
             pagingSourceFactory = { RemotePagingSource(query, apiProduct) }
         ).flow

@@ -7,16 +7,25 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.myshopproject.databinding.ItemProductListBinding
 import com.myshopproject.domain.entities.DataProduct
-import com.myshopproject.utils.DiffUtilRecycler
-import com.myshopproject.utils.show
-import com.myshopproject.utils.toIDRPrice
+import com.myshopproject.utils.*
 
-class ProductFavoriteAdapter(private val onClick: (Int) -> Unit) : RecyclerView.Adapter<ProductFavoriteAdapter.ProductFavoriteVH>() {
+class ProductFavoriteAdapter(private val type: ItemType, private val onClick: (Int) -> Unit) : RecyclerView.Adapter<ProductFavoriteAdapter.ProductFavoriteVH>() {
 
     private var listProduct = listOf<DataProduct>()
 
     inner class ProductFavoriteVH(private val binding: ItemProductListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: DataProduct) {
+            when(type) {
+                ItemType.IS_FAVORITE_PRODUCT -> {
+                    bindProductFavorite(data)
+                }
+                ItemType.IS_DETAIL_PRODUCT -> {
+                    bindProductDetail(data)
+                }
+            }
+        }
+
+        private fun bindProductFavorite(data: DataProduct) {
             binding.apply {
                 ivProductFavIcon.show()
                 ivProductImage.load(data.image)
@@ -29,6 +38,18 @@ class ProductFavoriteAdapter(private val onClick: (Int) -> Unit) : RecyclerView.
                 itemView.setOnClickListener {
                     onClick.invoke(data.id)
                 }
+            }
+        }
+
+        private fun bindProductDetail(data: DataProduct) {
+            binding.apply {
+                ivProductFavIcon.hide()
+                ivProductImage.load(data.image)
+                tvProductDate.text = data.date
+                tvProductName.isSelected = true
+                tvProductName.text = data.nameProduct
+                tvProductPrice.text = data.harga.toIDRPrice()
+                rbProductRate.rating = data.rate.toFloat()
             }
         }
     }

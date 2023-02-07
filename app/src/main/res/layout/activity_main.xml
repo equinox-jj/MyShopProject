@@ -20,6 +20,7 @@
             android:layout_height="match_parent">
 
             <ImageView
+                android:id="@+id/ivToolbarMainLogo"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/splash_logo"

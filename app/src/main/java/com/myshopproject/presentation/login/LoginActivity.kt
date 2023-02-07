@@ -2,10 +2,12 @@ package com.myshopproject.presentation.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.myshopproject.data.source.remote.dto.ErrorResponseDTO
@@ -84,11 +86,19 @@ class LoginActivity : AppCompatActivity() {
                         email = etEmailLogin.text.toString(),
                         password = etPasswordLogin.text.toString()
                     )
+                    getTokenFirebase()
                 }
             }
             btnToSignUp.setOnClickListener {
                 startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
             }
+        }
+    }
+
+    private fun getTokenFirebase() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            val token = task.result
+            Log.d("Token Firebase", token)
         }
     }
 

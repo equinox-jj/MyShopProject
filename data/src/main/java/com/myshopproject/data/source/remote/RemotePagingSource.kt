@@ -19,13 +19,13 @@ class RemotePagingSource @Inject constructor(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, DataProduct> {
         return try {
-            val productOffset = params.key ?: 0
+            val productOffset = params.key ?: INITIAL_INDEX
 
             val response = apiProduct.getListProductPaging(query, productOffset)
             val productResult = response.success.data.map { it.toDomain() }
 
-            val prevKey = if (productOffset == 0) null else productOffset -1
-            val nextKey = if (productResult.isEmpty()) null else productOffset + 5
+            val prevKey = if (productOffset == INITIAL_INDEX) null else productOffset - 1
+            val nextKey = if (productResult.isEmpty()) null else productOffset + TOTAL_ITEM
 
             LoadResult.Page(
                 data = productResult,
@@ -37,5 +37,10 @@ class RemotePagingSource @Inject constructor(
         } catch (exception: HttpException) {
             LoadResult.Error(exception)
         }
+    }
+
+    companion object {
+        const val INITIAL_INDEX = 0
+        const val TOTAL_ITEM = 5
     }
 }

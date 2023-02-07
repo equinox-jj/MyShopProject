@@ -67,10 +67,12 @@ class TrolleyActivity : AppCompatActivity() {
 
                     if (result.isNotEmpty()) {
                         binding.rvTrolley.show()
+                        binding.bottomAppBarTrolley.show()
                         trolleyAdapter?.submitData(result)
                     } else {
-                        binding.cbTrolley.isChecked = false
                         binding.rvTrolley.hide()
+                        binding.bottomAppBarTrolley.hide()
+                        binding.cbTrolley.isChecked = false
                     }
                 }
             }
@@ -78,6 +80,15 @@ class TrolleyActivity : AppCompatActivity() {
     }
 
     private fun setupListener() {
+        binding.cbTrolley.setOnCheckedChangeListener { _, isChecked ->
+            if (!isChecked) {
+                binding.btnBuyTrlly.isClickable = false
+            } else {
+                binding.btnBuyTrlly.setOnClickListener {
+                    initData()
+                }
+            }
+        }
         binding.cbTrolley.setOnClickListener {
             if (binding.cbTrolley.isChecked) {
                 localViewModel.updateProductIsCheckedAll(true)
@@ -86,16 +97,20 @@ class TrolleyActivity : AppCompatActivity() {
             }
         }
         binding.btnBuyTrlly.setOnClickListener {
-            val dataStockItems = arrayListOf<UpdateStockItem>()
-            val listOfProductId = arrayListOf<String>()
-            lifecycleScope.launch {
-                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    localViewModel.getAllCheckedProduct().collectLatest { result ->
-                        for (i in result.indices) {
-                            dataStockItems.add(UpdateStockItem(result[i].id.toString(), result[i].quantity!!))
-                            listOfProductId.add(result[i].id.toString())
-                            buyProduct(dataStockItems, listOfProductId)
-                        }
+            initData()
+        }
+    }
+
+    private fun initData() {
+        val dataStockItems = arrayListOf<UpdateStockItem>()
+        val listOfProductId = arrayListOf<String>()
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                localViewModel.getAllCheckedProduct().collectLatest { result ->
+                    for (i in result.indices) {
+                        dataStockItems.add(UpdateStockItem(result[i].id.toString(), result[i].quantity!!))
+                        listOfProductId.add(result[i].id.toString())
+                        buyProduct(dataStockItems, listOfProductId)
                     }
                 }
             }

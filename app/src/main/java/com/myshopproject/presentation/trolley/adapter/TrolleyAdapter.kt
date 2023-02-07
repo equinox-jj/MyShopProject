@@ -19,7 +19,6 @@ class TrolleyAdapter(
 ) : RecyclerView.Adapter<TrolleyAdapter.TrolleyVH>() {
 
     private var data = ArrayList<CartEntity>()
-    private var isCheckedAll: Boolean = false
 
     inner class TrolleyVH(private val binding: ItemProductCartBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -70,11 +69,6 @@ class TrolleyAdapter(
     }
 
     override fun getItemCount(): Int = data.size
-
-    fun selectAll(isChecked: Boolean) {
-        isCheckedAll = isChecked
-        notifyDataSetChanged()
-    }
 
     fun submitData(newListData: List<CartEntity>?) {
         if (newListData == null) return

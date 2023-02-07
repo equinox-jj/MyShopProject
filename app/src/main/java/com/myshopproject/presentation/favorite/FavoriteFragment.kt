@@ -16,10 +16,7 @@ import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.detail.DetailActivity
 import com.myshopproject.presentation.favorite.adapter.ProductFavoriteAdapter
 import com.myshopproject.presentation.viewmodel.DataStoreViewModel
-import com.myshopproject.utils.Constants
-import com.myshopproject.utils.SortedBy
-import com.myshopproject.utils.hide
-import com.myshopproject.utils.show
+import com.myshopproject.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -56,6 +53,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
     private fun initRecyclerView() {
         binding.apply {
             adapter = ProductFavoriteAdapter(
+                type = ItemType.IS_FAVORITE_PRODUCT,
                 onClick = {
                     val intent = Intent(requireContext(), DetailActivity::class.java)
                     intent.putExtra(Constants.PRODUCT_ID_INTENT, it)

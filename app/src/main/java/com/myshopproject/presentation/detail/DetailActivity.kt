@@ -28,10 +28,7 @@ import com.myshopproject.presentation.detail.bottomsheet.DetailBottomSheet
 import com.myshopproject.presentation.favorite.adapter.ProductFavoriteAdapter
 import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.presentation.viewmodel.LocalViewModel
-import com.myshopproject.utils.Constants
-import com.myshopproject.utils.hide
-import com.myshopproject.utils.show
-import com.myshopproject.utils.toIDRPrice
+import com.myshopproject.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -70,7 +67,10 @@ class DetailActivity : AppCompatActivity() {
 
     private fun initRecyclerView() {
         binding.apply {
-            adapter = ProductFavoriteAdapter(onClick = {})
+            adapter = ProductFavoriteAdapter(
+                type = ItemType.IS_DETAIL_PRODUCT,
+                onClick = {}
+            )
             contentProductOther.rvProductOther.adapter = adapter
             contentProductOther.rvProductOther.setHasFixedSize(true)
 
@@ -174,14 +174,14 @@ class DetailActivity : AppCompatActivity() {
             when (response) {
                 is Resource.Loading -> {
                     binding.shimmerDetail.root.show()
-                    binding.nestedScrollDtl.hide()
+                    binding.stickyScrollDetail.hide()
                     binding.btnDtlBuy.hide()
                     binding.btnDtlTrolley.hide()
                     binding.toolbarDetail.title
                 }
                 is Resource.Success -> {
                     binding.shimmerDetail.root.hide()
-                    binding.nestedScrollDtl.show()
+                    binding.stickyScrollDetail.show()
                     binding.btnDtlBuy.show()
                     binding.btnDtlTrolley.show()
                     response.data?.success?.data?.let { dataDetailProduct = it }
@@ -190,7 +190,7 @@ class DetailActivity : AppCompatActivity() {
                 }
                 is Resource.Error -> {
                     binding.shimmerDetail.root.hide()
-                    binding.nestedScrollDtl.hide()
+                    binding.stickyScrollDetail.hide()
                     binding.btnDtlBuy.hide()
                     binding.btnDtlTrolley.hide()
                 }

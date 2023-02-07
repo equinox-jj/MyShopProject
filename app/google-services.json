@@ -1,0 +1,171 @@
+{
+  "project_info": {
+    "project_number": "1037486014292",
+    "project_id": "trainingphincon",
+    "storage_bucket": "trainingphincon.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1037486014292:android:b86c8e63ce452f3f3dd2c1",
+        "android_client_info": {
+          "package_name": "com.bagaspardanailham.myecommerceapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1037486014292-ugjuav872pt9tp2a70nl0k0bjce3pio9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5F91jl0oBRMHAVUeCoPwXlleCsgv-rAg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1037486014292-ugjuav872pt9tp2a70nl0k0bjce3pio9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1037486014292:android:a77a62f3b5d5b3683dd2c1",
+        "android_client_info": {
+          "package_name": "com.bimabagaskhoro.taskappphincon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1037486014292-gkq0pnjqu5b9dn4dc7etrcvadmj4fg4l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bimabagaskhoro.taskappphincon",
+            "certificate_hash": "cf5a36c75eae119623ba98d4842ddce84f44351c"
+          }
+        },
+        {
+          "client_id": "1037486014292-ugjuav872pt9tp2a70nl0k0bjce3pio9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5F91jl0oBRMHAVUeCoPwXlleCsgv-rAg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1037486014292-ugjuav872pt9tp2a70nl0k0bjce3pio9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1037486014292:android:88bdb549d8c7853d3dd2c1",
+        "android_client_info": {
+          "package_name": "com.example.ecommerce_rifqi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1037486014292-ugjuav872pt9tp2a70nl0k0bjce3pio9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5F91jl0oBRMHAVUeCoPwXlleCsgv-rAg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1037486014292-ugjuav872pt9tp2a70nl0k0bjce3pio9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1037486014292:android:50c8d0fe6b154a9a3dd2c1",
+        "android_client_info": {
+          "package_name": "com.myshopproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1037486014292-ugjuav872pt9tp2a70nl0k0bjce3pio9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5F91jl0oBRMHAVUeCoPwXlleCsgv-rAg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1037486014292-ugjuav872pt9tp2a70nl0k0bjce3pio9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1037486014292:android:691cf79c07b3c3383dd2c1",
+        "android_client_info": {
+          "package_name": "com.phincon.belajarandroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1037486014292-lldb61f4fondhe5jnhk3f74hqoj6hqim.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.phincon.belajarandroid",
+            "certificate_hash": "f39fa94839a2939b6d3fb164c8e7811a1fed05c9"
+          }
+        },
+        {
+          "client_id": "1037486014292-ugjuav872pt9tp2a70nl0k0bjce3pio9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5F91jl0oBRMHAVUeCoPwXlleCsgv-rAg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1037486014292-ugjuav872pt9tp2a70nl0k0bjce3pio9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
