@@ -8,6 +8,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import coil.load
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
@@ -18,9 +21,12 @@ import com.myshopproject.databinding.FragmentBottomSheetDetailBinding
 import com.myshopproject.domain.entities.DetailProductData
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.buysuccess.BuySuccessActivity
+import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.utils.Constants
 import com.myshopproject.utils.toIDRPrice
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 @AndroidEntryPoint
@@ -30,6 +36,9 @@ class DetailBottomSheet(private val data: DetailProductData) : BottomSheetDialog
     private val binding get() = _binding!!
 
     private val viewModel by viewModels<DetailBottomSheetViewModel>()
+    private val prefViewModel by viewModels<DataStoreViewModel>()
+
+    private lateinit var userId: String
     private var quantity: Int = 0
 
     override fun onCreateView(
@@ -42,7 +51,16 @@ class DetailBottomSheet(private val data: DetailProductData) : BottomSheetDialog
         initObserver()
         initView()
         setupListener()
+        initDataStore()
         return binding.root
+    }
+
+    private fun initDataStore() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                userId = prefViewModel.getUserId.first().toString()
+            }
+        }
     }
 
     private fun initView() {
@@ -74,13 +92,19 @@ class DetailBottomSheet(private val data: DetailProductData) : BottomSheetDialog
                 }
             }
         }
+
         viewModel.setPrice(data.harga.toInt())
+
         viewModel.price.observe(viewLifecycleOwner) {
             binding.tvProductPriceBottSht.text = it.toString().toIDRPrice()
         }
 
         binding.btnBuyNowBottSheet.setOnClickListener {
-            updateStock(data.id.toString(), quantity)
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    updateStock(userId, data.id.toString(), quantity)
+                }
+            }
         }
     }
 
@@ -99,8 +123,8 @@ class DetailBottomSheet(private val data: DetailProductData) : BottomSheetDialog
         }
     }
 
-    private fun updateStock(idProduct: String, stock: Int) {
-        viewModel.updateStock(idProduct, stock)
+    private fun updateStock(userId: String, idProduct: String, stock: Int) {
+        viewModel.updateStock(userId, idProduct, stock)
         viewModel.updateStockState.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is Resource.Loading -> {}

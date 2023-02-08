@@ -12,6 +12,7 @@ import com.myshopproject.domain.entities.UpdateStockItem
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.buysuccess.BuySuccessActivity
 import com.myshopproject.presentation.trolley.adapter.TrolleyAdapter
+import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.presentation.viewmodel.LocalViewModel
 import com.myshopproject.utils.Constants.LIST_PRODUCT_ID
 import com.myshopproject.utils.hide
@@ -19,6 +20,7 @@ import com.myshopproject.utils.show
 import com.myshopproject.utils.toIDRPrice
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -27,8 +29,12 @@ class TrolleyActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTrolleyBinding
 
     private var trolleyAdapter: TrolleyAdapter? = null
+
     private val viewModel by viewModels<TrolleyViewModel>()
     private val localViewModel by viewModels<LocalViewModel>()
+    private val prefViewModel by viewModels<DataStoreViewModel>()
+
+    private lateinit var userId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +46,15 @@ class TrolleyActivity : AppCompatActivity() {
         initObserver()
         initRecyclerView()
         setupListener()
+        initDataStore()
+    }
+
+    private fun initDataStore() {
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                userId = prefViewModel.getUserId.first().toString()
+            }
+        }
     }
 
     private fun setupToolbar() {
@@ -85,10 +100,11 @@ class TrolleyActivity : AppCompatActivity() {
                 binding.btnBuyTrlly.isClickable = false
             } else {
                 binding.btnBuyTrlly.setOnClickListener {
-                    initData()
+                    postProductTrolley()
                 }
             }
         }
+
         binding.cbTrolley.setOnClickListener {
             if (binding.cbTrolley.isChecked) {
                 localViewModel.updateProductIsCheckedAll(true)
@@ -96,29 +112,10 @@ class TrolleyActivity : AppCompatActivity() {
                 localViewModel.updateProductIsCheckedAll(false)
             }
         }
-        binding.btnBuyTrlly.setOnClickListener {
-            initData()
-        }
     }
 
-    private fun initData() {
-        val dataStockItems = arrayListOf<UpdateStockItem>()
-        val listOfProductId = arrayListOf<String>()
-        lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                localViewModel.getAllCheckedProduct().collectLatest { result ->
-                    for (i in result.indices) {
-                        dataStockItems.add(UpdateStockItem(result[i].id.toString(), result[i].quantity!!))
-                        listOfProductId.add(result[i].id.toString())
-                        buyProduct(dataStockItems, listOfProductId)
-                    }
-                }
-            }
-        }
-    }
-
-    private fun buyProduct(body: List<UpdateStockItem>, productId: ArrayList<String>) {
-        viewModel.updateStock(body)
+    private fun buyProduct(userId: String, body: List<UpdateStockItem>, productId: ArrayList<String>) {
+        viewModel.updateStock(userId, body)
         viewModel.updateStockState.observe(this@TrolleyActivity) { response ->
             when (response) {
                 is Resource.Loading -> {}
@@ -157,6 +154,22 @@ class TrolleyActivity : AppCompatActivity() {
             )
             rvTrolley.adapter = trolleyAdapter
             rvTrolley.setHasFixedSize(true)
+        }
+    }
+
+    private fun postProductTrolley() {
+        val dataStockItems = arrayListOf<UpdateStockItem>()
+        val listOfProductId = arrayListOf<String>()
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                localViewModel.getAllCheckedProduct().collectLatest { result ->
+                    for (i in result.indices) {
+                        dataStockItems.add(UpdateStockItem(result[i].id.toString(), result[i].quantity!!))
+                        listOfProductId.add(result[i].id.toString())
+                        buyProduct(userId, dataStockItems, listOfProductId)
+                    }
+                }
+            }
         }
     }
 

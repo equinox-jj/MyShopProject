@@ -6,6 +6,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.myshopproject.R
 import com.myshopproject.databinding.ItemProductListBinding
 import com.myshopproject.domain.entities.DataProduct
 import com.myshopproject.utils.hide
@@ -17,7 +18,10 @@ class ProductPagingAdapter(private val onClick: (Int) -> Unit): PagingDataAdapte
         fun bind(data: DataProduct) {
             binding.apply {
                 ivProductFavIcon.hide()
-                ivProductImage.load(data.image)
+                ivProductImage.load(data.image) {
+                    crossfade(800)
+                    placeholder(R.drawable.ic_image_placeholder)
+                }
                 tvProductDate.text = data.date
                 tvProductName.isSelected = true
                 tvProductName.text = data.nameProduct

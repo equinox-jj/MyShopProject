@@ -18,7 +18,7 @@ class TrolleyAdapter(
     private val onCheckedItem: (CartEntity) -> Unit,
 ) : RecyclerView.Adapter<TrolleyAdapter.TrolleyVH>() {
 
-    private var data = ArrayList<CartEntity>()
+    private var data = arrayListOf<CartEntity>()
 
     inner class TrolleyVH(private val binding: ItemProductCartBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -29,9 +29,11 @@ class TrolleyAdapter(
                 tvTrolleyProductPrice.text = cartEntity.price?.toIDRPrice()
                 tvTrolleyQuantity.text = cartEntity.quantity.toString()
                 cbTrolleyList.isChecked = cartEntity.isChecked
+
                 btnTrolleyDelete.setOnClickListener {
                     onDeleteItem.invoke(cartEntity)
                 }
+
                 btnTrolleyIncrement.setOnClickListener {
                     val stock = cartEntity.stock
                     val quantity = (cartEntity.quantity)
@@ -43,6 +45,7 @@ class TrolleyAdapter(
                         binding.btnTrolleyIncrement.background = ContextCompat.getDrawable(itemView.context, R.drawable.bg_button_round_grey)
                     }
                 }
+
                 btnTrolleyDecrement.setOnClickListener {
                     val quantity = (cartEntity.quantity)
                     if (quantity != 1) {
@@ -52,6 +55,7 @@ class TrolleyAdapter(
                         binding.btnTrolleyDecrement.background = ContextCompat.getDrawable(itemView.context, R.drawable.bg_button_round_grey)
                     }
                 }
+
                 cbTrolleyList.setOnClickListener {
                     onCheckedItem.invoke(cartEntity)
                 }

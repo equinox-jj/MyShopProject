@@ -14,7 +14,7 @@ class RemoteInteractor @Inject constructor(
     private val authRepository: AuthRepository,
     private val productRepository: ProductRepository
 ): RemoteUseCase {
-    override fun loginAccount(email: String, password: String): Flow<Resource<LoginResult>> = authRepository.loginAccount(email, password)
+    override fun loginAccount(email: String, password: String, firebaseToken: String): Flow<Resource<LoginResult>> = authRepository.loginAccount(email, password, firebaseToken)
     override fun registerAccount(image: MultipartBody.Part, email: RequestBody, password: RequestBody, name: RequestBody, phone: RequestBody, gender: Int): Flow<Resource<SuccessResponseStatus>> = authRepository.registerAccount(image, email, password, name, phone, gender)
     override fun changePassword(id: Int, password: String, newPassword: String, confirmPassword: String): Flow<Resource<SuccessResponseStatus>> = authRepository.changePassword(id, password, newPassword, confirmPassword)
     override fun changeImage(id: Int, image: MultipartBody.Part): Flow<Resource<ChangeImageResponse>> = authRepository.changeImage(id, image)

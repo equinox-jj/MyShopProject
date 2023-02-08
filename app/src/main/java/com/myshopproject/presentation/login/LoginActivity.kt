@@ -7,6 +7,9 @@ import android.util.Patterns
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import com.google.gson.JsonObject
@@ -19,6 +22,8 @@ import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.utils.hide
 import com.myshopproject.utils.show
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import org.json.JSONObject
 
 @AndroidEntryPoint
@@ -82,23 +87,26 @@ class LoginActivity : AppCompatActivity() {
         binding.apply {
             btnLogin.setOnClickListener {
                 if (validation()) {
-                    viewModel.loginAccount(
-                        email = etEmailLogin.text.toString(),
-                        password = etPasswordLogin.text.toString()
-                    )
-                    getTokenFirebase()
+                    lifecycleScope.launch {
+                        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                            launch {
+                                viewModel.loginAccount(
+                                    email = etEmailLogin.text.toString(),
+                                    password = etPasswordLogin.text.toString(),
+                                    firebaseToken = FirebaseMessaging.getInstance().token.addOnCompleteListener { it.result }.await()
+                                )
+                            }
+                            launch {
+                                Log.d("Token Firebase", FirebaseMessaging.getInstance().token.addOnCompleteListener { it.result }.await())
+                            }
+                        }
+                    }
                 }
             }
+
             btnToSignUp.setOnClickListener {
                 startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
             }
-        }
-    }
-
-    private fun getTokenFirebase() {
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-            val token = task.result
-            Log.d("Token Firebase", token)
         }
     }
 

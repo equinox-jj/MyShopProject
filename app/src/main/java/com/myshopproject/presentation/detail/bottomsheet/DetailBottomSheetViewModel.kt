@@ -34,8 +34,8 @@ class DetailBottomSheetViewModel @Inject constructor(
         _quantity.value = 1
     }
 
-    fun updateStock(idProduct: String, stock: Int) {
-        remoteUseCase.updateStock(UpdateStockProduct(listOf(UpdateStockItem(idProduct, stock)))).onEach { response ->
+    fun updateStock(userId: String,idProduct: String, stock: Int) {
+        remoteUseCase.updateStock(UpdateStockProduct(userId,listOf(UpdateStockItem(idProduct, stock)))).onEach { response ->
             when (response) {
                 is Resource.Loading -> {
                     _updateStockState.value = Resource.Loading

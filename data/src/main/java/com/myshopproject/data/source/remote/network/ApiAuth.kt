@@ -14,7 +14,7 @@ interface ApiAuth {
     suspend fun loginAccount(
         @Field("email") email: String,
         @Field("password") password: String,
-        // @token_fcm tambahin
+        @Field("token_fcm") firebaseToken: String
     ): LoginResponseDTO
 
     @Multipart

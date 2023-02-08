@@ -41,7 +41,6 @@ interface ApiProduct {
 
     @POST("update-stock")
     suspend fun updateStock(
-        // Tambahin Id User Query di dalam Body UpdateStockProduct
         @Body updateStock: UpdateStockProduct
     ): SuccessResponseDTO
 

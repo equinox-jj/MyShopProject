@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/pbLoadAdapter"
         android:layout_centerHorizontal="true"
-        android:text="Error load data"
+        android:text="@string/check_your_connectivity"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold" />

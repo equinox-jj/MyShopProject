@@ -14,6 +14,7 @@ import com.myshopproject.R
 import com.myshopproject.presentation.login.LoginActivity
 
 class MyFirebaseNotification : FirebaseMessagingService() {
+
     override fun onNewToken(token: String) {
         super.onNewToken(token)
     }
@@ -57,18 +58,4 @@ class MyFirebaseNotification : FirebaseMessagingService() {
         private const val NOTIFICATION_CHANNEL_ID = "Firebase Channel"
         private const val NOTIFICATION_CHANNEL_NAME = "Firebase Notification"
     }
-
-//    override fun onMessageReceived(message: RemoteMessage) {
-//        super.onMessageReceived(message)
-//        val notificationBuilder = NotificationCompat.Builder(this@MyFirebaseNotification, "")
-//            .setContentTitle(message.notification?.title)
-//            .setContentText(message.notification?.body)
-//            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-//            .setStyle(NotificationCompat.BigTextStyle())
-//            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-//            .setAutoCancel(true)
-
-//        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//        notificationManager.notify(0, notificationBuilder.build())
-//    }
 }

@@ -7,9 +7,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
 import com.myshopproject.R
 import com.myshopproject.databinding.FragmentHomeBinding
@@ -19,7 +17,6 @@ import com.myshopproject.presentation.home.adapter.ProductPagingAdapter
 import com.myshopproject.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -59,6 +56,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             adapter!!.addLoadStateListener { loadState ->
                 shimmerHome.root.isVisible = loadState.source.refresh is LoadState.Loading
                 rvHome.isVisible = loadState.source.refresh is LoadState.NotLoading
+
                 /** SEARCH EMPTY STATE */
                 if (loadState.source.refresh is LoadState.NotLoading && adapter!!.itemCount < 1) {
                     rvHome.isVisible = false
@@ -87,16 +85,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 svHome.setQuery(null, false)
                 svHome.clearFocus()
                 refreshHome.isRefreshing = false
-                adapter?.retry()
+                adapter?.refresh()
             }
         }
     }
 
     private fun initObserver() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.productList.collectLatest { adapter?.submitData(viewLifecycleOwner.lifecycle,it) }
-            }
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.productList.collectLatest { adapter?.submitData(viewLifecycleOwner.lifecycle,it) }
         }
     }
 

@@ -46,4 +46,5 @@
     <string name="give_your_rating">Give Your Rating</string>
     <string name="submit">Submit</string>
     <string name="your_order_is_successful">Your Order is Successful</string>
+    <string name="check_your_connectivity">Check your connectivity.</string>
 </resources>

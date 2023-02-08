@@ -20,8 +20,8 @@ class LoginViewModel @Inject constructor(
     private val _state = MutableLiveData<Resource<LoginResult>>()
     val state: LiveData<Resource<LoginResult>> = _state
 
-    fun loginAccount(email: String, password: String) {
-        remoteUseCase.loginAccount(email, password).onEach { response ->
+    fun loginAccount(email: String, password: String, firebaseToken: String) {
+        remoteUseCase.loginAccount(email, password, firebaseToken).onEach { response ->
             when(response) {
                 is Resource.Loading -> {
                     _state.value = Resource.Loading

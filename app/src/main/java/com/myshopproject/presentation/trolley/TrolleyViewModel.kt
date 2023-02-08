@@ -22,8 +22,8 @@ class TrolleyViewModel @Inject constructor(
     private val _updateStockState = MutableLiveData<Resource<SuccessResponseStatus>>()
     val updateStockState: LiveData<Resource<SuccessResponseStatus>> = _updateStockState
 
-    fun updateStock(data: List<UpdateStockItem>) {
-        remoteUseCase.updateStock(UpdateStockProduct(data)).onEach { response ->
+    fun updateStock(userId: String, data: List<UpdateStockItem>) {
+        remoteUseCase.updateStock(UpdateStockProduct(userId, data)).onEach { response ->
             when (response) {
                 is Resource.Loading -> {
                     _updateStockState.value = Resource.Loading

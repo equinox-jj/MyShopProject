@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.myshopproject.R
 import com.myshopproject.databinding.ItemImageSliderBinding
 import com.myshopproject.domain.entities.DetailProductImage
 
@@ -15,7 +16,10 @@ class ImageSliderAdapter(
     inner class ImageVH(private val binding: ItemImageSliderBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(data: DetailProductImage) {
             binding.apply {
-                ivProductDtl.load(data.imageProduct)
+                ivProductDtl.load(data.imageProduct) {
+                    crossfade(800)
+                    placeholder(R.drawable.ic_image_placeholder)
+                }
                 tvCarouselProductDtl.text = data.titleProduct
 
                 ivProductDtl.setOnClickListener {
