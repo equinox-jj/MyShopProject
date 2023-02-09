@@ -1,7 +1,6 @@
 package com.myshopproject.data.source.remote.network
 
 import com.myshopproject.data.source.remote.dto.*
-import com.myshopproject.domain.entities.UpdateRate
 import com.myshopproject.domain.entities.UpdateStockProduct
 import retrofit2.http.*
 
@@ -44,10 +43,11 @@ interface ApiProduct {
         @Body updateStock: UpdateStockProduct
     ): SuccessResponseDTO
 
+    @FormUrlEncoded
     @PUT("update_rate/{id}")
     suspend fun updateRate(
         @Path("id") id: Int,
-        @Body updateRate: UpdateRate
+        @Field("rate") rate: String
     ): SuccessResponseDTO
 
     @GET("get_list_product_other")

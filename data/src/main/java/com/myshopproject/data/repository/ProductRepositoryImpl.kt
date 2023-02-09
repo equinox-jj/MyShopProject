@@ -4,6 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.myshopproject.data.mapper.toDomain
+import com.myshopproject.data.mapper.toEntity
 import com.myshopproject.data.source.local.dao.ProductCartDao
 import com.myshopproject.data.source.remote.RemotePagingSource
 import com.myshopproject.data.source.remote.RemotePagingSource.Companion.TOTAL_ITEM
@@ -28,7 +29,7 @@ class ProductRepositoryImpl @Inject constructor(
             config = PagingConfig(
                 enablePlaceholders = false,
                 pageSize = TOTAL_ITEM,
-                prefetchDistance = 1,
+//                prefetchDistance = 1,
                 initialLoadSize = TOTAL_ITEM
             ),
             pagingSourceFactory = { RemotePagingSource(query, apiProduct) }
@@ -123,7 +124,7 @@ class ProductRepositoryImpl @Inject constructor(
 
     override fun updateRate(
         id: Int,
-        updateRate: UpdateRate
+        updateRate: String
     ): Flow<Resource<SuccessResponseStatus>> = flow {
         emit(Resource.Loading)
         try {
@@ -183,7 +184,7 @@ class ProductRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addProductToTrolley(trolley: CartDataDomain) {
-        cartDao.addProductToTrolley(trolley.toDomain())
+        cartDao.addProductToTrolley(trolley.toEntity())
     }
 
     override suspend fun updateProductData(quantity: Int?, itemTotalPrice: Int?, id: Int?) {

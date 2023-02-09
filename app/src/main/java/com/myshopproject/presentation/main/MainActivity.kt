@@ -19,6 +19,7 @@ import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.badge.BadgeUtils
 import com.myshopproject.R
 import com.myshopproject.databinding.ActivityMainBinding
+import com.myshopproject.presentation.notification.NotificationActivity
 import com.myshopproject.presentation.trolley.TrolleyActivity
 import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.presentation.viewmodel.LocalViewModel
@@ -73,20 +74,23 @@ class MainActivity : AppCompatActivity() {
         addMenuProvider(object : MenuProvider {
             override fun onPrepareMenu(menu: Menu) {
                 super.onPrepareMenu(menu)
-                val badge = BadgeDrawable.create(this@MainActivity)
+                val badgeTrolley = BadgeDrawable.create(this@MainActivity)
+                val badgeNotification = BadgeDrawable.create(this@MainActivity)
                 lifecycleScope.launch {
                     lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                         localViewModel.getAllProduct().collect { result ->
                             if (result.isNotEmpty()) {
-                                badge.isVisible = true
-                                badge.number = result.size
+                                badgeTrolley.isVisible = true
+                                badgeTrolley.number = result.size
+                                BadgeUtils.attachBadgeDrawable(badgeTrolley, binding.toolbarMain, R.id.menu_cart)
                             } else {
-                                badge.isVisible = false
+                                badgeTrolley.isVisible = false
+                                BadgeUtils.detachBadgeDrawable(badgeTrolley, binding.toolbarMain, R.id.menu_cart)
                             }
                         }
                     }
                 }
-                BadgeUtils.attachBadgeDrawable(badge, binding.toolbarMain, R.id.menu_cart)
+                BadgeUtils.attachBadgeDrawable(badgeNotification, binding.toolbarMain, R.id.menu_notification)
             }
 
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -97,6 +101,9 @@ class MainActivity : AppCompatActivity() {
                 when (menuItem.itemId) {
                     R.id.menu_cart -> {
                         startActivity(Intent(this@MainActivity, TrolleyActivity::class.java))
+                    }
+                    R.id.menu_notification -> {
+                        startActivity(Intent(this@MainActivity, NotificationActivity::class.java))
                     }
                 }
                 return true

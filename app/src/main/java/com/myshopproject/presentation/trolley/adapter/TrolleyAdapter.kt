@@ -49,8 +49,7 @@ class TrolleyAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrolleyVH {
-        val binding =
-            ItemProductCartBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemProductCartBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return TrolleyVH(binding)
     }
 

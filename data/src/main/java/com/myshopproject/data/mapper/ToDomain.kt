@@ -120,16 +120,6 @@ fun DetailProductImageDTO.toDomain() = DetailProductImage(
     imageProduct = imageProduct, titleProduct = titleProduct
 )
 
-fun CartDataDomain.toDomain(): CartEntity = CartEntity(
-    id = id,
-    image = image,
-    nameProduct = nameProduct,
-    quantity = quantity,
-    price = price,
-    itemTotalPrice = itemTotalPrice,
-    stock = stock
-)
-
 fun List<CartEntity>.toDomain(): List<CartDataDomain> = this.map {
     CartDataDomain(
         id = it.id,

@@ -2,7 +2,6 @@ package com.myshopproject.presentation.trolley
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
@@ -91,7 +90,9 @@ class TrolleyActivity : AppCompatActivity() {
                         binding.cbTrolley.show()
                         binding.rvTrolley.show()
                         binding.bottomAppBarTrolley.show()
+                        binding.emptyStateTrolley.root.hide()
                     } else {
+                        binding.emptyStateTrolley.root.show()
                         binding.cbTrolley.hide()
                         binding.rvTrolley.hide()
                         binding.bottomAppBarTrolley.hide()
@@ -134,7 +135,6 @@ class TrolleyActivity : AppCompatActivity() {
                                         val intent = Intent(this@TrolleyActivity, BuySuccessActivity::class.java)
                                         intent.putExtra(LIST_PRODUCT_ID, listOfProductId)
                                         startActivity(intent)
-                                        Log.d("StartActivities", "$intent")
                                         finishAffinity()
                                     }
                                     is Resource.Error -> {}

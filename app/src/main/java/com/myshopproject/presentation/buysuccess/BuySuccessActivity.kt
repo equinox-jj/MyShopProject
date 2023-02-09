@@ -2,14 +2,12 @@ package com.myshopproject.presentation.buysuccess
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.myshopproject.databinding.ActivityBuySuccessBinding
-import com.myshopproject.domain.entities.UpdateRate
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.main.MainActivity
 import com.myshopproject.utils.Constants
@@ -38,10 +36,10 @@ class BuySuccessActivity : AppCompatActivity() {
     }
 
     private fun initObserver() {
-        val rate = binding.rbBuySccss.rating
         binding.btnSubmitBuySccss.setOnClickListener {
+            val rate = binding.rbBuySccss.rating.toString()
             if (productId != 0) {
-                viewModel.updateRate(id = productId, updateRate = UpdateRate(rate = rate.toString()))
+                viewModel.updateRate(id = productId, updateRate = rate)
                 viewModel.state.observe(this@BuySuccessActivity) { response ->
                     when (response) {
                         is Resource.Loading -> {
@@ -50,7 +48,6 @@ class BuySuccessActivity : AppCompatActivity() {
                         is Resource.Success -> {
                             val intent = Intent(this@BuySuccessActivity, MainActivity::class.java)
                             startActivity(intent)
-                            Log.d("StartActivities", "$intent")
                             finishAffinity()
                         }
                         is Resource.Error -> {
@@ -68,14 +65,13 @@ class BuySuccessActivity : AppCompatActivity() {
             } else {
                 listProductId?.let { listProductIds ->
                     for (i in listProductIds.indices) {
-                        viewModel.updateRate(id = listProductIds[i].toInt(), updateRate = UpdateRate(rate = rate.toString()))
+                        viewModel.updateRate(id = listProductIds[i].toInt(), updateRate = rate)
                         viewModel.state.observe(this@BuySuccessActivity) { response ->
                             when (response) {
                                 is Resource.Loading -> {
 
                                 }
                                 is Resource.Success -> {
-                                    Log.d("StartActivities", "$intent")
                                     finishAffinity()
                                 }
                                 is Resource.Error -> {
@@ -91,12 +87,11 @@ class BuySuccessActivity : AppCompatActivity() {
                             }
                         }
                     }
+                    val intent = Intent(this@BuySuccessActivity, MainActivity::class.java)
+                    startActivity(intent)
+                    finishAffinity()
                 }
             }
-            val intent = Intent(this@BuySuccessActivity, MainActivity::class.java)
-            startActivity(intent)
-            Log.d("StartActivities", "$intent")
-            finishAffinity()
         }
     }
 }
