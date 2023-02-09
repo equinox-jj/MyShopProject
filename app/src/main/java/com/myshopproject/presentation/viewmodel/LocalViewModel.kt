@@ -2,7 +2,7 @@ package com.myshopproject.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.myshopproject.domain.entities.CartEntity
+import com.myshopproject.domain.entities.CartDataDomain
 import com.myshopproject.domain.usecase.LocalUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -13,17 +13,17 @@ import javax.inject.Inject
 @HiltViewModel
 class LocalViewModel @Inject constructor(private val localUseCase: LocalUseCase) : ViewModel() {
 
-    fun getAllProduct(): Flow<List<CartEntity>> {
+    fun getAllProduct(): Flow<List<CartDataDomain>> {
         return localUseCase.getAllProduct()
     }
 
-    fun getAllCheckedProduct(): Flow<List<CartEntity>> {
+    fun getAllCheckedProduct(): Flow<List<CartDataDomain>> {
         return localUseCase.getAllCheckedProduct()
     }
 
-    fun insertCart(cartEntity: CartEntity) {
+    fun insertCart(cartDataDomain: CartDataDomain) {
         viewModelScope.launch(Dispatchers.IO) {
-            localUseCase.addProductToTrolley(cartEntity)
+            localUseCase.addProductToTrolley(cartDataDomain)
         }
     }
 

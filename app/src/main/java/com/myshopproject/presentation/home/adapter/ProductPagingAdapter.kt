@@ -20,7 +20,7 @@ class ProductPagingAdapter(private val onClick: (Int) -> Unit): PagingDataAdapte
                 ivProductFavIcon.hide()
                 ivProductImage.load(data.image) {
                     crossfade(800)
-                    placeholder(R.drawable.ic_image_placeholder)
+                    placeholder(R.drawable.ic_image_placeholder_filled)
                 }
                 tvProductDate.text = data.date
                 tvProductName.isSelected = true

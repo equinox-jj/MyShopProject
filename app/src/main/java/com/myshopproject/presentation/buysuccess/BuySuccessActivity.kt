@@ -2,6 +2,7 @@ package com.myshopproject.presentation.buysuccess
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -33,67 +34,69 @@ class BuySuccessActivity : AppCompatActivity() {
         productId = intent.getIntExtra(Constants.PRODUCT_ID, 0)
         listProductId = intent.getStringArrayListExtra(Constants.LIST_PRODUCT_ID)
 
-        setupListener()
-    }
-
-    private fun setupListener() {
-        binding.apply {
-            btnSubmitBuySccss.setOnClickListener {
-                initObserver()
-            }
-        }
+        initObserver()
     }
 
     private fun initObserver() {
         val rate = binding.rbBuySccss.rating
-        if (productId != 0) {
-            viewModel.updateRate(id = productId, updateRate = UpdateRate(rate = rate.toString()))
-            viewModel.state.observe(this@BuySuccessActivity) { response ->
-                when (response) {
-                    is Resource.Loading -> {
-
-                    }
-                    is Resource.Success -> {
-                        startActivity(Intent(this@BuySuccessActivity, MainActivity::class.java))
-                        Toast.makeText(this@BuySuccessActivity, response.data?.success?.message, Toast.LENGTH_SHORT).show()
-                        finishAffinity()
-                    }
-                    is Resource.Error -> {
-                        val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
-                        val gson = Gson()
-                        val jsonObject = gson.fromJson(errors, JsonObject::class.java)
-                        val errorResponse = gson.fromJson(jsonObject, com.myshopproject.data.source.remote.dto.ErrorResponseDTO::class.java)
-
-                        Toast.makeText(this@BuySuccessActivity, "${errorResponse.error.message} ${errorResponse.error.status}", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        } else {
-            for (i in listProductId!!.indices) {
-                viewModel.updateRate(id = listProductId!![i].toInt(), updateRate = UpdateRate(rate = rate.toString()))
-                viewModel.deleteProductByIdFromTrolley(listProductId!![i].toInt())
+        binding.btnSubmitBuySccss.setOnClickListener {
+            if (productId != 0) {
+                viewModel.updateRate(id = productId, updateRate = UpdateRate(rate = rate.toString()))
                 viewModel.state.observe(this@BuySuccessActivity) { response ->
                     when (response) {
                         is Resource.Loading -> {
 
                         }
                         is Resource.Success -> {
-                            startActivity(Intent(this@BuySuccessActivity, MainActivity::class.java))
-                            Toast.makeText(this@BuySuccessActivity, response.data?.success?.message, Toast.LENGTH_SHORT).show()
+                            val intent = Intent(this@BuySuccessActivity, MainActivity::class.java)
+                            startActivity(intent)
+                            Log.d("StartActivities", "$intent")
                             finishAffinity()
                         }
                         is Resource.Error -> {
-                            val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
-                            val gson = Gson()
-                            val jsonObject = gson.fromJson(errors, JsonObject::class.java)
-                            val errorResponse = gson.fromJson(jsonObject, com.myshopproject.data.source.remote.dto.ErrorResponseDTO::class.java)
+                            try {
+                                val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
+                                val gson = Gson()
+                                val jsonObject = gson.fromJson(errors, JsonObject::class.java)
+                                val errorResponse = gson.fromJson(jsonObject, com.myshopproject.data.source.remote.dto.ErrorResponseDTO::class.java)
 
-                            Toast.makeText(this@BuySuccessActivity, "${errorResponse.error.message} ${errorResponse.error.status}", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this@BuySuccessActivity, "${errorResponse.error.message} ${errorResponse.error.status}", Toast.LENGTH_SHORT).show()
+                            } catch (e: Exception) { }
+                        }
+                    }
+                }
+            } else {
+                listProductId?.let { listProductIds ->
+                    for (i in listProductIds.indices) {
+                        viewModel.updateRate(id = listProductIds[i].toInt(), updateRate = UpdateRate(rate = rate.toString()))
+                        viewModel.state.observe(this@BuySuccessActivity) { response ->
+                            when (response) {
+                                is Resource.Loading -> {
+
+                                }
+                                is Resource.Success -> {
+                                    Log.d("StartActivities", "$intent")
+                                    finishAffinity()
+                                }
+                                is Resource.Error -> {
+                                    try {
+                                        val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
+                                        val gson = Gson()
+                                        val jsonObject = gson.fromJson(errors, JsonObject::class.java)
+                                        val errorResponse = gson.fromJson(jsonObject, com.myshopproject.data.source.remote.dto.ErrorResponseDTO::class.java)
+
+                                        Toast.makeText(this@BuySuccessActivity, "${errorResponse.error.message} ${errorResponse.error.status}", Toast.LENGTH_SHORT).show()
+                                    } catch (e: Exception) {}
+                                }
+                            }
                         }
                     }
                 }
             }
+            val intent = Intent(this@BuySuccessActivity, MainActivity::class.java)
+            startActivity(intent)
+            Log.d("StartActivities", "$intent")
+            finishAffinity()
         }
-
     }
 }

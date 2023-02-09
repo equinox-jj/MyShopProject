@@ -20,7 +20,7 @@ import coil.imageLoader
 import coil.request.ImageRequest
 import com.myshopproject.R
 import com.myshopproject.databinding.ActivityDetailBinding
-import com.myshopproject.domain.entities.CartEntity
+import com.myshopproject.domain.entities.CartDataDomain
 import com.myshopproject.domain.entities.DetailProductData
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.detail.adapter.ImageSliderAdapter
@@ -45,6 +45,7 @@ class DetailActivity : AppCompatActivity() {
     private val localViewModel by viewModels<LocalViewModel>()
 
     private lateinit var dataDetailProduct: DetailProductData
+
     private var productId: Int = 0
     private var userId: Int = 0
 
@@ -201,13 +202,25 @@ class DetailActivity : AppCompatActivity() {
         viewModel.otherProductState.observe(this@DetailActivity) { response ->
             when(response) {
                 is Resource.Loading -> {
+                    binding.view1.hide()
+                    binding.toolbarOtherProduct.hide()
                     binding.contentProductOther.rvProductOther.hide()
                 }
                 is Resource.Success -> {
-                    binding.contentProductOther.rvProductOther.show()
-                    response.data?.success?.data?.let { adapter?.submitData(it) }
+                    if (response.data?.success?.data?.isNotEmpty() == true) {
+                        binding.view1.show()
+                        binding.toolbarOtherProduct.show()
+                        binding.contentProductOther.rvProductOther.show()
+                        response.data?.success?.data?.let { adapter?.submitData(it) }
+                    } else {
+                        binding.view1.hide()
+                        binding.toolbarOtherProduct.hide()
+                        binding.contentProductOther.rvProductOther.hide()
+                    }
                 }
                 is Resource.Error -> {
+                    binding.view1.hide()
+                    binding.toolbarOtherProduct.hide()
                     binding.contentProductOther.rvProductOther.hide()
                 }
             }
@@ -217,13 +230,25 @@ class DetailActivity : AppCompatActivity() {
         viewModel.historyProductState.observe(this@DetailActivity) { response ->
             when(response) {
                 is Resource.Loading -> {
-                    binding.contentProductHistory.rvProductHistory?.hide()
+                    binding.view2.hide()
+                    binding.toolbarHistoryProduct.hide()
+                    binding.contentProductHistory.rvProductHistory.hide()
                 }
                 is Resource.Success -> {
-                    binding.contentProductHistory.rvProductHistory.show()
-                    response.data?.success?.data?.let { adapter?.submitData(it) }
+                    if (response.data?.success?.data?.isNotEmpty() == true) {
+                        binding.view2.show()
+                        binding.toolbarHistoryProduct.show()
+                        binding.contentProductHistory.rvProductHistory.show()
+                        response.data?.success?.data?.let { adapter?.submitData(it) }
+                    } else {
+                        binding.view2.hide()
+                        binding.toolbarHistoryProduct.hide()
+                        binding.contentProductHistory.rvProductHistory.hide()
+                    }
                 }
                 is Resource.Error -> {
+                    binding.view2.hide()
+                    binding.toolbarHistoryProduct.hide()
                     binding.contentProductHistory.rvProductHistory.hide()
                 }
             }
@@ -264,7 +289,7 @@ class DetailActivity : AppCompatActivity() {
             btnDtlTrolley.setOnClickListener {
                 if (data.stock > 1) {
                     localViewModel.insertCart(
-                        CartEntity(
+                        CartDataDomain(
                             id = data.id,
                             image = data.image,
                             nameProduct = data.nameProduct,

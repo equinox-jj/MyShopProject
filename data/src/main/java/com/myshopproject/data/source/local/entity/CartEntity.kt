@@ -1,12 +1,12 @@
-package com.myshopproject.domain.entities
+package com.myshopproject.data.source.local.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.myshopproject.domain.utils.Constants.CART_TABLE
+import com.myshopproject.domain.utils.Constants
 
-@Entity(tableName = CART_TABLE)
-data class CartEntity (
+@Entity(tableName = Constants.CART_TABLE)
+data class CartEntity(
     @PrimaryKey(autoGenerate = false)
     val id: Int? = null,
 
@@ -31,4 +31,3 @@ data class CartEntity (
     @ColumnInfo(name = "is_checked")
     val isChecked: Boolean = false,
 )
-

@@ -2,69 +2,55 @@ package com.myshopproject.presentation.trolley.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.myshopproject.R
 import com.myshopproject.databinding.ItemProductCartBinding
-import com.myshopproject.domain.entities.CartEntity
+import com.myshopproject.domain.entities.CartDataDomain
+import com.myshopproject.utils.DiffUtilRecycler
 import com.myshopproject.utils.toIDRPrice
 
 class TrolleyAdapter(
-    private val onDeleteItem: (CartEntity) -> Unit,
-    private val onAddQuantity: (CartEntity) -> Unit,
-    private val onMinQuantity: (CartEntity) -> Unit,
-    private val onCheckedItem: (CartEntity) -> Unit,
+    private val onDeleteItem: (CartDataDomain) -> Unit,
+    private val onAddQuantity: (CartDataDomain) -> Unit,
+    private val onMinQuantity: (CartDataDomain) -> Unit,
+    private val onCheckedItem: (CartDataDomain) -> Unit,
 ) : RecyclerView.Adapter<TrolleyAdapter.TrolleyVH>() {
 
-    private var data = arrayListOf<CartEntity>()
+    private var data = listOf<CartDataDomain>()
 
-    inner class TrolleyVH(private val binding: ItemProductCartBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bind(cartEntity: CartEntity) {
+    inner class TrolleyVH(private val binding: ItemProductCartBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(cartDataDomain: CartDataDomain) {
             binding.apply {
-                ivTrolleyProduct.load(cartEntity.image)
-                tvTrolleyProductName.text = cartEntity.nameProduct
-                tvTrolleyProductPrice.text = cartEntity.price?.toIDRPrice()
-                tvTrolleyQuantity.text = cartEntity.quantity.toString()
-                cbTrolleyList.isChecked = cartEntity.isChecked
+                ivTrolleyProduct.load(cartDataDomain.image)
+                tvTrolleyProductName.text = cartDataDomain.nameProduct
+                tvTrolleyProductPrice.text = cartDataDomain.price?.toIDRPrice()
+                tvTrolleyQuantity.text = cartDataDomain.quantity.toString()
+                cbTrolleyList.isChecked = cartDataDomain.isChecked
 
-                btnTrolleyDelete.setOnClickListener {
-                    onDeleteItem.invoke(cartEntity)
-                }
+                btnTrolleyDelete.setOnClickListener { onDeleteItem.invoke(cartDataDomain) }
+                cbTrolleyList.setOnClickListener { onCheckedItem.invoke(cartDataDomain) }
 
                 btnTrolleyIncrement.setOnClickListener {
-                    val stock = cartEntity.stock
-                    val quantity = (cartEntity.quantity)
-                    if (quantity == stock) {
-                        btnTrolleyIncrement.isClickable = false
-                        Toast.makeText(itemView.context, "Out of stock.", Toast.LENGTH_SHORT).show()
-                    } else {
-                        onAddQuantity.invoke(cartEntity)
-                        binding.btnTrolleyIncrement.background = ContextCompat.getDrawable(itemView.context, R.drawable.bg_button_round_grey)
+                    cartDataDomain.stock?.let {
+                        if (tvTrolleyQuantity.text.toString().toInt() < it) {
+                            onAddQuantity.invoke(cartDataDomain)
+                        }
                     }
                 }
 
                 btnTrolleyDecrement.setOnClickListener {
-                    val quantity = (cartEntity.quantity)
-                    if (quantity != 1) {
-                        onMinQuantity.invoke(cartEntity)
-                    } else {
-                        btnTrolleyDecrement.isClickable = false
-                        binding.btnTrolleyDecrement.background = ContextCompat.getDrawable(itemView.context, R.drawable.bg_button_round_grey)
+                    if (tvTrolleyQuantity.text.toString().toInt() > 1) {
+                        onMinQuantity.invoke(cartDataDomain)
                     }
-                }
-
-                cbTrolleyList.setOnClickListener {
-                    onCheckedItem.invoke(cartEntity)
                 }
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrolleyVH {
-        val binding = ItemProductCartBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemProductCartBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return TrolleyVH(binding)
     }
 
@@ -74,11 +60,10 @@ class TrolleyAdapter(
 
     override fun getItemCount(): Int = data.size
 
-    fun submitData(newListData: List<CartEntity>?) {
-        if (newListData == null) return
-        data.clear()
-        data.addAll(newListData)
-        notifyItemRemoved(newListData.size)
-        notifyDataSetChanged()
+    fun submitData(newListData: List<CartDataDomain>) {
+        val diffUtilRecycler = DiffUtilRecycler(data, newListData)
+        val diffResult = DiffUtil.calculateDiff(diffUtilRecycler)
+        data = newListData
+        diffResult.dispatchUpdatesTo(this)
     }
 }

@@ -1,6 +1,6 @@
 package com.myshopproject.domain.usecase
 
-import com.myshopproject.domain.entities.CartEntity
+import com.myshopproject.domain.entities.CartDataDomain
 import com.myshopproject.domain.repository.ProductRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -8,15 +8,15 @@ import javax.inject.Inject
 class LocalInteractor @Inject constructor(
     private val productRepository: ProductRepository
 ) : LocalUseCase {
-    override fun getAllProduct(): Flow<List<CartEntity>> {
+    override fun getAllProduct(): Flow<List<CartDataDomain>> {
         return productRepository.getAllProduct()
     }
 
-    override fun getAllCheckedProduct(): Flow<List<CartEntity>> {
+    override fun getAllCheckedProduct(): Flow<List<CartDataDomain>> {
         return productRepository.getAllCheckedProduct()
     }
 
-    override suspend fun addProductToTrolley(trolley: CartEntity) {
+    override suspend fun addProductToTrolley(trolley: CartDataDomain) {
         productRepository.addProductToTrolley(trolley)
     }
 

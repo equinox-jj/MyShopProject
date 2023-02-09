@@ -13,6 +13,7 @@ import com.myshopproject.domain.repository.ProductRepository
 import com.myshopproject.domain.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import retrofit2.HttpException
 import javax.inject.Inject
 
@@ -173,16 +174,16 @@ class ProductRepositoryImpl @Inject constructor(
     }
 
     /** ROOM DB */
-    override fun getAllProduct(): Flow<List<CartEntity>> {
-        return cartDao.getAllProduct()
+    override fun getAllProduct(): Flow<List<CartDataDomain>> {
+        return cartDao.getAllProduct().map { it.toDomain() }
     }
 
-    override fun getAllCheckedProduct(): Flow<List<CartEntity>> {
-        return cartDao.getAllCheckedProduct()
+    override fun getAllCheckedProduct(): Flow<List<CartDataDomain>> {
+        return cartDao.getAllCheckedProduct().map { it.toDomain() }
     }
 
-    override suspend fun addProductToTrolley(trolley: CartEntity) {
-        cartDao.addProductToTrolley(trolley)
+    override suspend fun addProductToTrolley(trolley: CartDataDomain) {
+        cartDao.addProductToTrolley(trolley.toDomain())
     }
 
     override suspend fun updateProductData(quantity: Int?, itemTotalPrice: Int?, id: Int?) {

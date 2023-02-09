@@ -18,9 +18,9 @@ interface ProductRepository {
     fun getProductHistory(userId: Int): Flow<Resource<DataProductResponse>>
 
     /** ROOM DB */
-    fun getAllProduct(): Flow<List<CartEntity>>
-    fun getAllCheckedProduct(): Flow<List<CartEntity>>
-    suspend fun addProductToTrolley(trolley: CartEntity)
+    fun getAllProduct(): Flow<List<CartDataDomain>>
+    fun getAllCheckedProduct(): Flow<List<CartDataDomain>>
+    suspend fun addProductToTrolley(trolley: CartDataDomain)
     suspend fun updateProductData(quantity: Int?, itemTotalPrice: Int?, id: Int?)
     suspend fun updateProductIsCheckedAll(isChecked: Boolean)
     suspend fun updateProductIsCheckedById(isChecked: Boolean, id: Int?)

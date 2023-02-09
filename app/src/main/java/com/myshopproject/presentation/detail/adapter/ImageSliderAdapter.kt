@@ -18,7 +18,7 @@ class ImageSliderAdapter(
             binding.apply {
                 ivProductDtl.load(data.imageProduct) {
                     crossfade(800)
-                    placeholder(R.drawable.ic_image_placeholder)
+                    placeholder(R.drawable.ic_image_placeholder_filled)
                 }
                 tvCarouselProductDtl.text = data.titleProduct
 

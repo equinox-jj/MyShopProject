@@ -1,5 +1,6 @@
 package com.myshopproject.data.mapper
 
+import com.myshopproject.data.source.local.entity.CartEntity
 import com.myshopproject.data.source.remote.dto.*
 import com.myshopproject.domain.entities.*
 
@@ -119,15 +120,25 @@ fun DetailProductImageDTO.toDomain() = DetailProductImage(
     imageProduct = imageProduct, titleProduct = titleProduct
 )
 
-//fun UpdateRateDTO.toDomain() = UpdateRate(
-//    updateRate = updateRate
-//)
-//
-//fun UpdateStockProductDTO.toDomain() = UpdateStockProduct(
-//    data_stock = data_stock.map { it.toDomain() }
-//)
-//
-//fun UpdateStockItemDTO.toDomain() = UpdateStockItem(
-//    id_product = id_product,
-//    stock = stock
-//)
+fun CartDataDomain.toDomain(): CartEntity = CartEntity(
+    id = id,
+    image = image,
+    nameProduct = nameProduct,
+    quantity = quantity,
+    price = price,
+    itemTotalPrice = itemTotalPrice,
+    stock = stock
+)
+
+fun List<CartEntity>.toDomain(): List<CartDataDomain> = this.map {
+    CartDataDomain(
+        id = it.id,
+        image = it.image,
+        nameProduct = it.nameProduct,
+        quantity = it.quantity,
+        price = it.price,
+        itemTotalPrice = it.itemTotalPrice,
+        stock = it.stock,
+        isChecked = it.isChecked
+    )
+}
