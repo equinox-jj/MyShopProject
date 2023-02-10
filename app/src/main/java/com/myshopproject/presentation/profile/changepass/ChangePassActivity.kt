@@ -27,8 +27,8 @@ class ChangePassActivity : AppCompatActivity() {
     private val viewModel by viewModels<ChangePassViewModel>()
     private val prefViewModel by viewModels<DataStoreViewModel>()
 
-    private var userId: Int? = null
-    private var authorization: String? = null
+    private var userId = 0
+    private var authorization = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,7 +104,7 @@ class ChangePassActivity : AppCompatActivity() {
             btnSaveNewPass.setOnClickListener {
                 if (validation()) {
                     viewModel.changePassword(
-                        id = userId!!,
+                        id = userId,
                         password = binding.etOldPass.text.toString(),
                         newPassword = binding.etNewPass.text.toString(),
                         confirmPassword = binding.etConfirmNewPass.text.toString()

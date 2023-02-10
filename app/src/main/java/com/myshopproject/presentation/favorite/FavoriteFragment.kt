@@ -123,6 +123,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
                         binding.shimmerFavorite.root.stopShimmer()
                         binding.shimmerFavorite.root.hide()
                         binding.rvFavorite.show()
+                        binding.fabSortedByFav.show()
                         isEmptyState(false)
 
                         when(sortedBy) {
@@ -146,6 +147,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
                         binding.shimmerFavorite.root.stopShimmer()
                         binding.shimmerFavorite.root.hide()
                         binding.rvFavorite.hide()
+                        binding.fabSortedByFav.hide()
                         isEmptyState(true)
                     }
                 }

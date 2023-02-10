@@ -1,25 +1,30 @@
 package com.myshopproject.presentation.detail
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.StrictMode
 import android.provider.MediaStore
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import coil.imageLoader
+import coil.load
 import coil.request.ImageRequest
 import com.myshopproject.R
 import com.myshopproject.databinding.ActivityDetailBinding
+import com.myshopproject.databinding.CustomDialogImageDetailBinding
 import com.myshopproject.domain.entities.CartDataDomain
 import com.myshopproject.domain.entities.DetailProductData
 import com.myshopproject.domain.utils.Resource
@@ -46,8 +51,8 @@ class DetailActivity : AppCompatActivity() {
 
     private lateinit var dataDetailProduct: DetailProductData
 
-    private var productId: Int = 0
-    private var userId: Int = 0
+    private var productId = 0
+    private var userId = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,13 +104,13 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun setupToolbarMenu() {
-        addMenuProvider(object  : MenuProvider {
+        addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.menu_detail_toolbar, menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                when(menuItem.itemId) {
+                when (menuItem.itemId) {
                     android.R.id.home -> {
                         finish()
                     }
@@ -200,7 +205,7 @@ class DetailActivity : AppCompatActivity() {
 
         viewModel.getProductOther(userId)
         viewModel.otherProductState.observe(this@DetailActivity) { response ->
-            when(response) {
+            when (response) {
                 is Resource.Loading -> {
                     binding.view1.hide()
                     binding.toolbarOtherProduct.hide()
@@ -228,7 +233,7 @@ class DetailActivity : AppCompatActivity() {
 
         viewModel.getProductHistory(userId)
         viewModel.historyProductState.observe(this@DetailActivity) { response ->
-            when(response) {
+            when (response) {
                 is Resource.Loading -> {
                     binding.view2.hide()
                     binding.toolbarHistoryProduct.hide()
@@ -260,7 +265,9 @@ class DetailActivity : AppCompatActivity() {
             toolbarDetail.title = data.nameProduct
             imageSliderAdapter = ImageSliderAdapter(
                 data.imageProduct,
-                onClick = {}
+                onClick = {
+                    showImageDetail(this@DetailActivity, it)
+                }
             )
             vpImageSliderProductDtl.adapter = imageSliderAdapter
             indicatorSlider.setViewPager(vpImageSliderProductDtl)
@@ -300,10 +307,15 @@ class DetailActivity : AppCompatActivity() {
                             isChecked = false
                         )
                     )
-                    Toast.makeText(this@DetailActivity, "Add to trolley.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@DetailActivity, "Add to trolley.", Toast.LENGTH_SHORT)
+                        .show()
                     finish()
                 } else {
-                    Toast.makeText(this@DetailActivity, "Failed add to trolley.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@DetailActivity,
+                        "Failed add to trolley.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
             ivImageFavProductDtl.setOnClickListener {
@@ -327,7 +339,11 @@ class DetailActivity : AppCompatActivity() {
                     Toast.makeText(this, "Success add to favorite.", Toast.LENGTH_SHORT).show()
                 }
                 is Resource.Error -> {
-                    Toast.makeText(this@DetailActivity, response.errorBody.toString(), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@DetailActivity,
+                        response.errorBody.toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -342,10 +358,27 @@ class DetailActivity : AppCompatActivity() {
                     Toast.makeText(this, "Success remove from favorite.", Toast.LENGTH_SHORT).show()
                 }
                 is Resource.Error -> {
-                    Toast.makeText(this@DetailActivity, response.errorBody.toString(), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@DetailActivity,
+                        response.errorBody.toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
+    }
+
+    private fun showImageDetail(context: Context, drawable: String) {
+        val dialogBinding = CustomDialogImageDetailBinding.inflate(layoutInflater)
+
+        val dialog = AlertDialog.Builder(context, R.style.Ctm_ImageDialog)
+        dialog.setView(dialogBinding.root)
+        dialog.setCancelable(true)
+        dialog.create()
+        dialog.show()
+
+        dialogBinding.imageDetailDialog.load(drawable)
+        Log.d("DataImage", drawable)
     }
 
 }

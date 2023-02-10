@@ -14,9 +14,21 @@ interface FirebaseMessageDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNotification(fcmEntity: FcmEntity)
 
-    @Query("SELECT * FROM $FCM_TABLE ORDER BY id ASC")
+    @Query("SELECT * FROM $FCM_TABLE ORDER BY is_read, notification_date ASC")
     fun getAllNotification(): Flow<List<FcmEntity>>
 
-    @Query("SELECT COUNT(*) FROM $FCM_TABLE")
-    suspend fun notificationCount(total: Int)
+    @Query("UPDATE $FCM_TABLE SET is_read = :isRead WHERE id = :id")
+    suspend fun updateReadNotification(isRead: Boolean, id: Int?)
+
+    @Query("UPDATE $FCM_TABLE SET is_read = :isRead")
+    suspend fun setAllReadNotification(isRead: Boolean)
+
+    @Query("UPDATE $FCM_TABLE SET is_checked = :isChecked WHERE id = :id")
+    suspend fun updateCheckedNotification(isChecked: Boolean, id: Int?)
+
+    @Query("UPDATE $FCM_TABLE SET is_checked = :isChecked")
+    suspend fun setAllUncheckedNotification(isChecked: Boolean)
+
+    @Query("DELETE FROM $FCM_TABLE WHERE is_checked = :isChecked")
+    suspend fun deleteNotification(isChecked: Boolean)
 }

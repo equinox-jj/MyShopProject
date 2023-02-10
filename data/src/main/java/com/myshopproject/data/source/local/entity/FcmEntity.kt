@@ -8,17 +8,21 @@ import com.myshopproject.domain.utils.Constants
 @Entity(tableName = Constants.FCM_TABLE)
 data class FcmEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    @ColumnInfo(name = "id")
+    val id: Int? = null,
 
     @ColumnInfo(name = "notification_title")
-    val notificationTitle: String = "",
+    val notificationTitle: String? = "",
 
     @ColumnInfo(name = "notification_body")
-    val notificationBody: String = "",
+    val notificationBody: String? = "",
 
     @ColumnInfo(name = "notification_date")
-    val notificationDate: String = "",
+    val notificationDate: String? = "",
 
-    @ColumnInfo(name = "isRead")
+    @ColumnInfo(name = "is_read")
     val isRead: Boolean = false,
+
+    @ColumnInfo(name = "is_checked")
+    val isChecked: Boolean = false,
 )

@@ -25,4 +25,12 @@ interface ProductRepository {
     suspend fun updateProductIsCheckedAll(isChecked: Boolean)
     suspend fun updateProductIsCheckedById(isChecked: Boolean, id: Int?)
     suspend fun deleteProductByIdFromTrolley(id: Int?)
+
+    suspend fun insertNotification(fcmDataDomain: FcmDataDomain)
+    fun getAllNotification(): Flow<List<FcmDataDomain>>
+    suspend fun updateReadNotification(isRead: Boolean, id: Int?)
+    suspend fun setAllReadNotification(isRead: Boolean)
+    suspend fun updateCheckedNotification(isChecked: Boolean, id: Int?)
+    suspend fun setAllUncheckedNotification(isChecked: Boolean)
+    suspend fun deleteNotification(isChecked: Boolean)
 }

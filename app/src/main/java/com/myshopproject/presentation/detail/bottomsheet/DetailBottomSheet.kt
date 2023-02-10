@@ -38,8 +38,8 @@ class DetailBottomSheet(private val data: DetailProductData) : BottomSheetDialog
     private val viewModel by viewModels<DetailBottomSheetViewModel>()
     private val prefViewModel by viewModels<DataStoreViewModel>()
 
-    private lateinit var userId: String
-    private var quantity: Int = 0
+    private var userId = ""
+    private var quantity = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,

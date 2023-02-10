@@ -20,6 +20,7 @@ import com.google.android.material.badge.BadgeUtils
 import com.myshopproject.R
 import com.myshopproject.databinding.ActivityMainBinding
 import com.myshopproject.presentation.notification.NotificationActivity
+import com.myshopproject.presentation.notification.NotificationViewModel
 import com.myshopproject.presentation.trolley.TrolleyActivity
 import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.presentation.viewmodel.LocalViewModel
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity() {
 
     private val prefViewModel by viewModels<DataStoreViewModel>()
     private val localViewModel by viewModels<LocalViewModel>()
+    private val notificationViewModel by viewModels<NotificationViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,19 +80,32 @@ class MainActivity : AppCompatActivity() {
                 val badgeNotification = BadgeDrawable.create(this@MainActivity)
                 lifecycleScope.launch {
                     lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                        localViewModel.getAllProduct().collect { result ->
-                            if (result.isNotEmpty()) {
-                                badgeTrolley.isVisible = true
-                                badgeTrolley.number = result.size
-                                BadgeUtils.attachBadgeDrawable(badgeTrolley, binding.toolbarMain, R.id.menu_cart)
-                            } else {
-                                badgeTrolley.isVisible = false
-                                BadgeUtils.detachBadgeDrawable(badgeTrolley, binding.toolbarMain, R.id.menu_cart)
+                        launch {
+                            localViewModel.getAllProduct().collect { result ->
+                                if (result.isNotEmpty()) {
+                                    badgeTrolley.isVisible = true
+                                    badgeTrolley.number = result.size
+                                    BadgeUtils.attachBadgeDrawable(badgeTrolley, binding.toolbarMain, R.id.menu_cart)
+                                } else {
+                                    badgeTrolley.isVisible = false
+                                    BadgeUtils.detachBadgeDrawable(badgeTrolley, binding.toolbarMain, R.id.menu_cart)
+                                }
+                            }
+                        }
+                        launch {
+                            notificationViewModel.getAllNotification().collect { result ->
+                                if (result.isNotEmpty()) {
+                                    badgeNotification.isVisible = true
+                                    badgeNotification.number = result.size
+                                    BadgeUtils.attachBadgeDrawable(badgeNotification, binding.toolbarMain, R.id.menu_notification)
+                                } else {
+                                    badgeTrolley.isVisible = false
+                                    BadgeUtils.detachBadgeDrawable(badgeNotification, binding.toolbarMain, R.id.menu_notification)
+                                }
                             }
                         }
                     }
                 }
-                BadgeUtils.attachBadgeDrawable(badgeNotification, binding.toolbarMain, R.id.menu_notification)
             }
 
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {

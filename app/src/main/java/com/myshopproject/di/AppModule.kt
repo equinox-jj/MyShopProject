@@ -5,6 +5,7 @@ import com.myshopproject.data.BuildConfig
 import com.myshopproject.data.preferences.MyPreferencesImpl
 import com.myshopproject.data.repository.AuthRepositoryImpl
 import com.myshopproject.data.repository.ProductRepositoryImpl
+import com.myshopproject.data.source.local.dao.FirebaseMessageDao
 import com.myshopproject.data.source.local.dao.ProductCartDao
 import com.myshopproject.data.source.remote.network.ApiAuth
 import com.myshopproject.data.source.remote.network.ApiProduct
@@ -120,9 +121,10 @@ object AppModule {
     @Provides
     fun providesProductRepository(
         apiProduct: ApiProduct,
-        cartDao: ProductCartDao
+        cartDao: ProductCartDao,
+        fcmDao: FirebaseMessageDao
     ): ProductRepository {
-        return ProductRepositoryImpl(apiProduct, cartDao)
+        return ProductRepositoryImpl(apiProduct, cartDao, fcmDao)
     }
 
     @Provides

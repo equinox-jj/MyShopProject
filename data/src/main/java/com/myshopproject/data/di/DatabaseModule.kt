@@ -26,4 +26,8 @@ object DatabaseModule {
     @Singleton
     @Provides
     fun providesCartDao(db: ProductCartDatabase) = db.productCartDao()
+
+    @Singleton
+    @Provides
+    fun providesFcmDao(db: ProductCartDatabase) = db.firebaseMessageDao()
 }

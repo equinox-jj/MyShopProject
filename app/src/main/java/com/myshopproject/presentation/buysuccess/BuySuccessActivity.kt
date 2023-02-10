@@ -21,7 +21,7 @@ class BuySuccessActivity : AppCompatActivity() {
 
     private val viewModel by viewModels<BuySuccessViewModel>()
 
-    private var productId: Int = 0
+    private var productId = 0
     private var listProductId: List<String>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

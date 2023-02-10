@@ -49,4 +49,8 @@
     <string name="your_order_is_successful">Your Order is Successful</string>
     <string name="check_your_connectivity">Check your connectivity.</string>
     <string name="notification">Notification</string>
+    <string name="empty_notification">Empty Notification</string>
+    <string name="delete">Delete</string>
+    <string name="read_notification">Read Notification</string>
+    <string name="check_notification">Check Notification</string>
 </resources>

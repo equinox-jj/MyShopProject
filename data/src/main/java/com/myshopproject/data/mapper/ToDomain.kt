@@ -1,6 +1,7 @@
 package com.myshopproject.data.mapper
 
 import com.myshopproject.data.source.local.entity.CartEntity
+import com.myshopproject.data.source.local.entity.FcmEntity
 import com.myshopproject.data.source.remote.dto.*
 import com.myshopproject.domain.entities.*
 
@@ -120,6 +121,7 @@ fun DetailProductImageDTO.toDomain() = DetailProductImage(
     imageProduct = imageProduct, titleProduct = titleProduct
 )
 
+@JvmName("CartEntity")
 fun List<CartEntity>.toDomain(): List<CartDataDomain> = this.map {
     CartDataDomain(
         id = it.id,
@@ -129,6 +131,18 @@ fun List<CartEntity>.toDomain(): List<CartDataDomain> = this.map {
         price = it.price,
         itemTotalPrice = it.itemTotalPrice,
         stock = it.stock,
+        isChecked = it.isChecked
+    )
+}
+
+@JvmName("FcmEntity")
+fun List<FcmEntity>.toDomain(): List<FcmDataDomain> = this.map {
+    FcmDataDomain(
+        id = it.id,
+        notificationTitle = it.notificationTitle,
+        notificationBody = it.notificationBody,
+        notificationDate = it.notificationDate,
+        isRead = it.isRead,
         isChecked = it.isChecked
     )
 }

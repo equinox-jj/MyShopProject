@@ -58,7 +58,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private lateinit var resultCamera: Bitmap
     private var getFile: File? = null
 
-    private var userId: Int? = null
+    private var userId = 0
 
     private val launcherIntentCameraX = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -195,7 +195,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 file.name,
                 requestBodyImage
             )
-            viewModel.changeImage(userId!!, multiPartImage)
+            viewModel.changeImage(userId, multiPartImage)
             viewModel.state.observe(viewLifecycleOwner) { response ->
                 when (response) {
                     is Resource.Loading -> {

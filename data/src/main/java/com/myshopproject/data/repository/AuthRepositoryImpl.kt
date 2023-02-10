@@ -33,11 +33,9 @@ class AuthRepositoryImpl @Inject constructor(
                     400 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
                     404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
                     500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                    else -> emit(Resource.Error(null, null, null))
+                    else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
                 }
             }
-        } catch (e: Exception) {
-            emit(Resource.Error(e.localizedMessage, null, null))
         }
     }
 
@@ -66,11 +64,9 @@ class AuthRepositoryImpl @Inject constructor(
                     400 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
                     404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
                     500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                    else -> emit(Resource.Error(null, null, null))
+                    else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
                 }
             }
-        } catch (e: Exception) {
-            emit(Resource.Error(e.localizedMessage, null, null))
         }
     }
 
@@ -96,11 +92,9 @@ class AuthRepositoryImpl @Inject constructor(
                     401 -> { emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody())) }
                     404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
                     500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                    else -> emit(Resource.Error(null, null, null))
+                    else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
                 }
             }
-        } catch (e: Exception) {
-            emit(Resource.Error(e.localizedMessage, null, null))
         }
     }
 
@@ -122,11 +116,9 @@ class AuthRepositoryImpl @Inject constructor(
                     401 -> { emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody())) }
                     404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
                     500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                    else -> emit(Resource.Error(null, null, null))
+                    else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
                 }
             }
-        } catch (e: Exception) {
-            emit(Resource.Error(e.localizedMessage, null, null))
         }
     }
 }

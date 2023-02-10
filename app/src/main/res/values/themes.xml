@@ -33,4 +33,8 @@
         <item name="android:windowBackground">@drawable/bg_select_image_dialog</item>
     </style>
 
+    <style name="Ctm.ImageDialog" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
 </resources>

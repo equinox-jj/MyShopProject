@@ -34,7 +34,7 @@ class TrolleyActivity : AppCompatActivity() {
     private val localViewModel by viewModels<LocalViewModel>()
     private val prefViewModel by viewModels<DataStoreViewModel>()
 
-    private lateinit var userId: String
+    private var userId = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

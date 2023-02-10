@@ -5,6 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.myshopproject.data.mapper.toDomain
 import com.myshopproject.data.mapper.toEntity
+import com.myshopproject.data.source.local.dao.FirebaseMessageDao
 import com.myshopproject.data.source.local.dao.ProductCartDao
 import com.myshopproject.data.source.remote.RemotePagingSource
 import com.myshopproject.data.source.remote.RemotePagingSource.Companion.TOTAL_ITEM
@@ -21,6 +22,7 @@ import javax.inject.Inject
 class ProductRepositoryImpl @Inject constructor(
     private val apiProduct: ApiProduct,
     private val cartDao: ProductCartDao,
+    private val fcmDao: FirebaseMessageDao
 ) : ProductRepository {
 
     /** API SERVICE */
@@ -29,10 +31,9 @@ class ProductRepositoryImpl @Inject constructor(
             config = PagingConfig(
                 enablePlaceholders = false,
                 pageSize = TOTAL_ITEM,
-//                prefetchDistance = 1,
                 initialLoadSize = TOTAL_ITEM
             ),
-            pagingSourceFactory = { RemotePagingSource(query, apiProduct) }
+            pagingSourceFactory = { RemotePagingSource(query = query, apiProduct = apiProduct) }
         ).flow
     }
 
@@ -42,7 +43,7 @@ class ProductRepositoryImpl @Inject constructor(
     ): Flow<Resource<DataProductResponse>> = flow {
         emit(Resource.Loading)
         try {
-            val response = apiProduct.getListProductFavorite(query, userId).toDomain()
+            val response = apiProduct.getListProductFavorite(query = query, userId = userId).toDomain()
             emit(Resource.Success(response))
         } catch (t: Throwable) {
             if (t is HttpException) {
@@ -50,7 +51,7 @@ class ProductRepositoryImpl @Inject constructor(
                     400 -> { emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody())) }
                     404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
                     500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                    else -> emit(Resource.Error(null, null, null))
+                    else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
                 }
             }
         }
@@ -59,13 +60,13 @@ class ProductRepositoryImpl @Inject constructor(
     override fun getProductDetail(productId: Int, userId: Int): Flow<Resource<DetailProductResponse>> = flow {
         emit(Resource.Loading)
         try {
-            val response = apiProduct.getProductDetail(productId, userId).toDomain()
+            val response = apiProduct.getProductDetail(productId = productId, userId = userId).toDomain()
             emit(Resource.Success(response))
         } catch (t: Throwable) {
             if (t is HttpException) {
                 when (t.code()) {
                     400 -> { emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody())) }
-                    else -> emit(Resource.Error(null, null, null))
+                    else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
                 }
             }
         }
@@ -77,13 +78,13 @@ class ProductRepositoryImpl @Inject constructor(
     ): Flow<Resource<SuccessResponseStatus>> = flow {
         emit(Resource.Loading)
         try {
-            val response = apiProduct.addProductFavorite(productId, userId).toDomain()
+            val response = apiProduct.addProductFavorite(productId = productId, userId = userId).toDomain()
             emit(Resource.Success(response))
         } catch (t: Throwable) {
             if (t is HttpException) {
                 when (t.code()) {
                     400 -> { emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody())) }
-                    else -> emit(Resource.Error(null, null, null))
+                    else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
                 }
             }
         }
@@ -95,13 +96,13 @@ class ProductRepositoryImpl @Inject constructor(
     ): Flow<Resource<SuccessResponseStatus>> = flow {
         emit(Resource.Loading)
         try {
-            val response = apiProduct.removeProductFavorite(productId, userId).toDomain()
+            val response = apiProduct.removeProductFavorite(productId = productId, userId = userId).toDomain()
             emit(Resource.Success(response))
         } catch (t: Throwable) {
             if (t is HttpException) {
                 when (t.code()) {
                     400 -> { emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody())) }
-                    else -> emit(Resource.Error(null, null, null))
+                    else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
                 }
             }
         }
@@ -110,13 +111,13 @@ class ProductRepositoryImpl @Inject constructor(
     override fun updateStock(updateStock: UpdateStockProduct): Flow<Resource<SuccessResponseStatus>> = flow {
         emit(Resource.Loading)
         try {
-            val response = apiProduct.updateStock(updateStock).toDomain()
+            val response = apiProduct.updateStock(updateStock = updateStock).toDomain()
             emit(Resource.Success(response))
         } catch (t: Throwable) {
             if (t is HttpException) {
                 when (t.code()) {
                     400 -> { emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody())) }
-                    else -> emit(Resource.Error(null, null, null))
+                    else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
                 }
             }
         }
@@ -128,13 +129,13 @@ class ProductRepositoryImpl @Inject constructor(
     ): Flow<Resource<SuccessResponseStatus>> = flow {
         emit(Resource.Loading)
         try {
-            val response = apiProduct.updateRate(id, updateRate).toDomain()
+            val response = apiProduct.updateRate(id = id, rate = updateRate).toDomain()
             emit(Resource.Success(response))
         } catch (t: Throwable) {
             if (t is HttpException) {
                 when (t.code()) {
                     400 -> { emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody())) }
-                    else -> emit(Resource.Error(null, null, null))
+                    else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
                 }
             }
         }
@@ -143,7 +144,7 @@ class ProductRepositoryImpl @Inject constructor(
     override fun getProductOther(userId: Int): Flow<Resource<DataProductResponse>> = flow {
         emit(Resource.Loading)
         try {
-            val response = apiProduct.getProductOther(userId).toDomain()
+            val response = apiProduct.getProductOther(userId = userId).toDomain()
             emit(Resource.Success(response))
         } catch (t: Throwable) {
             if (t is HttpException) {
@@ -151,7 +152,7 @@ class ProductRepositoryImpl @Inject constructor(
                     400 -> { emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody())) }
                     404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
                     500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                    else -> emit(Resource.Error(null, null, null))
+                    else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
                 }
             }
         }
@@ -160,7 +161,7 @@ class ProductRepositoryImpl @Inject constructor(
     override fun getProductHistory(userId: Int): Flow<Resource<DataProductResponse>> = flow {
         emit(Resource.Loading)
         try {
-            val response = apiProduct.getProductHistory(userId).toDomain()
+            val response = apiProduct.getProductHistory(userId = userId).toDomain()
             emit(Resource.Success(response))
         } catch (t: Throwable) {
             if (t is HttpException) {
@@ -168,7 +169,7 @@ class ProductRepositoryImpl @Inject constructor(
                     400 -> { emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody())) }
                     404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
                     500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                    else -> emit(Resource.Error(null, null, null))
+                    else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
                 }
             }
         }
@@ -184,23 +185,51 @@ class ProductRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addProductToTrolley(trolley: CartDataDomain) {
-        cartDao.addProductToTrolley(trolley.toEntity())
+        cartDao.addProductToTrolley(trolley = trolley.toEntity())
     }
 
     override suspend fun updateProductData(quantity: Int?, itemTotalPrice: Int?, id: Int?) {
-        cartDao.updateProductData(quantity, itemTotalPrice, id)
+        cartDao.updateProductData(quantity = quantity, itemTotalPrice = itemTotalPrice, id = id)
     }
 
     override suspend fun updateProductIsCheckedAll(isChecked: Boolean) {
-        cartDao.updateProductIsCheckedAll(isChecked)
+        cartDao.updateProductIsCheckedAll(isChecked = isChecked)
     }
 
     override suspend fun updateProductIsCheckedById(isChecked: Boolean, id: Int?) {
-        cartDao.updateProductIsCheckedById(isChecked, id)
+        cartDao.updateProductIsCheckedById(isChecked = isChecked, id = id)
     }
 
     override suspend fun deleteProductByIdFromTrolley(id: Int?) {
-        cartDao.deleteProductByIdFromTrolley(id)
+        cartDao.deleteProductByIdFromTrolley(id = id)
+    }
+
+    override suspend fun insertNotification(fcmDataDomain: FcmDataDomain) {
+        fcmDao.insertNotification(fcmEntity = fcmDataDomain.toEntity())
+    }
+
+    override fun getAllNotification(): Flow<List<FcmDataDomain>> {
+        return fcmDao.getAllNotification().map { it.toDomain()}
+    }
+
+    override suspend fun updateReadNotification(isRead: Boolean, id: Int?) {
+        fcmDao.updateReadNotification(isRead = isRead, id = id)
+    }
+
+    override suspend fun setAllReadNotification(isRead: Boolean) {
+        fcmDao.setAllReadNotification(isRead = isRead)
+    }
+
+    override suspend fun updateCheckedNotification(isChecked: Boolean, id: Int?) {
+        fcmDao.updateCheckedNotification(isChecked = isChecked, id = id)
+    }
+
+    override suspend fun setAllUncheckedNotification(isChecked: Boolean) {
+        fcmDao.setAllUncheckedNotification(isChecked = isChecked)
+    }
+
+    override suspend fun deleteNotification(isChecked: Boolean) {
+        fcmDao.deleteNotification(isChecked = isChecked)
     }
 
 }

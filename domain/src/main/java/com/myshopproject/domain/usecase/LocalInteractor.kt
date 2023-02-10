@@ -1,6 +1,7 @@
 package com.myshopproject.domain.usecase
 
 import com.myshopproject.domain.entities.CartDataDomain
+import com.myshopproject.domain.entities.FcmDataDomain
 import com.myshopproject.domain.repository.ProductRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -34,5 +35,33 @@ class LocalInteractor @Inject constructor(
 
     override suspend fun deleteProductByIdFromTrolley(id: Int?) {
         productRepository.deleteProductByIdFromTrolley(id)
+    }
+
+    override suspend fun insertNotification(fcmDataDomain: FcmDataDomain) {
+        productRepository.insertNotification(fcmDataDomain)
+    }
+
+    override fun getAllNotification(): Flow<List<FcmDataDomain>> {
+        return productRepository.getAllNotification()
+    }
+
+    override suspend fun updateReadNotification(isRead: Boolean, id: Int?) {
+        productRepository.updateReadNotification(isRead, id)
+    }
+
+    override suspend fun setAllReadNotification(isRead: Boolean) {
+        productRepository.setAllReadNotification(isRead)
+    }
+
+    override suspend fun updateCheckedNotification(isChecked: Boolean, id: Int?) {
+        productRepository.updateCheckedNotification(isChecked, id)
+    }
+
+    override suspend fun setAllUncheckedNotification(isChecked: Boolean) {
+        productRepository.setAllUncheckedNotification(isChecked)
+    }
+
+    override suspend fun deleteNotification(isChecked: Boolean) {
+        productRepository.deleteNotification(isChecked)
     }
 }
