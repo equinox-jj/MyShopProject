@@ -2,7 +2,6 @@ package com.myshopproject.presentation.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -10,6 +9,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.firebase.FirebaseException
+import com.google.firebase.FirebaseNetworkException
+import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import com.google.gson.JsonObject
@@ -66,7 +68,7 @@ class LoginActivity : AppCompatActivity() {
                     prefViewModel.saveNameUser(nameUser!!)
                     prefViewModel.saveImageUser(imageUser!!)
                     binding.loginCardLoading.root.hide()
-                    Toast.makeText(this@LoginActivity, "Login Successfully ${response.data!!.status}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@LoginActivity, "Login Successfully.", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                     finish()
                 }
@@ -84,21 +86,33 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupListener() {
+        val firebaseMessaging = FirebaseMessaging.getInstance()
         binding.apply {
             btnLogin.setOnClickListener {
                 if (validation()) {
                     lifecycleScope.launch {
                         lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                            launch {
-                                viewModel.loginAccount(
-                                    email = etEmailLogin.text.toString(),
-                                    password = etPasswordLogin.text.toString(),
-                                    firebaseToken = FirebaseMessaging.getInstance().token.addOnCompleteListener { it.result }.await()
-                                )
-                            }
-                            launch {
-                                Log.d("Token Firebase", FirebaseMessaging.getInstance().token.addOnCompleteListener { it.result }.await())
-                            }
+                            val firebaseToken = firebaseMessaging.token
+                                .addOnSuccessListener { it.toString() }
+                                .addOnFailureListener {
+                                    when(it) {
+                                        is FirebaseNetworkException -> {
+                                            Toast.makeText(this@LoginActivity, "Check your internet connection.", Toast.LENGTH_SHORT).show()
+                                        }
+                                        is FirebaseTooManyRequestsException -> {
+                                            Toast.makeText(this@LoginActivity, "Too many request.", Toast.LENGTH_SHORT).show()
+                                        }
+                                        is FirebaseException -> {
+                                            Toast.makeText(this@LoginActivity, "An unknown error occurred.", Toast.LENGTH_SHORT).show()
+                                        }
+                                    }
+                                }.await()
+
+                            viewModel.loginAccount(
+                                email = etEmailLogin.text.toString(),
+                                password = etPasswordLogin.text.toString(),
+                                firebaseToken = firebaseToken
+                            )
                         }
                     }
                 }

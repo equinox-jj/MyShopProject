@@ -70,7 +70,6 @@ class MyFirebaseNotification: FirebaseMessagingService() {
     }
 
     companion object {
-        private val TAG = MyFirebaseNotification::class.java.simpleName
         private const val NOTIFICATION_ID = 1
         private const val NOTIFICATION_CHANNEL_ID = "Firebase Channel"
         private const val NOTIFICATION_CHANNEL_NAME = "Firebase Notification"

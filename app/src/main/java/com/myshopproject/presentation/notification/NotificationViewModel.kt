@@ -17,12 +17,6 @@ class NotificationViewModel @Inject constructor(
     fun getAllNotification(): Flow<List<FcmDataDomain>> {
         return localUseCase.getAllNotification()
     }
-
-     fun insertNotification(fcmDataDomain: FcmDataDomain) {
-        viewModelScope.launch {
-            localUseCase.insertNotification(fcmDataDomain)
-        }
-    }
     
      fun updateReadNotification(isRead: Boolean, id: Int?) {
          viewModelScope.launch {
