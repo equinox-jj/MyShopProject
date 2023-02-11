@@ -15,24 +15,14 @@
             android:layout_width="match_parent"
             android:layout_height="?android:actionBarSize"
             android:background="@color/primaryLightColor"
+            android:tag="sticky"
             app:contentInsetStart="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <include
-            android:id="@+id/shimmerDetail"
-            layout="@layout/shimmer_product_detail"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbarDetail" />
-
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/nestedScrollDtl"
+        <me.didik.component.StickyNestedScrollView
+            android:id="@+id/stickyScrollDetail"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:padding="8dp"
@@ -42,6 +32,7 @@
             app:layout_constraintTop_toBottomOf="@+id/toolbarDetail">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clDetailContent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -284,7 +275,6 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="32dp"
                     android:fontFamily="@font/poppins_regular"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/description"
                     app:layout_constraintTop_toBottomOf="@+id/descriptionDot"
@@ -297,18 +287,98 @@
                     android:orientation="vertical"
                     app:layout_constraintGuide_percent="0.5" />
 
+                <View
+                    android:id="@+id/view1"
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp"
+                    android:background="@color/grey_background"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvDescProductDtl" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintProductOther"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view1">
+
+                    <androidx.appcompat.widget.Toolbar
+                        android:id="@+id/toolbarOtherProduct"
+                        android:layout_width="match_parent"
+                        android:layout_height="?actionBarSize"
+                        android:background="@color/white_background"
+                        android:tag="sticky"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:title="Other Product" />
+
+                    <include
+                        android:id="@+id/content_product_other"
+                        layout="@layout/content_product_other"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/toolbarOtherProduct" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp"
+                    android:background="@color/grey_background"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/constraintProductOther" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintProductHistory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view2">
+
+                    <androidx.appcompat.widget.Toolbar
+                        android:id="@+id/toolbarHistoryProduct"
+                        android:layout_width="match_parent"
+                        android:layout_height="?actionBarSize"
+                        android:background="@color/white_background"
+                        android:tag="sticky"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:title="Product History" />
+
+                    <include
+                        android:id="@+id/content_product_history"
+                        layout="@layout/content_product_riwayat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/toolbarHistoryProduct" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.core.widget.NestedScrollView>
+        </me.didik.component.StickyNestedScrollView>
 
-        <com.google.android.material.bottomappbar.BottomAppBar
+        <FrameLayout
             android:id="@+id/bottomAppBarDtl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white_background"
+            android:elevation="16dp"
+            android:padding="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="BottomAppBar">
+            app:layout_constraintStart_toStartOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -329,7 +399,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/btnDtlBuy"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.button.MaterialButton
+                <Button
                     android:id="@+id/btnDtlBuy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -341,7 +411,18 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </com.google.android.material.bottomappbar.BottomAppBar>
+        </FrameLayout>
+
+        <include
+            android:id="@+id/shimmerDetail"
+            layout="@layout/shimmer_product_detail"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbarDetail" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
