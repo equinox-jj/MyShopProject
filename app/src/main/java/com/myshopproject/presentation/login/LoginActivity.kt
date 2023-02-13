@@ -12,7 +12,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.FirebaseTooManyRequestsException
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.ktx.messaging
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.myshopproject.data.source.remote.dto.ErrorResponseDTO
@@ -42,6 +44,8 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        firebaseMessaging = Firebase.messaging
 
         setupListener()
         initObserver()

@@ -20,6 +20,7 @@ import com.google.android.material.badge.BadgeUtils
 import com.myshopproject.R
 import com.myshopproject.databinding.ActivityMainBinding
 import com.myshopproject.presentation.notification.NotificationActivity
+import com.myshopproject.presentation.payment.PaymentActivity
 import com.myshopproject.presentation.trolley.TrolleyActivity
 import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.presentation.viewmodel.LocalViewModel
@@ -50,6 +51,10 @@ class MainActivity : AppCompatActivity() {
         setupNavHostFragment()
         setupToolbarMenu()
         initDataStore()
+        /** INTENT PAYMENT */
+        binding.toolbarMain.setOnClickListener {
+            startActivity(Intent(this@MainActivity, PaymentActivity::class.java))
+        }
     }
 
     private fun setupNavHostFragment() {
@@ -75,19 +80,18 @@ class MainActivity : AppCompatActivity() {
         addMenuProvider(object : MenuProvider {
             override fun onPrepareMenu(menu: Menu) {
                 super.onPrepareMenu(menu)
-                val badgeTrolley = BadgeDrawable.create(this@MainActivity)
-                val badgeNotification = BadgeDrawable.create(this@MainActivity)
+                val iconBadgeCount = BadgeDrawable.create(this@MainActivity)
                 lifecycleScope.launch {
                     lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                         launch {
                             localViewModel.getAllProduct().collectLatest { result ->
                                 if (result.isNotEmpty()) {
-                                    badgeTrolley.isVisible = true
-                                    badgeTrolley.number = result.size
-                                    BadgeUtils.attachBadgeDrawable(badgeTrolley, binding.toolbarMain, R.id.menu_cart)
+                                    iconBadgeCount.isVisible = true
+                                    iconBadgeCount.number = result.size
+                                    BadgeUtils.attachBadgeDrawable(iconBadgeCount, binding.toolbarMain, R.id.menu_cart)
                                 } else {
-                                    badgeTrolley.isVisible = false
-                                    BadgeUtils.detachBadgeDrawable(badgeTrolley, binding.toolbarMain, R.id.menu_cart)
+                                    iconBadgeCount.isVisible = false
+                                    BadgeUtils.detachBadgeDrawable(iconBadgeCount, binding.toolbarMain, R.id.menu_cart)
                                 }
                             }
                         }
@@ -96,12 +100,12 @@ class MainActivity : AppCompatActivity() {
                                 val unreadNotification = result.filter { !it.isRead }
 
                                 if (result.isNotEmpty()) {
-                                    badgeNotification.isVisible = true
-                                    badgeNotification.number = unreadNotification.size
-                                    BadgeUtils.attachBadgeDrawable(badgeNotification, binding.toolbarMain, R.id.menu_notification)
+                                    iconBadgeCount.isVisible = true
+                                    iconBadgeCount.number = unreadNotification.size
+                                    BadgeUtils.attachBadgeDrawable(iconBadgeCount, binding.toolbarMain, R.id.menu_notification)
                                 } else {
-                                    badgeNotification.isVisible = false
-                                    BadgeUtils.detachBadgeDrawable(badgeNotification, binding.toolbarMain, R.id.menu_notification)
+                                    iconBadgeCount.isVisible = false
+                                    BadgeUtils.detachBadgeDrawable(iconBadgeCount, binding.toolbarMain, R.id.menu_notification)
                                 }
                             }
                         }
