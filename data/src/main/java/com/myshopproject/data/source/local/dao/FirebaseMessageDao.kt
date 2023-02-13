@@ -20,7 +20,7 @@ interface FirebaseMessageDao {
     @Query("UPDATE $FCM_TABLE SET is_read = :isRead WHERE id = :id")
     suspend fun updateReadNotification(isRead: Boolean, id: Int?)
 
-    @Query("UPDATE $FCM_TABLE SET is_read = :isRead")
+    @Query("UPDATE $FCM_TABLE SET is_read = :isRead WHERE is_checked = 1")
     suspend fun setAllReadNotification(isRead: Boolean)
 
     @Query("UPDATE $FCM_TABLE SET is_checked = :isChecked WHERE id = :id")

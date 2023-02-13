@@ -44,13 +44,14 @@
     <string name="select_all">Pilih Semua</string>
     <string name="total_price">Total Harga</string>
     <string name="out_of_stock">Stock Habis</string>
-    <string name="give_your_rating">Give Your Rating</string>
-    <string name="submit">Submit</string>
-    <string name="your_order_is_successful">Your Order is Successful</string>
-    <string name="check_your_connectivity">Check your connectivity.</string>
-    <string name="notification">Notification</string>
-    <string name="empty_notification">Empty Notification</string>
-    <string name="delete">Delete</string>
-    <string name="read_notification">Read Notification</string>
-    <string name="check_notification">Check Notification</string>
+    <string name="give_your_rating">Berikan Rating</string>
+    <string name="submit">Kirim</string>
+    <string name="your_order_is_successful">Pemesanan Berhasil</string>
+    <string name="check_your_connectivity">Cek Koneksi.</string>
+    <string name="notification">Notifikasi</string>
+    <string name="empty_notification">Notifikasi Kosong</string>
+    <string name="delete">Hapus</string>
+    <string name="read_notification">Baca Notifikasi</string>
+    <string name="check_notification">Cek Notifikasi</string>
+    <string name="multiple_select">Multiple Select</string>
 </resources>

@@ -131,7 +131,7 @@
             android:windowSoftInputMode="adjustPan" />
 
         <service
-            android:name=".firebase.MyFirebaseNotification"
+            android:name=".service.MyFirebaseNotification"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />

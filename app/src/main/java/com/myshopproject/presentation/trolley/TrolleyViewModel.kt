@@ -7,19 +7,16 @@ import androidx.lifecycle.viewModelScope
 import com.myshopproject.domain.entities.SuccessResponseStatus
 import com.myshopproject.domain.entities.UpdateStockItem
 import com.myshopproject.domain.entities.UpdateStockProduct
-import com.myshopproject.domain.usecase.LocalUseCase
 import com.myshopproject.domain.usecase.RemoteUseCase
 import com.myshopproject.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class TrolleyViewModel @Inject constructor(
-    private val remoteUseCase: RemoteUseCase,
-    private val localUseCase: LocalUseCase
+    private val remoteUseCase: RemoteUseCase
 ) : ViewModel() {
 
     private val _updateStockState = MutableLiveData<Resource<SuccessResponseStatus>>()
@@ -42,11 +39,4 @@ class TrolleyViewModel @Inject constructor(
             }
         }.launchIn(viewModelScope)
     }
-
-    fun deleteProductByIdFromTrolley(id: Int?) {
-        viewModelScope.launch {
-            localUseCase.deleteProductByIdFromTrolley(id)
-        }
-    }
-
 }

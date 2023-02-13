@@ -37,7 +37,7 @@ class NotificationAdapter(
                     cbNotification.hide()
                 }
 
-                cvNotification.setCardBackgroundColor(if (fcmDataDomain.isRead) Color.WHITE else ContextCompat.getColor(context,R.color.primaryColor))
+                cvNotification.setCardBackgroundColor(if (fcmDataDomain.isRead) Color.WHITE else ContextCompat.getColor(context,R.color.bg_notification_card))
 
                 cvNotification.setOnClickListener {
                     if (!isMultipleSelect) {

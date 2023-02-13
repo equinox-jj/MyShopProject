@@ -8,7 +8,6 @@ import com.myshopproject.domain.utils.Constants
 @Entity(tableName = Constants.FCM_TABLE)
 data class FcmEntity(
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
     val id: Int? = null,
 
     @ColumnInfo(name = "notification_title")

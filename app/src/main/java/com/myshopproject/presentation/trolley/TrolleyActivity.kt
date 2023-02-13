@@ -2,12 +2,15 @@ package com.myshopproject.presentation.trolley
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.myshopproject.databinding.ActivityTrolleyBinding
+import com.myshopproject.domain.entities.CartDataDomain
 import com.myshopproject.domain.entities.UpdateStockItem
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.buysuccess.BuySuccessActivity
@@ -71,7 +74,7 @@ class TrolleyActivity : AppCompatActivity() {
     private fun initObserver() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                localViewModel.getAllProduct().collect { result ->
+                localViewModel.getAllProduct().collectLatest { result ->
                     if (result.isNotEmpty()) {
                         var totalPrice = 0
                         val filterResult = result.filter { it.isChecked }
@@ -113,17 +116,18 @@ class TrolleyActivity : AppCompatActivity() {
     }
 
     private fun postProductTrolley() {
-        val dataStockItems = arrayListOf<UpdateStockItem>()
-        val listOfProductId = arrayListOf<String>()
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 localViewModel.getAllCheckedProduct().collectLatest { result ->
+                    val dataStockItems = arrayListOf<UpdateStockItem>()
+                    val listOfProductId = arrayListOf<String>()
                     for (i in result.indices) {
                         dataStockItems.add(UpdateStockItem(result[i].id.toString(), result[i].quantity!!))
                         listOfProductId.add(result[i].id.toString())
                     }
                     binding.btnBuyTrlly.setOnClickListener {
                         if (result.isEmpty()) {
+                            Toast.makeText(this@TrolleyActivity, "You haven't select any product yet", Toast.LENGTH_SHORT).show()
                             binding.btnBuyTrlly.isClickable = false
                         } else {
                             viewModel.updateStock(userId, dataStockItems)
@@ -131,11 +135,11 @@ class TrolleyActivity : AppCompatActivity() {
                                 when (response) {
                                     is Resource.Loading -> {}
                                     is Resource.Success -> {
-                                        dataStockItems.forEach { viewModel.deleteProductByIdFromTrolley(it.id_product.toInt()) }
+                                        dataStockItems.forEach { localViewModel.deleteProductByIdFromTrolley(it.id_product.toInt()) }
                                         val intent = Intent(this@TrolleyActivity, BuySuccessActivity::class.java)
                                         intent.putExtra(LIST_PRODUCT_ID, listOfProductId)
                                         startActivity(intent)
-                                        finishAffinity()
+                                        finish()
                                     }
                                     is Resource.Error -> {}
                                 }
@@ -150,7 +154,7 @@ class TrolleyActivity : AppCompatActivity() {
     private fun initRecyclerView() {
         binding.apply {
             trolleyAdapter = TrolleyAdapter(
-                onDeleteItem = { localViewModel.deleteProductByIdFromTrolley(it.id) },
+                onDeleteItem = { setDialogDeleteItem(it) },
                 onAddQuantity = {
                     val productId = it.id
                     val quantity = it.quantity
@@ -179,6 +183,17 @@ class TrolleyActivity : AppCompatActivity() {
                 },
             )
         }
+    }
+
+    private fun setDialogDeleteItem(data: CartDataDomain) {
+        AlertDialog.Builder(this@TrolleyActivity)
+            .setTitle("Remove item from trolley")
+            .setMessage("Are you sure you want to remove this item?")
+            .setPositiveButton("Ok") { _, _ ->
+                localViewModel.deleteProductByIdFromTrolley(data.id)
+            }
+            .setNegativeButton("Cancel") { _, _ -> }
+            .show()
     }
 
 }

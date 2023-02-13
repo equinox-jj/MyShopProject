@@ -53,4 +53,5 @@
     <string name="delete">Delete</string>
     <string name="read_notification">Read Notification</string>
     <string name="check_notification">Check Notification</string>
+    <string name="multiple_select">Multiple Select</string>
 </resources>

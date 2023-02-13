@@ -1,4 +1,4 @@
-package com.myshopproject.firebase
+package com.myshopproject.service
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -64,7 +64,6 @@ class MyFirebaseNotification: FirebaseMessagingService() {
         val date = LocalDate.now().toString()
         CoroutineScope(Dispatchers.IO).launch {
             localUseCase.insertNotification(FcmDataDomain(notificationTitle = title.toString(), notificationBody = messageBody.toString(), notificationDate = date))
-
         }
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
     }

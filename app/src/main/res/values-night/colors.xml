@@ -22,6 +22,7 @@
     <color name="bg_color">#FFC7CD</color>
     <color name="bg_button_pink">#EB848E</color>
     <color name="bg_status_bar">#FFC7CD</color>
+    <color name="bg_notification_card">#A7CFFF</color>
 
     <color name="primaryColor">#EB848E</color>
     <color name="primaryLightColor">#FFC7CD</color>

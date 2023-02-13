@@ -36,6 +36,8 @@ class LoginActivity : AppCompatActivity() {
     private val viewModel by viewModels<LoginViewModel>()
     private val prefViewModel by viewModels<DataStoreViewModel>()
 
+    private lateinit var firebaseMessaging: FirebaseMessaging
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -86,7 +88,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupListener() {
-        val firebaseMessaging = FirebaseMessaging.getInstance()
         binding.apply {
             btnLogin.setOnClickListener {
                 if (validation()) {

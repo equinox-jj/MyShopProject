@@ -4,20 +4,23 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.myshopproject.R
 import com.myshopproject.databinding.ActivityNotificationBinding
 import com.myshopproject.domain.entities.FcmDataDomain
 import com.myshopproject.presentation.notification.adapter.NotificationAdapter
+import com.myshopproject.presentation.viewmodel.LocalViewModel
 import com.myshopproject.utils.hide
 import com.myshopproject.utils.show
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -27,9 +30,9 @@ class NotificationActivity : AppCompatActivity() {
 
     private lateinit var menuNotification: Menu
 
-    private val viewModel by viewModels<NotificationViewModel>()
+    private val viewModel by viewModels<LocalViewModel>()
     private var adapter: NotificationAdapter? = null
-    private var multipleSelect = false
+    private var isMultipleSelect = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,9 +45,10 @@ class NotificationActivity : AppCompatActivity() {
 
     private fun setupToolbar() {
         setSupportActionBar(binding.toolbarNotification)
-        supportActionBar?.title = "Notification"
+        supportActionBar?.title = getString(R.string.notification)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
 
         addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -55,7 +59,7 @@ class NotificationActivity : AppCompatActivity() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 when (menuItem.itemId) {
                     android.R.id.home -> {
-                        finish()
+                        onBackPressed()
                     }
                     R.id.menu_check_notification -> {
                         showMultipleSelect()
@@ -73,23 +77,22 @@ class NotificationActivity : AppCompatActivity() {
     }
 
     private fun showMultipleSelect() {
-        multipleSelect = !multipleSelect
+        isMultipleSelect = !isMultipleSelect
         initObserver()
 
-        if (multipleSelect) {
+        if (isMultipleSelect) {
             menuNotification.findItem(R.id.menu_read_notification)?.isVisible = true
             menuNotification.findItem(R.id.menu_delete_notification)?.isVisible = true
             menuNotification.findItem(R.id.menu_check_notification)?.isVisible = false
 
-            binding.toolbarNotification.title = "Multiple Select"
+            binding.toolbarNotification.title = getString(R.string.multiple_select)
         } else {
             menuNotification.findItem(R.id.menu_read_notification)?.isVisible = false
             menuNotification.findItem(R.id.menu_delete_notification)?.isVisible = false
             menuNotification.findItem(R.id.menu_check_notification)?.isVisible = true
 
-            binding.toolbarNotification.title = "Notification"
+            binding.toolbarNotification.title = getString(R.string.notification)
         }
-
     }
 
     private fun readNotification() {
@@ -105,11 +108,11 @@ class NotificationActivity : AppCompatActivity() {
     private fun initObserver() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.getAllNotification().collect { result ->
+                viewModel.getAllNotification().collectLatest { result ->
                     if (result.isNotEmpty()) {
                         adapter = NotificationAdapter(
                             context = this@NotificationActivity,
-                            isMultipleSelect = multipleSelect,
+                            isMultipleSelect = isMultipleSelect,
                             onItemClicked = { onNotificationItemClicked(it) },
                             onCheckboxChecked = { onCheckboxChecked(it) }
                         )
@@ -131,13 +134,10 @@ class NotificationActivity : AppCompatActivity() {
 
     private fun onNotificationItemClicked(data: FcmDataDomain) {
         viewModel.updateReadNotification(true, data.id)
-
-        MaterialAlertDialogBuilder(this)
+        AlertDialog.Builder(this@NotificationActivity)
             .setTitle(data.notificationTitle)
             .setMessage(data.notificationBody)
-            .setPositiveButton("Ok") { dialog, which ->
-                dialog.dismiss()
-            }
+            .setPositiveButton("Ok") { _, _ -> }
             .show()
     }
 
@@ -148,7 +148,7 @@ class NotificationActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (multipleSelect) {
+        if (isMultipleSelect) {
             showMultipleSelect()
         } else {
             onBackPressedDispatcher.onBackPressed()
@@ -157,7 +157,7 @@ class NotificationActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        if (multipleSelect) {
+        if (isMultipleSelect) {
             showMultipleSelect()
         } else {
             onBackPressedDispatcher.onBackPressed()
@@ -166,4 +166,13 @@ class NotificationActivity : AppCompatActivity() {
         return true
     }
 
+    /** NEW BACK PRESSED */
+    private fun backPressed() {
+        val onBackPressedCallback = object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+
+            }
+        }
+        onBackPressedDispatcher.addCallback(this@NotificationActivity, onBackPressedCallback)
+    }
 }

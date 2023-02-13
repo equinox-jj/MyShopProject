@@ -20,13 +20,13 @@ import com.google.android.material.badge.BadgeUtils
 import com.myshopproject.R
 import com.myshopproject.databinding.ActivityMainBinding
 import com.myshopproject.presentation.notification.NotificationActivity
-import com.myshopproject.presentation.notification.NotificationViewModel
 import com.myshopproject.presentation.trolley.TrolleyActivity
 import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.presentation.viewmodel.LocalViewModel
 import com.myshopproject.utils.hide
 import com.myshopproject.utils.show
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.*
@@ -41,7 +41,6 @@ class MainActivity : AppCompatActivity() {
 
     private val prefViewModel by viewModels<DataStoreViewModel>()
     private val localViewModel by viewModels<LocalViewModel>()
-    private val notificationViewModel by viewModels<NotificationViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,7 +80,7 @@ class MainActivity : AppCompatActivity() {
                 lifecycleScope.launch {
                     lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                         launch {
-                            localViewModel.getAllProduct().collect { result ->
+                            localViewModel.getAllProduct().collectLatest { result ->
                                 if (result.isNotEmpty()) {
                                     badgeTrolley.isVisible = true
                                     badgeTrolley.number = result.size
@@ -93,13 +92,15 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                         launch {
-                            notificationViewModel.getAllNotification().collect { result ->
+                            localViewModel.getAllNotification().collectLatest { result ->
+                                val unreadNotification = result.filter { !it.isRead }
+
                                 if (result.isNotEmpty()) {
                                     badgeNotification.isVisible = true
-                                    badgeNotification.number = result.size
+                                    badgeNotification.number = unreadNotification.size
                                     BadgeUtils.attachBadgeDrawable(badgeNotification, binding.toolbarMain, R.id.menu_notification)
                                 } else {
-                                    badgeTrolley.isVisible = false
+                                    badgeNotification.isVisible = false
                                     BadgeUtils.detachBadgeDrawable(badgeNotification, binding.toolbarMain, R.id.menu_notification)
                                 }
                             }
