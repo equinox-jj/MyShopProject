@@ -47,6 +47,14 @@ class PaymentBodyAdapter: RecyclerView.Adapter<PaymentBodyAdapter.PaymentBodyVH>
                     }
                 }
 
+                if (data.status) {
+                    clPaymentBody.alpha = 1.0f
+                    clPaymentBody.isClickable = true
+                } else {
+                    clPaymentBody.alpha = 0.4f
+                    clPaymentBody.isClickable = false
+                }
+
                 tvPaymentName.text = data.name
             }
         }
