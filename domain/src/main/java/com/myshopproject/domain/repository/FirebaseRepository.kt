@@ -1,5 +1,8 @@
 package com.myshopproject.domain.repository
 
-//interface FirebaseRepository {
-//    fun getPaymentMethod(): Flow<Resource<String>>
-//}
+import com.myshopproject.domain.utils.Resource
+import kotlinx.coroutines.flow.Flow
+
+interface FirebaseRepository {
+    fun getPaymentMethod(): Flow<Resource<String>>
+}

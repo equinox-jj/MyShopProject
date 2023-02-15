@@ -11,6 +11,7 @@ import com.myshopproject.data.source.remote.network.ApiAuth
 import com.myshopproject.data.source.remote.network.ApiProduct
 import com.myshopproject.domain.preferences.MyPreferences
 import com.myshopproject.domain.repository.AuthRepository
+import com.myshopproject.domain.repository.FirebaseRepository
 import com.myshopproject.domain.repository.ProductRepository
 import com.myshopproject.domain.usecase.LocalInteractor
 import com.myshopproject.domain.usecase.LocalUseCase
@@ -137,9 +138,10 @@ object AppModule {
     @Singleton
     fun providesRemoteUseCase(
         authRepository: AuthRepository,
-        productRepository: ProductRepository
+        productRepository: ProductRepository,
+        firebaseRepository: FirebaseRepository
     ): RemoteUseCase {
-        return RemoteInteractor(authRepository, productRepository)
+        return RemoteInteractor(authRepository, productRepository, firebaseRepository)
     }
 
     @Provides
