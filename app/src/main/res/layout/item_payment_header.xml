@@ -2,20 +2,53 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/clPaymentHeader"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/white_background">
 
-    <TextView
-        android:id="@+id/tvPaymentItemHeader"
+    <View
+        android:id="@+id/line_divider"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_black"
-        android:padding="8dp"
-        android:textSize="20sp"
+        android:layout_height="8dp"
+        android:background="@color/grey_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Lorem Ipsum" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RelativeLayout
+        android:id="@+id/rlPaymentHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/line_divider">
+
+        <TextView
+            android:id="@+id/tvPaymentItemHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/ivDropdownPayment"
+            android:layout_alignParentStart="true"
+            android:fontFamily="@font/poppins_black"
+            android:maxLines="1"
+            android:textSize="20sp"
+            tools:text="Lorem Ipsum" />
+
+        <ImageButton
+            android:id="@+id/ivDropdownPayment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tvPaymentItemHeader"
+            android:layout_alignBottom="@+id/tvPaymentItemHeader"
+            android:layout_alignParentEnd="true"
+            android:background="@android:color/transparent"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_upward_filled" />
+
+    </RelativeLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvItemBodyPayment"
@@ -25,7 +58,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvPaymentItemHeader"
+        app:layout_constraintTop_toBottomOf="@+id/rlPaymentHeader"
         tools:listitem="@layout/item_payment_body" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

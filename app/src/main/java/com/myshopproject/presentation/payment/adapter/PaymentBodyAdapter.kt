@@ -2,6 +2,7 @@ package com.myshopproject.presentation.payment.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -56,6 +57,7 @@ class PaymentBodyAdapter(
                 } else {
                     clPaymentBody.alpha = 0.4f
                     clPaymentBody.isClickable = false
+                    clPaymentBody.setBackgroundColor(ContextCompat.getColor(itemView.context,R.color.grey_background))
                 }
 
                 tvPaymentName.text = data.name

@@ -128,14 +128,12 @@ class TrolleyActivity : AppCompatActivity() {
 
     private fun postProductTrolley() {
         if (paymentParcel == null) {
-            binding.btnBuyTrlly.text = getString(R.string.select_payment)
             binding.btnBuyTrlly.setOnClickListener {
                 val intent = Intent(this@TrolleyActivity, PaymentActivity::class.java)
                 startActivity(intent)
             }
             binding.llTrllyPayment.hide()
         } else {
-            binding.btnBuyTrlly.text = getString(R.string.buy)
             binding.llTrllyPayment.setOnClickListener {
                 val intent = Intent(this@TrolleyActivity, PaymentActivity::class.java)
                 startActivity(intent)

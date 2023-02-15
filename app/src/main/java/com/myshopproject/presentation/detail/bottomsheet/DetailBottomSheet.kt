@@ -84,7 +84,6 @@ class DetailBottomSheet(
             if (data.stock == 1) tvStockProductBottSht.text = resources.getString(R.string.out_of_stock)
             else tvStockProductBottSht.text = data.stock.toString()
             if (paymentData == null) {
-                binding.btnBuyNowBottSheet.text = getString(R.string.select_payment)
                 binding.btnBuyNowBottSheet.setOnClickListener {
                     val intent = Intent(requireContext(), PaymentActivity::class.java)
                     intent.putExtra(PRODUCT_ID_INTENT, data.id)

@@ -76,7 +76,8 @@ class PaymentActivity : AppCompatActivity() {
                                 startActivity(intent)
                                 finish()
                             }
-                        }
+                        },
+                        onHeaderClick = {}
                     )
                     binding.rvItemHeaderPayment.adapter = adapterPayment
                     binding.rvItemHeaderPayment.setHasFixedSize(true)

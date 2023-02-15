@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/grey_background"
     tools:context=".presentation.payment.PaymentActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -12,10 +13,10 @@
         android:layout_height="?actionBarSize"
         android:background="@color/primaryLightColor"
         app:contentInsetStart="0dp"
-        app:title="Select Payment Method"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="Select Payment Method" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvItemHeaderPayment"
