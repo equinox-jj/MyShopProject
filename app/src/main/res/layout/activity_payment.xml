@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".presentation.payment.PaymentActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarPayment"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@color/primaryLightColor"
+        app:contentInsetStart="0dp"
+        app:title="Select Payment Method"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvItemHeaderPayment"
         android:layout_width="0dp"
@@ -14,7 +25,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarPayment"
         tools:listitem="@layout/item_payment_body" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

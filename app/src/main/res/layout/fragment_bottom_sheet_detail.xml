@@ -135,17 +135,48 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTotalBottSheet" />
 
+    <LinearLayout
+        android:id="@+id/llBottPayment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/line2"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:id="@+id/ivBottPaymentImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:contentDescription="@null"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tvBottPaymentName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:maxLines="1"
+            tools:text="Lorem Ipsum" />
+
+    </LinearLayout>
+
     <Button
         android:id="@+id/btnBuyNowBottSheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:backgroundTint="@color/primaryColor"
-        tools:text="Lorem Ipsum"
         android:textColor="@color/text_white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/line2" />
+        app:layout_constraintTop_toBottomOf="@+id/llBottPayment"
+        tools:text="Lorem Ipsum" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

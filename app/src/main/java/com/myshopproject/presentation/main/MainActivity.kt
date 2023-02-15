@@ -20,14 +20,12 @@ import com.google.android.material.badge.BadgeUtils
 import com.myshopproject.R
 import com.myshopproject.databinding.ActivityMainBinding
 import com.myshopproject.presentation.notification.NotificationActivity
-import com.myshopproject.presentation.payment.PaymentActivity
 import com.myshopproject.presentation.trolley.TrolleyActivity
 import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.presentation.viewmodel.LocalViewModel
 import com.myshopproject.utils.hide
 import com.myshopproject.utils.show
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.*
@@ -49,12 +47,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupNavHostFragment()
-        setupToolbarMenu()
+        setupToolbar()
         initDataStore()
-        /** INTENT PAYMENT */
-        binding.toolbarMain.setOnClickListener {
-            startActivity(Intent(this@MainActivity, PaymentActivity::class.java))
-        }
     }
 
     private fun setupNavHostFragment() {
@@ -73,39 +67,40 @@ class MainActivity : AppCompatActivity() {
     }
 
     @androidx.annotation.OptIn(com.google.android.material.badge.ExperimentalBadgeUtils::class)
-    private fun setupToolbarMenu() {
+    private fun setupToolbar() {
         setSupportActionBar(binding.toolbarMain)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
         addMenuProvider(object : MenuProvider {
             override fun onPrepareMenu(menu: Menu) {
                 super.onPrepareMenu(menu)
-                val iconBadgeCount = BadgeDrawable.create(this@MainActivity)
+                val iconBadgeTrolley = BadgeDrawable.create(this@MainActivity)
+                val iconBadgeNotification = BadgeDrawable.create(this@MainActivity)
                 lifecycleScope.launch {
                     lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                         launch {
-                            localViewModel.getAllProduct().collectLatest { result ->
+                            localViewModel.getAllProduct().collect { result ->
                                 if (result.isNotEmpty()) {
-                                    iconBadgeCount.isVisible = true
-                                    iconBadgeCount.number = result.size
-                                    BadgeUtils.attachBadgeDrawable(iconBadgeCount, binding.toolbarMain, R.id.menu_cart)
+                                    iconBadgeTrolley.isVisible = true
+                                    iconBadgeTrolley.number = result.size
+                                    BadgeUtils.attachBadgeDrawable(iconBadgeTrolley, binding.toolbarMain, R.id.menu_cart)
                                 } else {
-                                    iconBadgeCount.isVisible = false
-                                    BadgeUtils.detachBadgeDrawable(iconBadgeCount, binding.toolbarMain, R.id.menu_cart)
+                                    iconBadgeTrolley.isVisible = false
+                                    BadgeUtils.detachBadgeDrawable(iconBadgeTrolley, binding.toolbarMain, R.id.menu_cart)
                                 }
                             }
                         }
                         launch {
-                            localViewModel.getAllNotification().collectLatest { result ->
+                            localViewModel.getAllNotification().collect { result ->
                                 val unreadNotification = result.filter { !it.isRead }
 
-                                if (result.isNotEmpty()) {
-                                    iconBadgeCount.isVisible = true
-                                    iconBadgeCount.number = unreadNotification.size
-                                    BadgeUtils.attachBadgeDrawable(iconBadgeCount, binding.toolbarMain, R.id.menu_notification)
+                                if (unreadNotification.isNotEmpty()) {
+                                    iconBadgeNotification.isVisible = true
+                                    iconBadgeNotification.number = unreadNotification.size
+                                    BadgeUtils.attachBadgeDrawable(iconBadgeNotification, binding.toolbarMain, R.id.menu_notification)
                                 } else {
-                                    iconBadgeCount.isVisible = false
-                                    BadgeUtils.detachBadgeDrawable(iconBadgeCount, binding.toolbarMain, R.id.menu_notification)
+                                    iconBadgeNotification.isVisible = false
+                                    BadgeUtils.detachBadgeDrawable(iconBadgeNotification, binding.toolbarMain, R.id.menu_notification)
                                 }
                             }
                         }

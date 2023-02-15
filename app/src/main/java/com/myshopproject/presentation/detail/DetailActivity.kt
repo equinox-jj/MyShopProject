@@ -27,13 +27,19 @@ import com.myshopproject.databinding.ActivityDetailBinding
 import com.myshopproject.databinding.CustomDialogImageDetailBinding
 import com.myshopproject.domain.entities.CartDataDomain
 import com.myshopproject.domain.entities.DetailProductData
+import com.myshopproject.domain.entities.PaymentResult
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.detail.adapter.ImageSliderAdapter
 import com.myshopproject.presentation.detail.bottomsheet.DetailBottomSheet
 import com.myshopproject.presentation.favorite.adapter.ProductFavoriteAdapter
 import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.presentation.viewmodel.LocalViewModel
-import com.myshopproject.utils.*
+import com.myshopproject.utils.Constants.PAYMENT_DATA_INTENT
+import com.myshopproject.utils.Constants.PRODUCT_ID_INTENT
+import com.myshopproject.utils.ItemType
+import com.myshopproject.utils.hide
+import com.myshopproject.utils.show
+import com.myshopproject.utils.toIDRPrice
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -51,6 +57,7 @@ class DetailActivity : AppCompatActivity() {
 
     private lateinit var dataDetailProduct: DetailProductData
 
+    private var paymentParcel: PaymentResult? = null
     private var productId = 0
     private var userId = 0
 
@@ -59,9 +66,9 @@ class DetailActivity : AppCompatActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupToolbar()
+        paymentParcel = intent.getParcelableExtra(PAYMENT_DATA_INTENT)
 
-        setupToolbarMenu()
+        setupToolbar()
         coroutineScope()
         refreshListener()
         checkProductId()
@@ -86,7 +93,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun checkProductId() {
-        val idProduct = intent.getIntExtra(Constants.PRODUCT_ID_INTENT, 0)
+        val idProduct = intent.getIntExtra(PRODUCT_ID_INTENT, 0)
         productId = idProduct
         if (productId == 0) {
             val data: Uri? = intent?.data
@@ -101,9 +108,7 @@ class DetailActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbarDetail)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    }
 
-    private fun setupToolbarMenu() {
         addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.menu_detail_toolbar, menu)
@@ -289,10 +294,16 @@ class DetailActivity : AppCompatActivity() {
 
     private fun setupListener(data: DetailProductData) {
         binding.apply {
-            btnDtlBuy.setOnClickListener {
-                val bottSheet = DetailBottomSheet(data)
+            if (paymentParcel != null) {
+                val bottSheet = DetailBottomSheet(data, paymentParcel)
                 bottSheet.show(supportFragmentManager, DetailActivity::class.java.simpleName)
             }
+
+            btnDtlBuy.setOnClickListener {
+                val bottSheet = DetailBottomSheet(data, paymentParcel)
+                bottSheet.show(supportFragmentManager, DetailActivity::class.java.simpleName)
+            }
+
             btnDtlTrolley.setOnClickListener {
                 if (data.stock > 1) {
                     localViewModel.insertCart(
@@ -307,15 +318,10 @@ class DetailActivity : AppCompatActivity() {
                             isChecked = false
                         )
                     )
-                    Toast.makeText(this@DetailActivity, "Add to trolley.", Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(this@DetailActivity, "Add to trolley.", Toast.LENGTH_SHORT).show()
                     finish()
                 } else {
-                    Toast.makeText(
-                        this@DetailActivity,
-                        "Failed add to trolley.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(this@DetailActivity, "Failed add to trolley.", Toast.LENGTH_SHORT).show()
                 }
             }
             ivImageFavProductDtl.setOnClickListener {
@@ -339,11 +345,7 @@ class DetailActivity : AppCompatActivity() {
                     Toast.makeText(this, "Success add to favorite.", Toast.LENGTH_SHORT).show()
                 }
                 is Resource.Error -> {
-                    Toast.makeText(
-                        this@DetailActivity,
-                        response.errorBody.toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(this@DetailActivity, response.errorBody.toString(), Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -358,11 +360,7 @@ class DetailActivity : AppCompatActivity() {
                     Toast.makeText(this, "Success remove from favorite.", Toast.LENGTH_SHORT).show()
                 }
                 is Resource.Error -> {
-                    Toast.makeText(
-                        this@DetailActivity,
-                        response.errorBody.toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(this@DetailActivity, response.errorBody.toString(), Toast.LENGTH_SHORT).show()
                 }
             }
         }

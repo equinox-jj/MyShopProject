@@ -11,7 +11,7 @@ interface ProductCartDao {
     @Query("SELECT * FROM $CART_TABLE")
     fun getAllProduct(): Flow<List<CartEntity>>
 
-    @Query("SELECT * FROM $CART_TABLE WHERE is_checked = '1'")
+    @Query("SELECT * FROM $CART_TABLE WHERE is_checked = 1")
     fun getAllCheckedProduct(): Flow<List<CartEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -10,7 +10,9 @@ import com.myshopproject.databinding.ItemPaymentBodyBinding
 import com.myshopproject.domain.entities.PaymentResult
 import com.myshopproject.utils.DiffUtilRecycler
 
-class PaymentBodyAdapter: RecyclerView.Adapter<PaymentBodyAdapter.PaymentBodyVH>() {
+class PaymentBodyAdapter(
+    private val onClick: (PaymentResult) -> Unit
+): RecyclerView.Adapter<PaymentBodyAdapter.PaymentBodyVH>() {
 
     private var listData = listOf<PaymentResult>()
 
@@ -50,6 +52,7 @@ class PaymentBodyAdapter: RecyclerView.Adapter<PaymentBodyAdapter.PaymentBodyVH>
                 if (data.status) {
                     clPaymentBody.alpha = 1.0f
                     clPaymentBody.isClickable = true
+                    clPaymentBody.setOnClickListener { onClick.invoke(data) }
                 } else {
                     clPaymentBody.alpha = 0.4f
                     clPaymentBody.isClickable = false

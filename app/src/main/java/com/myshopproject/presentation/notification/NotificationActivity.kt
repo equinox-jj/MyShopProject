@@ -46,7 +46,6 @@ class NotificationActivity : AppCompatActivity() {
     private fun setupToolbar() {
         setSupportActionBar(binding.toolbarNotification)
         supportActionBar?.title = getString(R.string.notification)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
@@ -85,13 +84,13 @@ class NotificationActivity : AppCompatActivity() {
             menuNotification.findItem(R.id.menu_delete_notification)?.isVisible = true
             menuNotification.findItem(R.id.menu_check_notification)?.isVisible = false
 
-            binding.toolbarNotification.title = getString(R.string.multiple_select)
+            supportActionBar?.title = getString(R.string.multiple_select)
         } else {
             menuNotification.findItem(R.id.menu_read_notification)?.isVisible = false
             menuNotification.findItem(R.id.menu_delete_notification)?.isVisible = false
             menuNotification.findItem(R.id.menu_check_notification)?.isVisible = true
 
-            binding.toolbarNotification.title = getString(R.string.notification)
+            supportActionBar?.title = getString(R.string.notification)
         }
     }
 

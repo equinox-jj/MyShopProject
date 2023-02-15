@@ -19,10 +19,18 @@ import com.myshopproject.R
 import com.myshopproject.data.source.remote.dto.ErrorResponseDTO
 import com.myshopproject.databinding.FragmentBottomSheetDetailBinding
 import com.myshopproject.domain.entities.DetailProductData
+import com.myshopproject.domain.entities.PaymentResult
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.buysuccess.BuySuccessActivity
+import com.myshopproject.presentation.payment.PaymentActivity
 import com.myshopproject.presentation.viewmodel.DataStoreViewModel
-import com.myshopproject.utils.Constants
+import com.myshopproject.utils.Constants.PAYMENT_ID_INTENT
+import com.myshopproject.utils.Constants.PAYMENT_NAME_INTENT
+import com.myshopproject.utils.Constants.PRICE_INTENT
+import com.myshopproject.utils.Constants.PRODUCT_ID
+import com.myshopproject.utils.Constants.PRODUCT_ID_INTENT
+import com.myshopproject.utils.hide
+import com.myshopproject.utils.show
 import com.myshopproject.utils.toIDRPrice
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
@@ -30,7 +38,10 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 @AndroidEntryPoint
-class DetailBottomSheet(private val data: DetailProductData) : BottomSheetDialogFragment() {
+class DetailBottomSheet(
+    private val data: DetailProductData,
+    private val paymentData: PaymentResult?
+) : BottomSheetDialogFragment() {
 
     private var _binding: FragmentBottomSheetDetailBinding? = null
     private val binding get() = _binding!!
@@ -39,6 +50,7 @@ class DetailBottomSheet(private val data: DetailProductData) : BottomSheetDialog
     private val prefViewModel by viewModels<DataStoreViewModel>()
 
     private var userId = ""
+    private var totalPrice = 0
     private var quantity = 0
 
     override fun onCreateView(
@@ -52,6 +64,7 @@ class DetailBottomSheet(private val data: DetailProductData) : BottomSheetDialog
         initView()
         setupListener()
         initDataStore()
+
         return binding.root
     }
 
@@ -67,9 +80,62 @@ class DetailBottomSheet(private val data: DetailProductData) : BottomSheetDialog
         binding.apply {
             ivProductBottSht.load(data.image)
             tvProductPriceBottSht.text = data.harga.toIDRPrice()
+            (resources.getString(R.string.buy_now) + data.harga.toIDRPrice()).also { btnBuyNowBottSheet.text = it }
             if (data.stock == 1) tvStockProductBottSht.text = resources.getString(R.string.out_of_stock)
             else tvStockProductBottSht.text = data.stock.toString()
-            (resources.getString(R.string.buy_now) + data.harga.toIDRPrice()).also { btnBuyNowBottSheet.text = it }
+            if (paymentData == null) {
+                binding.btnBuyNowBottSheet.text = getString(R.string.select_payment)
+                binding.btnBuyNowBottSheet.setOnClickListener {
+                    val intent = Intent(requireContext(), PaymentActivity::class.java)
+                    intent.putExtra(PRODUCT_ID_INTENT, data.id)
+                    requireContext().startActivity(intent)
+                }
+                binding.llBottPayment.hide()
+            } else {
+                binding.llBottPayment.setOnClickListener {
+                    val intent = Intent(requireContext(), PaymentActivity::class.java)
+                    intent.putExtra(PRODUCT_ID_INTENT, data.id)
+                    requireContext().startActivity(intent)
+                }
+                binding.btnBuyNowBottSheet.setOnClickListener {
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                            updateStock(userId, data.id.toString(), quantity)
+                        }
+                    }
+                }
+                binding.tvBottPaymentName.text = paymentData.name
+                when (paymentData.id) {
+                    "va_bca" -> {
+                        ivBottPaymentImage.load(R.drawable.img_bca)
+                    }
+                    "va_mandiri" -> {
+                        ivBottPaymentImage.load(R.drawable.img_mandiri)
+                    }
+                    "va_bri" -> {
+                        ivBottPaymentImage.load(R.drawable.img_bri)
+                    }
+                    "va_bni" -> {
+                        ivBottPaymentImage.load(R.drawable.img_bni)
+                    }
+                    "va_btn" -> {
+                        ivBottPaymentImage.load(R.drawable.img_btn)
+                    }
+                    "va_danamon" -> {
+                        ivBottPaymentImage.load(R.drawable.img_danamon)
+                    }
+                    "ewallet_gopay" -> {
+                        ivBottPaymentImage.load(R.drawable.img_gopay)
+                    }
+                    "ewallet_ovo" -> {
+                        ivBottPaymentImage.load(R.drawable.img_ovo)
+                    }
+                    "ewallet_dana" -> {
+                        ivBottPaymentImage.load(R.drawable.img_dana)
+                    }
+                }
+                binding.llBottPayment.show()
+            }
         }
     }
 
@@ -96,15 +162,8 @@ class DetailBottomSheet(private val data: DetailProductData) : BottomSheetDialog
         viewModel.setPrice(data.harga.toInt())
 
         viewModel.price.observe(viewLifecycleOwner) {
+            totalPrice = it
             binding.tvProductPriceBottSht.text = it.toString().toIDRPrice()
-        }
-
-        binding.btnBuyNowBottSheet.setOnClickListener {
-            viewLifecycleOwner.lifecycleScope.launch {
-                viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    updateStock(userId, data.id.toString(), quantity)
-                }
-            }
         }
     }
 
@@ -130,7 +189,10 @@ class DetailBottomSheet(private val data: DetailProductData) : BottomSheetDialog
                 is Resource.Loading -> {}
                 is Resource.Success -> {
                     val intent = Intent(context, BuySuccessActivity::class.java)
-                    intent.putExtra(Constants.PRODUCT_ID, data.id)
+                    intent.putExtra(PRODUCT_ID, data.id)
+                    intent.putExtra(PRICE_INTENT, totalPrice)
+                    intent.putExtra(PAYMENT_ID_INTENT, paymentData?.id)
+                    intent.putExtra(PAYMENT_NAME_INTENT, paymentData?.name)
                     startActivity(intent)
                 }
                 is Resource.Error -> {
@@ -140,7 +202,7 @@ class DetailBottomSheet(private val data: DetailProductData) : BottomSheetDialog
                         val jsonObject = gson.fromJson(errors, JsonObject::class.java)
                         val errorResponse = gson.fromJson(jsonObject, ErrorResponseDTO::class.java)
                         Toast.makeText(requireContext(), "${errorResponse.error.message} ${errorResponse.error.status}", Toast.LENGTH_SHORT).show()
-                    } catch (e: Exception) { }
+                    } catch (_: Exception) {}
                 }
             }
         }

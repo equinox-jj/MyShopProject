@@ -38,6 +38,7 @@
     <string name="type">Tipe</string>
     <string name="description">Deskripsi</string>
     <string name="buy_now">Beli Sekarang - </string>
+    <string name="select_payment">Select Payment Method</string>
     <string name="total">Total</string>
     <string name="share">Bagikan</string>
     <string name="shopping_cart">Keranjang Belanja</string>

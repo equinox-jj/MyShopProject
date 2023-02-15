@@ -6,22 +6,26 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.myshopproject.databinding.ItemPaymentHeaderBinding
+import com.myshopproject.domain.entities.PaymentResult
 import com.myshopproject.domain.entities.PaymentTypeResponse
 import com.myshopproject.utils.DiffUtilRecycler
 
-class PaymentHeaderAdapter: RecyclerView.Adapter<PaymentHeaderAdapter.PaymentHeaderVH>() {
+class PaymentHeaderAdapter(
+    private val onBodyClick: (PaymentResult) -> Unit
+): RecyclerView.Adapter<PaymentHeaderAdapter.PaymentHeaderVH>() {
 
     private var data = listOf<PaymentTypeResponse>()
 
-    class PaymentHeaderVH(private val binding: ItemPaymentHeaderBinding): RecyclerView.ViewHolder(binding.root) {
+    inner class PaymentHeaderVH(private val binding: ItemPaymentHeaderBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(data: PaymentTypeResponse) {
             binding.apply {
-                val paymentBodyAdapter = PaymentBodyAdapter()
-                paymentBodyAdapter.submitData(data.data)
+                val paymentBodyAdapter = PaymentBodyAdapter(
+                    onClick = { onBodyClick.invoke(it) }
+                )
+                paymentBodyAdapter.submitData(data.data.sortedBy { it.order })
                 rvItemBodyPayment.adapter = paymentBodyAdapter
                 rvItemBodyPayment.setHasFixedSize(true)
                 rvItemBodyPayment.addItemDecoration(DividerItemDecoration(itemView.context, DividerItemDecoration.VERTICAL))
-
 
                 tvPaymentItemHeader.text = data.type
             }

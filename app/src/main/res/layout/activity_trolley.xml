@@ -63,21 +63,51 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <LinearLayout
+                android:id="@+id/llTrllyPayment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start|center"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="UseCompoundDrawables">
+
+                <ImageView
+                    android:id="@+id/ivTrllyPaymentImage"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:contentDescription="@null"
+                    tools:src="@tools:sample/avatars" />
+
+                <TextView
+                    android:id="@+id/tvTrllyPaymentName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:maxLines="1"
+                    tools:text="Lorem Ipsum" />
+
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/totalPriceTrlly"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="@string/total_price"
                 android:textSize="11sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/llTrllyPayment" />
 
             <TextView
                 android:id="@+id/tvProductPriceTrlly"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:fontFamily="@font/poppins_regular"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="@+id/totalPriceTrlly"
@@ -92,7 +122,8 @@
                 android:text="@string/buy"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/totalPriceTrlly" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </FrameLayout>
@@ -107,4 +138,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ablTrolley" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
