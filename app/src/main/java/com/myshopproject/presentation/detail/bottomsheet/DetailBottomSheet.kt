@@ -87,6 +87,7 @@ class DetailBottomSheet(
                 binding.btnBuyNowBottSheet.setOnClickListener {
                     val intent = Intent(requireContext(), PaymentActivity::class.java)
                     intent.putExtra(PRODUCT_ID_INTENT, data.id)
+                    dismiss()
                     requireContext().startActivity(intent)
                 }
                 binding.llBottPayment.hide()
@@ -94,6 +95,7 @@ class DetailBottomSheet(
                 binding.llBottPayment.setOnClickListener {
                     val intent = Intent(requireContext(), PaymentActivity::class.java)
                     intent.putExtra(PRODUCT_ID_INTENT, data.id)
+                    dismiss()
                     requireContext().startActivity(intent)
                 }
                 binding.btnBuyNowBottSheet.setOnClickListener {
