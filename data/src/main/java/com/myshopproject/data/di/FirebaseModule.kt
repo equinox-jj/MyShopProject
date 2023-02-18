@@ -1,6 +1,5 @@
 package com.myshopproject.data.di
 
-import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.myshopproject.data.repository.FirebaseRepositoryImpl
 import com.myshopproject.domain.repository.FirebaseRepository
@@ -13,10 +12,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object FirebaseModule {
-
-    @Provides
-    @Singleton
-    fun providesFirebaseMessaging(): FirebaseMessaging = FirebaseMessaging.getInstance()
 
     @Provides
     @Singleton

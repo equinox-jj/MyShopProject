@@ -29,5 +29,5 @@ class RemoteInteractor @Inject constructor(
     override fun updateRate(id: Int, updateRate: String): Flow<Resource<SuccessResponseStatus>> = productRepository.updateRate(id, updateRate)
     override fun getProductOther(userId: Int): Flow<Resource<DataProductResponse>> = productRepository.getProductOther(userId)
     override fun getProductHistory(userId: Int): Flow<Resource<DataProductResponse>> = productRepository.getProductHistory(userId)
-    override fun getPaymentMethod(): Flow<Resource<String>> = firebaseRepository.getPaymentMethod()
+    override fun getPaymentMethod(): Flow<Resource<List<PaymentTypeResponse>>> = firebaseRepository.getPaymentMethod()
 }

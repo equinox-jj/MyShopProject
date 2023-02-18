@@ -7,10 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.myshopproject.databinding.ActivityPaymentBinding
-import com.myshopproject.domain.entities.PaymentTypeResponse
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.detail.DetailActivity
 import com.myshopproject.presentation.payment.adapter.PaymentHeaderAdapter
@@ -44,7 +41,11 @@ class PaymentActivity : AppCompatActivity() {
 
         setupToolbar()
         initObserver()
-//        remoteConfigSetup()
+    }
+
+    private fun setupToolbar() {
+        setSupportActionBar(binding.toolbarPayment)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun initObserver() {
@@ -58,7 +59,6 @@ class PaymentActivity : AppCompatActivity() {
                 is Resource.Success -> {
                     binding.pbPayment.hide()
                     binding.rvItemHeaderPayment.show()
-                    val dataList = Gson().fromJson<List<PaymentTypeResponse>>(response.data, object : TypeToken<List<PaymentTypeResponse>>() {}.type)
                     adapterPayment = PaymentHeaderAdapter(
                         onBodyClick = { data ->
                             if (productId == 0) {
@@ -80,12 +80,11 @@ class PaymentActivity : AppCompatActivity() {
                     )
                     binding.rvItemHeaderPayment.adapter = adapterPayment
                     binding.rvItemHeaderPayment.setHasFixedSize(true)
-                    adapterPayment?.submitData(dataList.sortedBy { it.order })
+                    response.data?.sortedBy { it.order }?.let { adapterPayment?.submitData(it) }
                 }
                 is Resource.Error -> {
                     binding.pbPayment.hide()
                     binding.rvItemHeaderPayment.hide()
-
                 }
             }
         }
@@ -93,49 +92,7 @@ class PaymentActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         finish()
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         return true
-    }
-
-//    private fun remoteConfigSetup() {
-//        val configSettings = remoteConfigSettings {
-//            minimumFetchIntervalInSeconds = 1
-//        }
-//
-//        remoteTest.setConfigSettingsAsync(configSettings)
-//        remoteTest.fetchAndActivate()
-//            .addOnCompleteListener { task ->
-//                if (task.isSuccessful) {
-//                    dataRemoteConfig = remoteTest.getString(FB_CONFIG_KEY)
-//                    val dataList = Gson().fromJson<List<PaymentTypeResponse>>(dataRemoteConfig, object : TypeToken<List<PaymentTypeResponse>>() {}.type)
-//
-//                    adapterPayment = PaymentHeaderAdapter(
-//                        onBodyClick = { data ->
-//                            if (productId == 0) {
-//                                val intent = Intent(this@PaymentActivity, TrolleyActivity::class.java)
-//                                intent.putExtra(PAYMENT_DATA_INTENT, data)
-//                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-//                                startActivity(intent)
-//                                finish()
-//                            } else {
-//                                val intent = Intent(this@PaymentActivity, DetailActivity::class.java)
-//                                intent.putExtra(PRODUCT_ID_INTENT, productId)
-//                                intent.putExtra(PAYMENT_DATA_INTENT, data)
-//                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-//                                startActivity(intent)
-//                                finish()
-//                            }
-//                        },
-//                        onHeaderClick = {}
-//                    )
-//                    binding.rvItemHeaderPayment.adapter = adapterPayment
-//                    binding.rvItemHeaderPayment.setHasFixedSize(true)
-//                    adapterPayment?.submitData(dataList.sortedBy { it.order })
-//                }
-//            }
-//    }
-
-    private fun setupToolbar() {
-        setSupportActionBar(binding.toolbarPayment)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 }

@@ -60,6 +60,7 @@ class DetailActivity : AppCompatActivity() {
     private var paymentParcel: PaymentResult? = null
     private var productId = 0
     private var userId = 0
+    private var isFavorite = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -195,7 +196,11 @@ class DetailActivity : AppCompatActivity() {
                     binding.stickyScrollDetail.show()
                     binding.btnDtlBuy.show()
                     binding.btnDtlTrolley.show()
-                    response.data?.success?.data?.let { dataDetailProduct = it }
+                    if (this::dataDetailProduct.isInitialized) {
+                        response.data?.success?.data?.let { dataDetailProduct = it }
+                    } else {
+                        Toast.makeText(this, "Check your connectivity.", Toast.LENGTH_SHORT).show()
+                    }
                     response.data?.success?.data?.let { initView(it) }
                     response.data?.success?.data?.let { setupListener(it) }
                 }

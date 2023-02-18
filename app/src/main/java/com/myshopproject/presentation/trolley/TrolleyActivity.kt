@@ -194,7 +194,6 @@ class TrolleyActivity : AppCompatActivity() {
                                             intent.putExtra(PAYMENT_ID_INTENT, paymentParcel?.id)
                                             intent.putExtra(PAYMENT_NAME_INTENT, paymentParcel?.name)
                                             startActivity(intent)
-                                            finish()
                                         }
                                         is Resource.Error -> {}
                                     }

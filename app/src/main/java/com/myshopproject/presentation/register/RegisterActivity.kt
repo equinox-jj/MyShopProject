@@ -91,19 +91,19 @@ class RegisterActivity : AppCompatActivity() {
                 }
                 is Resource.Success -> {
                     binding.registerCardLoading.root.hide()
-
-                    Toast.makeText(this@RegisterActivity, "Register Successfully ${response.data!!.success.status}", Toast.LENGTH_SHORT).show()
-
                     alertDialogRegisSuccess()
+                    Toast.makeText(this@RegisterActivity, "Register Successfully ${response.data!!.success.status}", Toast.LENGTH_SHORT).show()
                 }
                 is Resource.Error -> {
                     binding.registerCardLoading.root.hide()
-                    val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
-                    val gson = Gson()
-                    val jsonObject = gson.fromJson(errors, JsonObject::class.java)
-                    val errorResponse = gson.fromJson(jsonObject, com.myshopproject.data.source.remote.dto.ErrorResponseDTO::class.java)
+                    try {
+                        val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
+                        val gson = Gson()
+                        val jsonObject = gson.fromJson(errors, JsonObject::class.java)
+                        val errorResponse = gson.fromJson(jsonObject, com.myshopproject.data.source.remote.dto.ErrorResponseDTO::class.java)
 
-                    Toast.makeText(this@RegisterActivity, "${errorResponse.error.message} ${errorResponse.error.status}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@RegisterActivity, "${errorResponse.error.message} ${errorResponse.error.status}", Toast.LENGTH_SHORT).show()
+                    } catch (_: Exception) { }
                 }
             }
         }
@@ -112,15 +112,10 @@ class RegisterActivity : AppCompatActivity() {
     private fun setupListener() {
         binding.apply {
             btnSignUp.setOnClickListener {
-                if (validation() || getFile != null) {
+                if (validation() && getFile != null) {
                     val file = reduceFileImage(getFile as File)
                     val requestBodyImage = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-                    val multiPartImage: MultipartBody.Part = MultipartBody.Part.createFormData(
-                        "image",
-                        file.name,
-                        requestBodyImage
-                    )
-
+                    val multiPartImage: MultipartBody.Part = MultipartBody.Part.createFormData("image", file.name, requestBodyImage)
                     viewModel.registerAccount(
                         image = multiPartImage,
                         email = binding.etEmailRegister.text.toString().toRequestBody("text/plain".toMediaType()),
@@ -143,42 +138,107 @@ class RegisterActivity : AppCompatActivity() {
     private fun validation(): Boolean {
         var isValid = false
 
-        val email = binding.etEmailRegister.text.toString()
-        val password = binding.etPasswordRegister.text.toString()
-        val confirmPass = binding.etConfPasswordRegister.text.toString()
-        val name = binding.etNameRegister.text.toString()
-        val phone = binding.etPhoneRegister.text.toString()
+        val email = binding.etEmailRegister.text.toString().trim()
+        val password = binding.etPasswordRegister.text.toString().trim()
+        val confirmPass = binding.etConfPasswordRegister.text.toString().trim()
+        val name = binding.etNameRegister.text.toString().trim()
+        val phone = binding.etPhoneRegister.text.toString().trim()
         val male = binding.rbMale
         val female = binding.rbFemale
         val genderList = listOf(male, female).firstOrNull { it.isChecked }
 
         when {
             email.isEmpty() -> {
-                binding.etEmailRegister.error = "Please fill your email address."
+                binding.tilEmailRegister.error = "Please fill your email address."
+                binding.tilEmailRegister.requestFocus()
             }
             !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
-                binding.etEmailRegister.error = "Please enter a valid email address."
+                binding.tilEmailRegister.error = "Please enter a valid email address."
+                binding.tilEmailRegister.requestFocus()
             }
             password.isEmpty() -> {
                 binding.tilPasswordRegister.error = "Please enter your password."
+                binding.tilPasswordRegister.requestFocus()
             }
-            password.length < 6 -> {
-                binding.tilPasswordRegister.error = "Password length must be 6 character."
+            password.length < 6 ->{
+                binding.tilPasswordRegister.error = "Password length must be 6 characters."
+                binding.tilPasswordRegister.requestFocus()
             }
             confirmPass != password -> {
                 binding.tilConfPasswordRegister.error = "Password not match."
+                binding.tilConfPasswordRegister.requestFocus()
             }
             name.isEmpty() -> {
                 binding.tilNameRegister.error = "Please enter your name."
+                binding.tilNameRegister.requestFocus()
             }
             phone.isEmpty() -> {
                 binding.tilPhoneRegister.error = "Please enter your phone number."
+                binding.tilPhoneRegister.requestFocus()
             }
             genderList == null -> {
                 Toast.makeText(this@RegisterActivity, "Please select your gender.", Toast.LENGTH_SHORT).show()
             }
-            else -> isValid = true
+            else -> {
+                isValid = true
+            }
         }
+
+//        binding.etEmailRegister.doOnTextChanged { _, _, _, _ ->
+//            if (email.isEmpty()) {
+//                binding.tilEmailRegister.error = "Please fill your email address."
+//                binding.tilEmailRegister.requestFocus()
+//            } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+//                binding.tilEmailRegister.error = "Please enter a valid email address."
+//                binding.tilEmailRegister.requestFocus()
+//            } else {
+//                binding.tilEmailRegister.error = null
+//                isValid = true
+//            }
+//        }
+//
+//        binding.etPasswordRegister.doOnTextChanged { _, _, _, _ ->
+//            if (password.isEmpty()) {
+//                binding.tilPasswordRegister.error = "Please enter your password."
+//                binding.tilPasswordRegister.requestFocus()
+//            } else if (password.length < 6) {
+//                binding.tilPasswordRegister.error = "Password length must be 6 character."
+//                binding.tilPasswordRegister.requestFocus()
+//            } else {
+//                binding.tilPasswordRegister.error = null
+//                isValid = true
+//            }
+//        }
+//
+//        binding.etConfPasswordRegister.doOnTextChanged { _, _, _, _ ->
+//            if (confirmPass != password) {
+//                binding.tilConfPasswordRegister.error = "Password not match."
+//                binding.tilConfPasswordRegister.requestFocus()
+//            } else {
+//                binding.tilConfPasswordRegister.error = null
+//                isValid = true
+//            }
+//        }
+//
+//        binding.etNameRegister.doOnTextChanged { _, _, _, _ ->
+//            if (name.isEmpty()) {
+//                binding.tilNameRegister.error = "Please enter your name."
+//                binding.tilNameRegister.requestFocus()
+//            } else {
+//                binding.tilNameRegister.error = null
+//                isValid = true
+//            }
+//        }
+//
+//        binding.etPhoneRegister.doOnTextChanged { _, _, _, _ ->
+//            if (phone.isEmpty()) {
+//                binding.tilPhoneRegister.error = "Please enter your phone number."
+//                binding.tilPhoneRegister.requestFocus()
+//            } else {
+//                binding.tilPhoneRegister.error = null
+//                isValid = true
+//            }
+//        }
 
         return isValid
     }

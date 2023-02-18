@@ -21,5 +21,5 @@ interface RemoteUseCase {
     fun updateRate(id: Int, updateRate: String): Flow<Resource<SuccessResponseStatus>>
     fun getProductOther(userId: Int): Flow<Resource<DataProductResponse>>
     fun getProductHistory(userId: Int): Flow<Resource<DataProductResponse>>
-    fun getPaymentMethod(): Flow<Resource<String>>
+    fun getPaymentMethod(): Flow<Resource<List<PaymentTypeResponse>>>
 }
