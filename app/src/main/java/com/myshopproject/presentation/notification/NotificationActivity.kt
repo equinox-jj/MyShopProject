@@ -20,7 +20,6 @@ import com.myshopproject.presentation.viewmodel.LocalViewModel
 import com.myshopproject.utils.hide
 import com.myshopproject.utils.show
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -105,19 +104,19 @@ class NotificationActivity : AppCompatActivity() {
     }
 
     private fun initObserver() {
+        adapter = NotificationAdapter(
+            context = this@NotificationActivity,
+            isMultipleSelect = isMultipleSelect,
+            onItemClicked = { onNotificationItemClicked(it) },
+            onCheckboxChecked = { onCheckboxChecked(it) }
+        )
+        binding.rvNotification.adapter = adapter
+        binding.rvNotification.setHasFixedSize(true)
+
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.getAllNotification().collectLatest { result ->
+                viewModel.getAllNotification().collect { result ->
                     if (result.isNotEmpty()) {
-                        adapter = NotificationAdapter(
-                            context = this@NotificationActivity,
-                            isMultipleSelect = isMultipleSelect,
-                            onItemClicked = { onNotificationItemClicked(it) },
-                            onCheckboxChecked = { onCheckboxChecked(it) }
-                        )
-                        binding.rvNotification.adapter = adapter
-                        binding.rvNotification.setHasFixedSize(true)
-
                         adapter?.submitData(result)
 
                         binding.rvNotification.show()

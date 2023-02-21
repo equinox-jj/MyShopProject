@@ -55,4 +55,9 @@
     <string name="read_notification">Read Notification</string>
     <string name="check_notification">Check Notification</string>
     <string name="multiple_select">Multiple Select</string>
+    <string name="check_data_trolley">Product has already in trolley.</string>
+    <string name="add_to_trolley">Add to trolley.</string>
+    <string name="failed_add_trolley">Failed add to trolley.</string>
+    <string name="success_add_to_favorite">Success add to favorite.</string>
+    <string name="success_remove_favorite">Success remove from favorite.</string>
 </resources>

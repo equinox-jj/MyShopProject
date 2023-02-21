@@ -9,6 +9,7 @@ import coil.load
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.myshopproject.R
+import com.myshopproject.data.utils.toIDRPrice
 import com.myshopproject.databinding.ActivityBuySuccessBinding
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.main.MainActivity
@@ -17,7 +18,6 @@ import com.myshopproject.utils.Constants.PAYMENT_ID_INTENT
 import com.myshopproject.utils.Constants.PAYMENT_NAME_INTENT
 import com.myshopproject.utils.Constants.PRICE_INTENT
 import com.myshopproject.utils.Constants.PRODUCT_ID
-import com.myshopproject.utils.toIDRPrice
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
 

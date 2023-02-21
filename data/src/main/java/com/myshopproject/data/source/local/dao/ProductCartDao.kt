@@ -14,6 +14,9 @@ interface ProductCartDao {
     @Query("SELECT * FROM $CART_TABLE WHERE is_checked = 1")
     fun getAllCheckedProduct(): Flow<List<CartEntity>>
 
+    @Query("SELECT count(*) from $CART_TABLE where name_product = :name and id = :id")
+    fun checkProductDataCart(id: Int?, name: String?): Int
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addProductToTrolley(trolley: CartEntity)
 

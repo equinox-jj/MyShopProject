@@ -8,7 +8,10 @@ import coil.load
 import com.myshopproject.R
 import com.myshopproject.databinding.ItemProductListBinding
 import com.myshopproject.domain.entities.DataProduct
-import com.myshopproject.utils.*
+import com.myshopproject.utils.DiffUtilRecycler
+import com.myshopproject.utils.ItemType
+import com.myshopproject.utils.hide
+import com.myshopproject.utils.show
 
 class ProductFavoriteAdapter(private val type: ItemType, private val onClick: (Int) -> Unit) : RecyclerView.Adapter<ProductFavoriteAdapter.ProductFavoriteVH>() {
 
@@ -33,7 +36,7 @@ class ProductFavoriteAdapter(private val type: ItemType, private val onClick: (I
                 tvProductDate.text = data.date
                 tvProductName.isSelected = true
                 tvProductName.text = data.nameProduct
-                tvProductPrice.text = data.harga.toIDRPrice()
+                tvProductPrice.text = data.harga
                 rbProductRate.rating = data.rate.toFloat()
 
                 itemView.setOnClickListener {
@@ -52,7 +55,7 @@ class ProductFavoriteAdapter(private val type: ItemType, private val onClick: (I
                 tvProductDate.text = data.date
                 tvProductName.isSelected = true
                 tvProductName.text = data.nameProduct
-                tvProductPrice.text = data.harga.toIDRPrice()
+                tvProductPrice.text = data.harga
                 rbProductRate.rating = data.rate.toFloat()
             }
         }

@@ -17,6 +17,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.myshopproject.R
 import com.myshopproject.data.source.remote.dto.ErrorResponseDTO
+import com.myshopproject.data.utils.toIDRPrice
 import com.myshopproject.databinding.FragmentBottomSheetDetailBinding
 import com.myshopproject.domain.entities.DetailProductData
 import com.myshopproject.domain.entities.PaymentResult
@@ -31,7 +32,6 @@ import com.myshopproject.utils.Constants.PRODUCT_ID
 import com.myshopproject.utils.Constants.PRODUCT_ID_INTENT
 import com.myshopproject.utils.hide
 import com.myshopproject.utils.show
-import com.myshopproject.utils.toIDRPrice
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -163,7 +163,7 @@ class DetailBottomSheet(
             }
         }
 
-        viewModel.setPrice(data.harga.toInt())
+        viewModel.setPrice(data.harga.replace(Regex("\\D"), "").toInt())
 
         viewModel.price.observe(viewLifecycleOwner) {
             totalPrice = it
@@ -175,13 +175,13 @@ class DetailBottomSheet(
         binding.btnIncreaseBottSheet.setOnClickListener {
             viewModel.increaseQuantity(data.stock)
             val sum = binding.tvQuantityBottSheet.text.toString()
-            val total = (sum.toInt() * data.harga.toInt())
+            val total = (sum.toInt() * data.harga.replace(Regex("\\D"), "").toInt())
             (resources.getString(R.string.buy_now) + total.toString().toIDRPrice()).also { binding.btnBuyNowBottSheet.text = it }
         }
         binding.btnDecreaseBottSheet.setOnClickListener {
             viewModel.decreaseQuantity()
             val sum = binding.tvQuantityBottSheet.text.toString()
-            val total = (sum.toInt() * data.harga.toInt())
+            val total = (sum.toInt() * data.harga.replace(Regex("\\D"), "").toInt())
             (resources.getString(R.string.buy_now) + total.toString().toIDRPrice()).also { binding.btnBuyNowBottSheet.text = it }
         }
     }

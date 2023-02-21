@@ -3,6 +3,7 @@ package com.myshopproject.data.mapper
 import com.myshopproject.data.source.local.entity.CartEntity
 import com.myshopproject.data.source.local.entity.FcmEntity
 import com.myshopproject.data.source.remote.dto.*
+import com.myshopproject.data.utils.toIDRPrice
 import com.myshopproject.domain.entities.*
 
 fun LoginResponseDTO.toDomain() = LoginResponse(
@@ -81,7 +82,7 @@ fun DataProductDTO.toDomain() = DataProduct(
     id = id,
     date = date,
     desc = desc,
-    harga = harga,
+    harga = harga.toIDRPrice(),
     image = image,
     nameProduct = nameProduct,
     rate = rate,
@@ -104,7 +105,7 @@ fun DetailProductSuccessDTO.toDomain() = DetailProductSuccess(
 fun DetailProductDataDTO.toDomain() = DetailProductData(
     date = date,
     desc = desc,
-    harga = harga,
+    harga = harga.toIDRPrice(),
     id = id,
     image = image,
     imageProduct = imageProduct.map { it.toDomain() },
@@ -128,7 +129,7 @@ fun List<CartEntity>.toDomain(): List<CartDataDomain> = this.map {
         image = it.image,
         nameProduct = it.nameProduct,
         quantity = it.quantity,
-        price = it.price,
+        price = it.price?.toIDRPrice(),
         itemTotalPrice = it.itemTotalPrice,
         stock = it.stock,
         isChecked = it.isChecked

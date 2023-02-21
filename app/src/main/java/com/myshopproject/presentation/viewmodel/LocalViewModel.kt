@@ -22,6 +22,10 @@ class LocalViewModel @Inject constructor(private val localUseCase: LocalUseCase)
         return localUseCase.getAllCheckedProduct()
     }
 
+    fun checkProductDataCart(id: Int?, name: String?): Int {
+        return localUseCase.checkProductDataCart(id, name)
+    }
+
     fun insertCart(cartDataDomain: CartDataDomain) {
         viewModelScope.launch(Dispatchers.IO) {
             localUseCase.addProductToTrolley(cartDataDomain)

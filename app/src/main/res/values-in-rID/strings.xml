@@ -54,5 +54,10 @@
     <string name="delete">Hapus</string>
     <string name="read_notification">Baca Notifikasi</string>
     <string name="check_notification">Cek Notifikasi</string>
-    <string name="multiple_select">Multiple Select</string>
+    <string name="multiple_select">Pilih Beberapa</string>
+    <string name="check_data_trolley">Produk sudah ada di trolley.</string>
+    <string name="add_to_trolley">Tambah ke trolley.</string>
+    <string name="failed_add_trolley">Gagal tambah ke trolley.</string>
+    <string name="success_add_to_favorite">Berhasil menambahkan ke favorite.</string>
+    <string name="success_remove_favorite">Berhasil menghapus dari favorite.</string>
 </resources>

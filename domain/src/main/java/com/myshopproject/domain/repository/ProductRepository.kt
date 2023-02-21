@@ -20,6 +20,7 @@ interface ProductRepository {
     /** ROOM DB */
     fun getAllProduct(): Flow<List<CartDataDomain>>
     fun getAllCheckedProduct(): Flow<List<CartDataDomain>>
+    fun checkProductDataCart(id: Int?, name: String?): Int
     suspend fun addProductToTrolley(trolley: CartDataDomain)
     suspend fun updateProductData(quantity: Int?, itemTotalPrice: Int?, id: Int?)
     suspend fun updateProductIsCheckedAll(isChecked: Boolean)

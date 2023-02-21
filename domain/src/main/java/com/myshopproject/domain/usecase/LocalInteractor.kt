@@ -17,6 +17,10 @@ class LocalInteractor @Inject constructor(
         return productRepository.getAllCheckedProduct()
     }
 
+    override fun checkProductDataCart(id: Int?, name: String?): Int {
+        return productRepository.checkProductDataCart(id, name)
+    }
+
     override suspend fun addProductToTrolley(trolley: CartDataDomain) {
         productRepository.addProductToTrolley(trolley)
     }

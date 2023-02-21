@@ -7,7 +7,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.StrictMode
 import android.provider.MediaStore
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -39,7 +38,6 @@ import com.myshopproject.utils.Constants.PRODUCT_ID_INTENT
 import com.myshopproject.utils.ItemType
 import com.myshopproject.utils.hide
 import com.myshopproject.utils.show
-import com.myshopproject.utils.toIDRPrice
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -285,7 +283,7 @@ class DetailActivity : AppCompatActivity() {
             indicatorSlider.setViewPager(vpImageSliderProductDtl)
             tvNameProductDtl.isSelected = true
             tvNameProductDtl.text = data.nameProduct
-            tvPriceProductDtl.text = data.harga.toIDRPrice()
+            tvPriceProductDtl.text = data.harga
             rbProductDtl.rating = data.rate.toFloat()
             tvSizeProductDtl.text = data.size
             tvWeightProductDtl.text = data.weight
@@ -312,23 +310,11 @@ class DetailActivity : AppCompatActivity() {
             }
 
             btnDtlTrolley.setOnClickListener {
-                if (data.stock > 1) {
-                    localViewModel.insertCart(
-                        CartDataDomain(
-                            id = data.id,
-                            image = data.image,
-                            nameProduct = data.nameProduct,
-                            quantity = 1,
-                            price = data.harga,
-                            itemTotalPrice = data.harga.toInt(),
-                            stock = data.stock,
-                            isChecked = false
-                        )
-                    )
-                    Toast.makeText(this@DetailActivity, "Add to trolley.", Toast.LENGTH_SHORT).show()
-                    finish()
+                val checkProductCart = localViewModel.checkProductDataCart(data.id, data.nameProduct)
+                if (checkProductCart > 0) {
+                    Toast.makeText(this@DetailActivity, getString(R.string.check_data_trolley), Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(this@DetailActivity, "Failed add to trolley.", Toast.LENGTH_SHORT).show()
+                    addToCart(data)
                 }
             }
 
@@ -346,13 +332,34 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
+    private fun addToCart(data: DetailProductData) {
+        if (data.stock > 1) {
+            localViewModel.insertCart(
+                CartDataDomain(
+                    id = data.id,
+                    image = data.image,
+                    nameProduct = data.nameProduct,
+                    quantity = 1,
+                    price = data.harga,
+                    itemTotalPrice = data.harga.replace(Regex("\\D"), "").toInt(),
+                    stock = data.stock,
+                    isChecked = false
+                )
+            )
+            Toast.makeText(this@DetailActivity, getString(R.string.add_to_trolley), Toast.LENGTH_SHORT).show()
+            finish()
+        } else {
+            Toast.makeText(this@DetailActivity, getString(R.string.failed_add_trolley), Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private fun addFavorite() {
         viewModel.favState.observe(this@DetailActivity) { response ->
             when (response) {
                 is Resource.Loading -> {}
                 is Resource.Success -> {
                     binding.ivImageFavProductDtl.setImageResource(R.drawable.ic_favorite_filled)
-                    Toast.makeText(this, "Success add to favorite.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.success_add_to_favorite), Toast.LENGTH_SHORT).show()
                 }
                 is Resource.Error -> {
                     Toast.makeText(this@DetailActivity, response.errorBody.toString(), Toast.LENGTH_SHORT).show()
@@ -367,7 +374,7 @@ class DetailActivity : AppCompatActivity() {
                 is Resource.Loading -> {}
                 is Resource.Success -> {
                     binding.ivImageFavProductDtl.setImageResource(R.drawable.ic_favorite_outlined)
-                    Toast.makeText(this, "Success remove from favorite.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.success_remove_favorite), Toast.LENGTH_SHORT).show()
                 }
                 is Resource.Error -> {
                     Toast.makeText(this@DetailActivity, response.errorBody.toString(), Toast.LENGTH_SHORT).show()
@@ -386,7 +393,6 @@ class DetailActivity : AppCompatActivity() {
         dialog.show()
 
         dialogBinding.imageDetailDialog.load(drawable)
-        Log.d("DataImage", drawable)
     }
 
 }

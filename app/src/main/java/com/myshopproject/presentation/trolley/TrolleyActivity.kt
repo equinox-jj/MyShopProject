@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import coil.load
 import com.myshopproject.R
+import com.myshopproject.data.utils.toIDRPrice
 import com.myshopproject.databinding.ActivityTrolleyBinding
 import com.myshopproject.domain.entities.CartDataDomain
 import com.myshopproject.domain.entities.PaymentResult
@@ -28,7 +29,6 @@ import com.myshopproject.utils.Constants.PAYMENT_NAME_INTENT
 import com.myshopproject.utils.Constants.PRICE_INTENT
 import com.myshopproject.utils.hide
 import com.myshopproject.utils.show
-import com.myshopproject.utils.toIDRPrice
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -95,10 +95,7 @@ class TrolleyActivity : AppCompatActivity() {
 
                         binding.tvProductPriceTrlly.text = priceTotal.toString().toIDRPrice()
                         binding.cbTrolley.isChecked = result.size == filterResult.size
-                        binding.rvTrolley.adapter = trolleyAdapter
-                        binding.rvTrolley.setHasFixedSize(true)
-                        binding.rvTrolley.itemAnimator = null
-                        trolleyAdapter?.differ?.submitList(result)
+                        trolleyAdapter?.submitData(result)
                         totalPrice = priceTotal
 
                         binding.cbTrolley.show()
@@ -136,65 +133,72 @@ class TrolleyActivity : AppCompatActivity() {
                         dataStockItems.add(UpdateStockItem(result[i].id.toString(), result[i].quantity!!))
                         listOfProductId.add(result[i].id.toString())
                     }
-                    // FIX TROLLEY
-                    if (result.isEmpty() || paymentParcel == null) {
-                        binding.btnBuyTrlly.setOnClickListener {
-                            val intent = Intent(this@TrolleyActivity, PaymentActivity::class.java)
-                            startActivity(intent)
-                            Toast.makeText(this@TrolleyActivity, "You haven't select any product yet", Toast.LENGTH_SHORT).show()
-                        }
-                        binding.llTrllyPayment.hide()
-                    } else {
-                        binding.llTrllyPayment.setOnClickListener {
-                            val intent = Intent(this@TrolleyActivity, PaymentActivity::class.java)
-                            startActivity(intent)
-                        }
-                        binding.tvTrllyPaymentName.text = paymentParcel?.name
-                        binding.llTrllyPayment.show()
-                        when (paymentParcel?.id) {
-                            "va_bca" -> {
-                                binding.ivTrllyPaymentImage.load(R.drawable.img_bca)
-                            }
-                            "va_mandiri" -> {
-                                binding.ivTrllyPaymentImage.load(R.drawable.img_mandiri)
-                            }
-                            "va_bri" -> {
-                                binding.ivTrllyPaymentImage.load(R.drawable.img_bri)
-                            }
-                            "va_bni" -> {
-                                binding.ivTrllyPaymentImage.load(R.drawable.img_bni)
-                            }
-                            "va_btn" -> {
-                                binding.ivTrllyPaymentImage.load(R.drawable.img_btn)
-                            }
-                            "va_danamon" -> {
-                                binding.ivTrllyPaymentImage.load(R.drawable.img_danamon)
-                            }
-                            "ewallet_gopay" -> {
-                                binding.ivTrllyPaymentImage.load(R.drawable.img_gopay)
-                            }
-                            "ewallet_ovo" -> {
-                                binding.ivTrllyPaymentImage.load(R.drawable.img_ovo)
-                            }
-                            "ewallet_dana" -> {
-                                binding.ivTrllyPaymentImage.load(R.drawable.img_dana)
+
+                    when {
+                        result.isEmpty() -> {
+                            binding.btnBuyTrlly.setOnClickListener {
+                                Toast.makeText(this@TrolleyActivity, "You haven't select any product yet", Toast.LENGTH_SHORT).show()
                             }
                         }
-                        binding.btnBuyTrlly.setOnClickListener {
-                            viewModel.updateStock(userId, dataStockItems)
-                            viewModel.updateStockState.observe(this@TrolleyActivity) { response ->
-                                when (response) {
-                                    is Resource.Loading -> {}
-                                    is Resource.Success -> {
-                                        dataStockItems.forEach { localViewModel.deleteProductByIdFromTrolley(it.id_product.toInt()) }
-                                        val intent = Intent(this@TrolleyActivity, BuySuccessActivity::class.java)
-                                        intent.putExtra(LIST_PRODUCT_ID, listOfProductId)
-                                        intent.putExtra(PRICE_INTENT, totalPrice)
-                                        intent.putExtra(PAYMENT_ID_INTENT, paymentParcel?.id)
-                                        intent.putExtra(PAYMENT_NAME_INTENT, paymentParcel?.name)
-                                        startActivity(intent)
+                        paymentParcel == null -> {
+                            binding.btnBuyTrlly.setOnClickListener {
+                                val intent = Intent(this@TrolleyActivity, PaymentActivity::class.java)
+                                startActivity(intent)
+                            }
+                            binding.llTrllyPayment.hide()
+                        }
+                        else -> {
+                            binding.llTrllyPayment.setOnClickListener {
+                                val intent = Intent(this@TrolleyActivity, PaymentActivity::class.java)
+                                startActivity(intent)
+                            }
+                            binding.tvTrllyPaymentName.text = paymentParcel?.name
+                            binding.llTrllyPayment.show()
+                            when (paymentParcel?.id) {
+                                "va_bca" -> {
+                                    binding.ivTrllyPaymentImage.load(R.drawable.img_bca)
+                                }
+                                "va_mandiri" -> {
+                                    binding.ivTrllyPaymentImage.load(R.drawable.img_mandiri)
+                                }
+                                "va_bri" -> {
+                                    binding.ivTrllyPaymentImage.load(R.drawable.img_bri)
+                                }
+                                "va_bni" -> {
+                                    binding.ivTrllyPaymentImage.load(R.drawable.img_bni)
+                                }
+                                "va_btn" -> {
+                                    binding.ivTrllyPaymentImage.load(R.drawable.img_btn)
+                                }
+                                "va_danamon" -> {
+                                    binding.ivTrllyPaymentImage.load(R.drawable.img_danamon)
+                                }
+                                "ewallet_gopay" -> {
+                                    binding.ivTrllyPaymentImage.load(R.drawable.img_gopay)
+                                }
+                                "ewallet_ovo" -> {
+                                    binding.ivTrllyPaymentImage.load(R.drawable.img_ovo)
+                                }
+                                "ewallet_dana" -> {
+                                    binding.ivTrllyPaymentImage.load(R.drawable.img_dana)
+                                }
+                            }
+                            binding.btnBuyTrlly.setOnClickListener {
+                                viewModel.updateStock(userId, dataStockItems)
+                                viewModel.updateStockState.observe(this@TrolleyActivity) { response ->
+                                    when (response) {
+                                        is Resource.Loading -> {}
+                                        is Resource.Success -> {
+                                            dataStockItems.forEach { localViewModel.deleteProductByIdFromTrolley(it.id_product.toInt()) }
+                                            val intent = Intent(this@TrolleyActivity, BuySuccessActivity::class.java)
+                                            intent.putExtra(LIST_PRODUCT_ID, listOfProductId)
+                                            intent.putExtra(PRICE_INTENT, totalPrice)
+                                            intent.putExtra(PAYMENT_ID_INTENT, paymentParcel?.id)
+                                            intent.putExtra(PAYMENT_NAME_INTENT, paymentParcel?.name)
+                                            startActivity(intent)
+                                        }
+                                        is Resource.Error -> {}
                                     }
-                                    is Resource.Error -> {}
                                 }
                             }
                         }
@@ -214,7 +218,7 @@ class TrolleyActivity : AppCompatActivity() {
                     val price = it.price
                     localViewModel.updateProductData(
                         quantity = quantity?.plus(1),
-                        itemTotalPrice = price?.toInt()?.times(quantity.toString().toInt().plus(1)),
+                        itemTotalPrice = price?.replace(Regex("\\D"), "")?.toInt()?.times(quantity.toString().toInt().plus(1)),
                         id = productId
                     )
                 },
@@ -224,7 +228,7 @@ class TrolleyActivity : AppCompatActivity() {
                     val price = it.price
                     localViewModel.updateProductData(
                         quantity = quantity?.minus(1),
-                        itemTotalPrice = price?.toInt()?.times(quantity.toString().toInt().minus(1)),
+                        itemTotalPrice = price?.replace(Regex("\\D"), "")?.toInt()?.times(quantity.toString().toInt().minus(1)),
                         id = productId
                     )
                 },
@@ -235,6 +239,9 @@ class TrolleyActivity : AppCompatActivity() {
                     localViewModel.updateProductIsCheckedById(isChecked, productId)
                 },
             )
+            binding.rvTrolley.adapter = trolleyAdapter
+            binding.rvTrolley.setHasFixedSize(true)
+            binding.rvTrolley.itemAnimator = null
         }
     }
 

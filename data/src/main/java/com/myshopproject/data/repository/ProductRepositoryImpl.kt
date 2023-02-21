@@ -227,6 +227,10 @@ class ProductRepositoryImpl @Inject constructor(
         return cartDao.getAllCheckedProduct().map { it.toDomain() }
     }
 
+    override fun checkProductDataCart(id: Int?, name: String?): Int {
+        return cartDao.checkProductDataCart(id, name)
+    }
+
     override suspend fun addProductToTrolley(trolley: CartDataDomain) {
         cartDao.addProductToTrolley(trolley = trolley.toEntity())
     }
