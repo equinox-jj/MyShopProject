@@ -28,12 +28,17 @@ class AuthRepositoryImpl @Inject constructor(
             ).success.toDomain()
             emit(Resource.Success(response))
         } catch (t: Throwable) {
-            if (t is HttpException) {
-                when (t.code()) {
-                    400 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                    404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                    500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                    else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
+            when(t) {
+                is HttpException -> {
+                    when (t.code()) {
+                        400 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
+                    }
+                }
+                is Exception -> {
+                    emit(Resource.Error(t.message, null, null))
                 }
             }
         }
@@ -59,12 +64,17 @@ class AuthRepositoryImpl @Inject constructor(
             ).toDomain()
             emit(Resource.Success(response))
         } catch (t: Throwable) {
-            if (t is HttpException) {
-                when (t.code()) {
-                    400 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                    404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                    500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                    else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
+            when(t) {
+                is HttpException -> {
+                    when (t.code()) {
+                        400 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
+                    }
+                }
+                is Exception -> {
+                    emit(Resource.Error(t.message, null, null))
                 }
             }
         }
@@ -86,13 +96,18 @@ class AuthRepositoryImpl @Inject constructor(
             ).toDomain()
             emit(Resource.Success(response))
         } catch (t: Throwable) {
-            if (t is HttpException) {
-                when (t.code()) {
-                    400 -> { emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody())) }
-                    401 -> { emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody())) }
-                    404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                    500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                    else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
+            when(t) {
+                is HttpException -> {
+                    when (t.code()) {
+                        400 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        401 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
+                    }
+                }
+                is Exception -> {
+                    emit(Resource.Error(t.message, null, null))
                 }
             }
         }
@@ -110,13 +125,18 @@ class AuthRepositoryImpl @Inject constructor(
             ).toDomain()
             emit(Resource.Success(response))
         } catch (t: Throwable) {
-            if (t is HttpException) {
-                when (t.code()) {
-                    400 -> { emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody())) }
-                    401 -> { emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody())) }
-                    404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                    500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                    else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
+            when(t) {
+                is HttpException -> {
+                    when (t.code()) {
+                        400 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        401 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
+                    }
+                }
+                is Exception -> {
+                    emit(Resource.Error(t.message, null, null))
                 }
             }
         }

@@ -127,76 +127,74 @@ class TrolleyActivity : AppCompatActivity() {
     }
 
     private fun postProductTrolley() {
-        if (paymentParcel == null) {
-            binding.btnBuyTrlly.setOnClickListener {
-                val intent = Intent(this@TrolleyActivity, PaymentActivity::class.java)
-                startActivity(intent)
-            }
-            binding.llTrllyPayment.hide()
-        } else {
-            binding.llTrllyPayment.setOnClickListener {
-                val intent = Intent(this@TrolleyActivity, PaymentActivity::class.java)
-                startActivity(intent)
-            }
-            binding.tvTrllyPaymentName.text = paymentParcel?.name
-            binding.llTrllyPayment.show()
-            when (paymentParcel?.id) {
-                "va_bca" -> {
-                    binding.ivTrllyPaymentImage.load(R.drawable.img_bca)
-                }
-                "va_mandiri" -> {
-                    binding.ivTrllyPaymentImage.load(R.drawable.img_mandiri)
-                }
-                "va_bri" -> {
-                    binding.ivTrllyPaymentImage.load(R.drawable.img_bri)
-                }
-                "va_bni" -> {
-                    binding.ivTrllyPaymentImage.load(R.drawable.img_bni)
-                }
-                "va_btn" -> {
-                    binding.ivTrllyPaymentImage.load(R.drawable.img_btn)
-                }
-                "va_danamon" -> {
-                    binding.ivTrllyPaymentImage.load(R.drawable.img_danamon)
-                }
-                "ewallet_gopay" -> {
-                    binding.ivTrllyPaymentImage.load(R.drawable.img_gopay)
-                }
-                "ewallet_ovo" -> {
-                    binding.ivTrllyPaymentImage.load(R.drawable.img_ovo)
-                }
-                "ewallet_dana" -> {
-                    binding.ivTrllyPaymentImage.load(R.drawable.img_dana)
-                }
-            }
-            lifecycleScope.launch {
-                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    localViewModel.getAllCheckedProduct().collect { result ->
-                        val dataStockItems = arrayListOf<UpdateStockItem>()
-                        val listOfProductId = arrayListOf<String>()
-                        for (i in result.indices) {
-                            dataStockItems.add(UpdateStockItem(result[i].id.toString(), result[i].quantity!!))
-                            listOfProductId.add(result[i].id.toString())
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                localViewModel.getAllCheckedProduct().collect { result ->
+                    val dataStockItems = arrayListOf<UpdateStockItem>()
+                    val listOfProductId = arrayListOf<String>()
+                    for (i in result.indices) {
+                        dataStockItems.add(UpdateStockItem(result[i].id.toString(), result[i].quantity!!))
+                        listOfProductId.add(result[i].id.toString())
+                    }
+                    // FIX TROLLEY
+                    if (result.isEmpty() || paymentParcel == null) {
+                        binding.btnBuyTrlly.setOnClickListener {
+                            val intent = Intent(this@TrolleyActivity, PaymentActivity::class.java)
+                            startActivity(intent)
+                            Toast.makeText(this@TrolleyActivity, "You haven't select any product yet", Toast.LENGTH_SHORT).show()
+                        }
+                        binding.llTrllyPayment.hide()
+                    } else {
+                        binding.llTrllyPayment.setOnClickListener {
+                            val intent = Intent(this@TrolleyActivity, PaymentActivity::class.java)
+                            startActivity(intent)
+                        }
+                        binding.tvTrllyPaymentName.text = paymentParcel?.name
+                        binding.llTrllyPayment.show()
+                        when (paymentParcel?.id) {
+                            "va_bca" -> {
+                                binding.ivTrllyPaymentImage.load(R.drawable.img_bca)
+                            }
+                            "va_mandiri" -> {
+                                binding.ivTrllyPaymentImage.load(R.drawable.img_mandiri)
+                            }
+                            "va_bri" -> {
+                                binding.ivTrllyPaymentImage.load(R.drawable.img_bri)
+                            }
+                            "va_bni" -> {
+                                binding.ivTrllyPaymentImage.load(R.drawable.img_bni)
+                            }
+                            "va_btn" -> {
+                                binding.ivTrllyPaymentImage.load(R.drawable.img_btn)
+                            }
+                            "va_danamon" -> {
+                                binding.ivTrllyPaymentImage.load(R.drawable.img_danamon)
+                            }
+                            "ewallet_gopay" -> {
+                                binding.ivTrllyPaymentImage.load(R.drawable.img_gopay)
+                            }
+                            "ewallet_ovo" -> {
+                                binding.ivTrllyPaymentImage.load(R.drawable.img_ovo)
+                            }
+                            "ewallet_dana" -> {
+                                binding.ivTrllyPaymentImage.load(R.drawable.img_dana)
+                            }
                         }
                         binding.btnBuyTrlly.setOnClickListener {
-                            if (result.isEmpty()) {
-                                Toast.makeText(this@TrolleyActivity, "You haven't select any product yet", Toast.LENGTH_SHORT).show()
-                            } else {
-                                viewModel.updateStock(userId, dataStockItems)
-                                viewModel.updateStockState.observe(this@TrolleyActivity) { response ->
-                                    when (response) {
-                                        is Resource.Loading -> {}
-                                        is Resource.Success -> {
-                                            dataStockItems.forEach { localViewModel.deleteProductByIdFromTrolley(it.id_product.toInt()) }
-                                            val intent = Intent(this@TrolleyActivity, BuySuccessActivity::class.java)
-                                            intent.putExtra(LIST_PRODUCT_ID, listOfProductId)
-                                            intent.putExtra(PRICE_INTENT, totalPrice)
-                                            intent.putExtra(PAYMENT_ID_INTENT, paymentParcel?.id)
-                                            intent.putExtra(PAYMENT_NAME_INTENT, paymentParcel?.name)
-                                            startActivity(intent)
-                                        }
-                                        is Resource.Error -> {}
+                            viewModel.updateStock(userId, dataStockItems)
+                            viewModel.updateStockState.observe(this@TrolleyActivity) { response ->
+                                when (response) {
+                                    is Resource.Loading -> {}
+                                    is Resource.Success -> {
+                                        dataStockItems.forEach { localViewModel.deleteProductByIdFromTrolley(it.id_product.toInt()) }
+                                        val intent = Intent(this@TrolleyActivity, BuySuccessActivity::class.java)
+                                        intent.putExtra(LIST_PRODUCT_ID, listOfProductId)
+                                        intent.putExtra(PRICE_INTENT, totalPrice)
+                                        intent.putExtra(PAYMENT_ID_INTENT, paymentParcel?.id)
+                                        intent.putExtra(PAYMENT_NAME_INTENT, paymentParcel?.name)
+                                        startActivity(intent)
                                     }
+                                    is Resource.Error -> {}
                                 }
                             }
                         }

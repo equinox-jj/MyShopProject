@@ -81,22 +81,25 @@ class DetailBottomSheet(
             ivProductBottSht.load(data.image)
             tvProductPriceBottSht.text = data.harga.toIDRPrice()
             (resources.getString(R.string.buy_now) + data.harga.toIDRPrice()).also { btnBuyNowBottSheet.text = it }
+
             if (data.stock == 1) tvStockProductBottSht.text = resources.getString(R.string.out_of_stock)
             else tvStockProductBottSht.text = data.stock.toString()
+
             if (paymentData == null) {
                 binding.btnBuyNowBottSheet.setOnClickListener {
                     val intent = Intent(requireContext(), PaymentActivity::class.java)
                     intent.putExtra(PRODUCT_ID_INTENT, data.id)
+                    startActivity(intent)
                     dismiss()
-                    requireContext().startActivity(intent)
                 }
                 binding.llBottPayment.hide()
             } else {
+                binding.llBottPayment.show()
                 binding.llBottPayment.setOnClickListener {
                     val intent = Intent(requireContext(), PaymentActivity::class.java)
                     intent.putExtra(PRODUCT_ID_INTENT, data.id)
+                    startActivity(intent)
                     dismiss()
-                    requireContext().startActivity(intent)
                 }
                 binding.btnBuyNowBottSheet.setOnClickListener {
                     viewLifecycleOwner.lifecycleScope.launch {
@@ -135,8 +138,8 @@ class DetailBottomSheet(
                         ivBottPaymentImage.load(R.drawable.img_dana)
                     }
                 }
-                binding.llBottPayment.show()
             }
+
         }
     }
 
@@ -195,6 +198,7 @@ class DetailBottomSheet(
                     intent.putExtra(PAYMENT_ID_INTENT, paymentData?.id)
                     intent.putExtra(PAYMENT_NAME_INTENT, paymentData?.name)
                     startActivity(intent)
+                    requireActivity().finish()
                 }
                 is Resource.Error -> {
                     try {

@@ -121,36 +121,40 @@ class DetailActivity : AppCompatActivity() {
                         finish()
                     }
                     R.id.menu_share -> {
-                        val request = ImageRequest.Builder(this@DetailActivity)
-                            .data(dataDetailProduct.image)
-                            .target(
-                                onStart = { },
-                                onSuccess = { result ->
-                                    val intent = Intent(Intent.ACTION_SEND)
-                                    val bitmap = (result as BitmapDrawable).bitmap
-                                    intent.type = "image/*"
-                                    intent.putExtra(
-                                        Intent.EXTRA_TEXT,
-                                        "Name : ${dataDetailProduct.nameProduct}\nStock : ${dataDetailProduct.stock}\nWeight : ${dataDetailProduct.weight}\nSize : ${dataDetailProduct.size}\nLink : https://joshuaj.com/detail_product?id=$productId"
-                                    )
+                        if (this@DetailActivity::dataDetailProduct.isInitialized) {
+                            val request = ImageRequest.Builder(this@DetailActivity)
+                                .data(dataDetailProduct.image)
+                                .target(
+                                    onStart = { },
+                                    onSuccess = { result ->
+                                        val intent = Intent(Intent.ACTION_SEND)
+                                        val bitmap = (result as BitmapDrawable).bitmap
+                                        intent.type = "image/*"
+                                        intent.putExtra(
+                                            Intent.EXTRA_TEXT,
+                                            "Name : ${dataDetailProduct.nameProduct}\nStock : ${dataDetailProduct.stock}\nWeight : ${dataDetailProduct.weight}\nSize : ${dataDetailProduct.size}\nLink : https://joshuaj.com/detail_product?id=$productId"
+                                        )
 
-                                    val path = MediaStore.Images.Media.insertImage(
-                                        contentResolver,
-                                        bitmap,
-                                        "image desc",
-                                        null
-                                    )
+                                        val path = MediaStore.Images.Media.insertImage(
+                                            contentResolver,
+                                            bitmap,
+                                            "image desc",
+                                            null
+                                        )
 
-                                    val uri = Uri.parse(path)
+                                        val uri = Uri.parse(path)
 
-                                    intent.putExtra(Intent.EXTRA_STREAM, uri)
-                                    if (intent.resolveActivity(packageManager) != null) {
-                                        startActivity(Intent.createChooser(intent, "Share To"))
-                                    }
-                                },
-                                onError = { }
-                            ).build()
-                        this@DetailActivity.imageLoader.enqueue(request)
+                                        intent.putExtra(Intent.EXTRA_STREAM, uri)
+                                        if (intent.resolveActivity(packageManager) != null) {
+                                            startActivity(Intent.createChooser(intent, "Share To"))
+                                        }
+                                    },
+                                    onError = { }
+                                ).build()
+                            this@DetailActivity.imageLoader.enqueue(request)
+                        } else {
+                            Toast.makeText(this@DetailActivity, "An unknown error occurred.", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
                 return true
@@ -196,11 +200,8 @@ class DetailActivity : AppCompatActivity() {
                     binding.stickyScrollDetail.show()
                     binding.btnDtlBuy.show()
                     binding.btnDtlTrolley.show()
-                    if (this::dataDetailProduct.isInitialized) {
-                        response.data?.success?.data?.let { dataDetailProduct = it }
-                    } else {
-                        Toast.makeText(this, "Check your connectivity.", Toast.LENGTH_SHORT).show()
-                    }
+                    response.data?.success?.data?.isFavorite?.let { isFavorite = it }
+                    response.data?.success?.data?.let { dataDetailProduct = it }
                     response.data?.success?.data?.let { initView(it) }
                     response.data?.success?.data?.let { setupListener(it) }
                 }
@@ -209,6 +210,7 @@ class DetailActivity : AppCompatActivity() {
                     binding.stickyScrollDetail.hide()
                     binding.btnDtlBuy.hide()
                     binding.btnDtlTrolley.hide()
+                    Toast.makeText(this@DetailActivity, response.message, Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -299,12 +301,12 @@ class DetailActivity : AppCompatActivity() {
 
     private fun setupListener(data: DetailProductData) {
         binding.apply {
-            if (paymentParcel != null) {
+            btnDtlBuy.setOnClickListener {
                 val bottSheet = DetailBottomSheet(data, paymentParcel)
                 bottSheet.show(supportFragmentManager, DetailActivity::class.java.simpleName)
             }
 
-            btnDtlBuy.setOnClickListener {
+            if (paymentParcel != null) {
                 val bottSheet = DetailBottomSheet(data, paymentParcel)
                 bottSheet.show(supportFragmentManager, DetailActivity::class.java.simpleName)
             }
@@ -329,11 +331,14 @@ class DetailActivity : AppCompatActivity() {
                     Toast.makeText(this@DetailActivity, "Failed add to trolley.", Toast.LENGTH_SHORT).show()
                 }
             }
+
             ivImageFavProductDtl.setOnClickListener {
-                if (data.isFavorite) {
+                if (isFavorite) {
+                    isFavorite = false
                     viewModel.removeProductFavorite(productId, userId)
                     removeFavorite()
                 } else {
+                    isFavorite = true
                     viewModel.addProductFavorite(productId, userId)
                     addFavorite()
                 }

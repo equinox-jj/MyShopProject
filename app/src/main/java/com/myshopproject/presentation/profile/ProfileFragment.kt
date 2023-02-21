@@ -120,17 +120,23 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 val idUser = prefViewModel.getUserId.first()
                 val nameUser = prefViewModel.getNameUser.first()
                 val emailUser = prefViewModel.getEmailUser.first()
-                val languagePref = prefViewModel.getLanguage.first()
                 val imageUser = prefViewModel.getImageUser.first()
 
                 userId = idUser
                 binding.tvUserName.text = nameUser
                 binding.tvUserEmail.text = emailUser
                 binding.ivProfile.load(imageUser)
-
-                when(languagePref) {
-                    0 -> binding.sSelectLanguage.setSelection(0)
-                    1 -> binding.sSelectLanguage.setSelection(1)
+                prefViewModel.getLanguage.collect {
+                    when(it) {
+                        0 -> {
+                            binding.sSelectLanguage.setSelection(0)
+                            setLanguage("en")
+                        }
+                        1 -> {
+                            binding.sSelectLanguage.setSelection(1)
+                            setLanguage("in")
+                        }
+                    }
                 }
             }
         }
@@ -159,13 +165,13 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                         when (position) {
                             0 -> {
                                 setLanguage("en")
-                                setDialogChangeLanguage()
                                 prefViewModel.saveLanguage(position)
+                                requireActivity().recreate()
                             }
                             1 -> {
                                 setLanguage("in")
-                                setDialogChangeLanguage()
                                 prefViewModel.saveLanguage(position)
+                                requireActivity().recreate()
                             }
                         }
                     } else {
@@ -239,17 +245,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 alertDialogSelectImage()
             }
         }
-    }
-
-    private fun setDialogChangeLanguage() {
-        AlertDialog.Builder(requireContext())
-            .setTitle(R.string.change_language)
-            .setMessage(R.string.change_language)
-            .setPositiveButton("Ok") { _, _ ->
-                activity?.recreate()
-            }
-            .setNegativeButton("Cancel") { _, _ -> }
-            .show()
     }
 
     private fun alertDialogSelectImage() {

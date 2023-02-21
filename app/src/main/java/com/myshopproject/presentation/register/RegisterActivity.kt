@@ -92,10 +92,12 @@ class RegisterActivity : AppCompatActivity() {
                 is Resource.Success -> {
                     binding.registerCardLoading.root.hide()
                     alertDialogRegisSuccess()
-                    Toast.makeText(this@RegisterActivity, "Register Successfully ${response.data!!.success.status}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@RegisterActivity, "Register Successfully.", Toast.LENGTH_SHORT).show()
+                    finish()
                 }
                 is Resource.Error -> {
                     binding.registerCardLoading.root.hide()
+                    Toast.makeText(this@RegisterActivity, response.message, Toast.LENGTH_SHORT).show()
                     try {
                         val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
                         val gson = Gson()
@@ -179,66 +181,13 @@ class RegisterActivity : AppCompatActivity() {
             genderList == null -> {
                 Toast.makeText(this@RegisterActivity, "Please select your gender.", Toast.LENGTH_SHORT).show()
             }
+            getFile == null -> {
+                Toast.makeText(this@RegisterActivity, "Please upload your profile photo.", Toast.LENGTH_SHORT).show()
+            }
             else -> {
                 isValid = true
             }
         }
-
-//        binding.etEmailRegister.doOnTextChanged { _, _, _, _ ->
-//            if (email.isEmpty()) {
-//                binding.tilEmailRegister.error = "Please fill your email address."
-//                binding.tilEmailRegister.requestFocus()
-//            } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-//                binding.tilEmailRegister.error = "Please enter a valid email address."
-//                binding.tilEmailRegister.requestFocus()
-//            } else {
-//                binding.tilEmailRegister.error = null
-//                isValid = true
-//            }
-//        }
-//
-//        binding.etPasswordRegister.doOnTextChanged { _, _, _, _ ->
-//            if (password.isEmpty()) {
-//                binding.tilPasswordRegister.error = "Please enter your password."
-//                binding.tilPasswordRegister.requestFocus()
-//            } else if (password.length < 6) {
-//                binding.tilPasswordRegister.error = "Password length must be 6 character."
-//                binding.tilPasswordRegister.requestFocus()
-//            } else {
-//                binding.tilPasswordRegister.error = null
-//                isValid = true
-//            }
-//        }
-//
-//        binding.etConfPasswordRegister.doOnTextChanged { _, _, _, _ ->
-//            if (confirmPass != password) {
-//                binding.tilConfPasswordRegister.error = "Password not match."
-//                binding.tilConfPasswordRegister.requestFocus()
-//            } else {
-//                binding.tilConfPasswordRegister.error = null
-//                isValid = true
-//            }
-//        }
-//
-//        binding.etNameRegister.doOnTextChanged { _, _, _, _ ->
-//            if (name.isEmpty()) {
-//                binding.tilNameRegister.error = "Please enter your name."
-//                binding.tilNameRegister.requestFocus()
-//            } else {
-//                binding.tilNameRegister.error = null
-//                isValid = true
-//            }
-//        }
-//
-//        binding.etPhoneRegister.doOnTextChanged { _, _, _, _ ->
-//            if (phone.isEmpty()) {
-//                binding.tilPhoneRegister.error = "Please enter your phone number."
-//                binding.tilPhoneRegister.requestFocus()
-//            } else {
-//                binding.tilPhoneRegister.error = null
-//                isValid = true
-//            }
-//        }
 
         return isValid
     }

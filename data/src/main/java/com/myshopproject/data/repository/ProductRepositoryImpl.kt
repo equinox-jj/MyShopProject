@@ -46,12 +46,17 @@ class ProductRepositoryImpl @Inject constructor(
             val response = apiProduct.getListProductFavorite(query = query, userId = userId).toDomain()
             emit(Resource.Success(response))
         } catch (t: Throwable) {
-            if (t is HttpException) {
-                when (t.code()) {
-                    400 -> { emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody())) }
-                    404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                    500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                    else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
+            when(t) {
+                is HttpException -> {
+                    when (t.code()) {
+                        400 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
+                    }
+                }
+                is Exception -> {
+                    emit(Resource.Error(t.message, null, null))
                 }
             }
         }
@@ -63,10 +68,15 @@ class ProductRepositoryImpl @Inject constructor(
             val response = apiProduct.getProductDetail(productId = productId, userId = userId).toDomain()
             emit(Resource.Success(response))
         } catch (t: Throwable) {
-            if (t is HttpException) {
-                when (t.code()) {
-                    400 -> { emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody())) }
-                    else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
+            when(t) {
+                is HttpException -> {
+                    when (t.code()) {
+                        400 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
+                    }
+                }
+                is Exception -> {
+                    emit(Resource.Error(t.message, null, null))
                 }
             }
         }
@@ -81,10 +91,15 @@ class ProductRepositoryImpl @Inject constructor(
             val response = apiProduct.addProductFavorite(productId = productId, userId = userId).toDomain()
             emit(Resource.Success(response))
         } catch (t: Throwable) {
-            if (t is HttpException) {
-                when (t.code()) {
-                    400 -> { emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody())) }
-                    else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
+            when(t) {
+                is HttpException -> {
+                    when (t.code()) {
+                        400 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
+                    }
+                }
+                is Exception -> {
+                    emit(Resource.Error(t.message, null, null))
                 }
             }
         }
@@ -99,10 +114,15 @@ class ProductRepositoryImpl @Inject constructor(
             val response = apiProduct.removeProductFavorite(productId = productId, userId = userId).toDomain()
             emit(Resource.Success(response))
         } catch (t: Throwable) {
-            if (t is HttpException) {
-                when (t.code()) {
-                    400 -> { emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody())) }
-                    else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
+            when(t) {
+                is HttpException -> {
+                    when (t.code()) {
+                        400 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
+                    }
+                }
+                is Exception -> {
+                    emit(Resource.Error(t.message, null, null))
                 }
             }
         }
@@ -114,10 +134,15 @@ class ProductRepositoryImpl @Inject constructor(
             val response = apiProduct.updateStock(updateStock = updateStock).toDomain()
             emit(Resource.Success(response))
         } catch (t: Throwable) {
-            if (t is HttpException) {
-                when (t.code()) {
-                    400 -> { emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody())) }
-                    else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
+            when(t) {
+                is HttpException -> {
+                    when (t.code()) {
+                        400 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
+                    }
+                }
+                is Exception -> {
+                    emit(Resource.Error(t.message, null, null))
                 }
             }
         }
@@ -132,10 +157,18 @@ class ProductRepositoryImpl @Inject constructor(
             val response = apiProduct.updateRate(id = id, rate = updateRate).toDomain()
             emit(Resource.Success(response))
         } catch (t: Throwable) {
-            if (t is HttpException) {
-                when (t.code()) {
-                    400 -> { emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody())) }
-                    else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
+            when(t) {
+                is HttpException -> {
+                    when (t.code()) {
+                        400 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        401 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
+                    }
+                }
+                is Exception -> {
+                    emit(Resource.Error(t.message, null, null))
                 }
             }
         }
@@ -147,12 +180,17 @@ class ProductRepositoryImpl @Inject constructor(
             val response = apiProduct.getProductOther(userId = userId).toDomain()
             emit(Resource.Success(response))
         } catch (t: Throwable) {
-            if (t is HttpException) {
-                when (t.code()) {
-                    400 -> { emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody())) }
-                    404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                    500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                    else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
+            when(t) {
+                is HttpException -> {
+                    when (t.code()) {
+                        400 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
+                    }
+                }
+                is Exception -> {
+                    emit(Resource.Error(t.message, null, null))
                 }
             }
         }
@@ -164,12 +202,17 @@ class ProductRepositoryImpl @Inject constructor(
             val response = apiProduct.getProductHistory(userId = userId).toDomain()
             emit(Resource.Success(response))
         } catch (t: Throwable) {
-            if (t is HttpException) {
-                when (t.code()) {
-                    400 -> { emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody())) }
-                    404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                    500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                    else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
+            when(t) {
+                is HttpException -> {
+                    when (t.code()) {
+                        400 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
+                        else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
+                    }
+                }
+                is Exception -> {
+                    emit(Resource.Error(t.message, null, null))
                 }
             }
         }

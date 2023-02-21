@@ -28,7 +28,6 @@ class PaymentActivity : AppCompatActivity() {
     private var adapterPayment: PaymentHeaderAdapter? = null
 
     private var productId = 0
-    private var dataRemoteConfig = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +45,7 @@ class PaymentActivity : AppCompatActivity() {
     private fun setupToolbar() {
         setSupportActionBar(binding.toolbarPayment)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
     }
 
     private fun initObserver() {
@@ -91,8 +91,7 @@ class PaymentActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        finish()
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        onBackPressedDispatcher.onBackPressed()
         return true
     }
 }

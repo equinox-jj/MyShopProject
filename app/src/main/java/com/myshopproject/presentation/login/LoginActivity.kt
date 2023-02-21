@@ -80,12 +80,15 @@ class LoginActivity : AppCompatActivity() {
                 }
                 is Resource.Error -> {
                     binding.loginCardLoading.root.hide()
-                    val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
-                    val gson = Gson()
-                    val jsonObject = gson.fromJson(errors, JsonObject::class.java)
-                    val errorResponse = gson.fromJson(jsonObject, ErrorResponseDTO::class.java)
+                    Toast.makeText(this@LoginActivity, response.message, Toast.LENGTH_SHORT).show()
+                    try {
+                        val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
+                        val gson = Gson()
+                        val jsonObject = gson.fromJson(errors, JsonObject::class.java)
+                        val errorResponse = gson.fromJson(jsonObject, ErrorResponseDTO::class.java)
 
-                    Toast.makeText(this@LoginActivity, "${errorResponse.error.message} ${errorResponse.error.status}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@LoginActivity, "${errorResponse.error.message} ${errorResponse.error.status}", Toast.LENGTH_SHORT).show()
+                    } catch (_: Exception) {}
                 }
             }
         }
@@ -97,27 +100,33 @@ class LoginActivity : AppCompatActivity() {
                 if (validation()) {
                     lifecycleScope.launch {
                         lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                            val firebaseToken = firebaseMessaging.token
-                                .addOnSuccessListener { it.toString() }
-                                .addOnFailureListener {
-                                    when(it) {
-                                        is FirebaseNetworkException -> {
-                                            Toast.makeText(this@LoginActivity, "Check your internet connection.", Toast.LENGTH_SHORT).show()
-                                        }
-                                        is FirebaseTooManyRequestsException -> {
-                                            Toast.makeText(this@LoginActivity, "Too many request.", Toast.LENGTH_SHORT).show()
-                                        }
-                                        is FirebaseException -> {
-                                            Toast.makeText(this@LoginActivity, "An unknown error occurred.", Toast.LENGTH_SHORT).show()
-                                        }
+                            try {
+                                val firebaseToken = firebaseMessaging.token
+                                    .addOnSuccessListener {
+                                        it.toString()
                                     }
-                                }.await()
+                                    .addOnFailureListener {
+                                        when(it) {
+                                            is FirebaseNetworkException -> {
+                                                Toast.makeText(this@LoginActivity, "Check your internet connection.", Toast.LENGTH_SHORT).show()
+                                            }
+                                            is FirebaseTooManyRequestsException -> {
+                                                Toast.makeText(this@LoginActivity, "Too many request.", Toast.LENGTH_SHORT).show()
+                                            }
+                                            is FirebaseException -> {
+                                                Toast.makeText(this@LoginActivity, "An unknown error occurred.", Toast.LENGTH_SHORT).show()
+                                            }
+                                        }
+                                    }.await()
 
-                            viewModel.loginAccount(
-                                email = etEmailLogin.text.toString(),
-                                password = etPasswordLogin.text.toString(),
-                                firebaseToken = firebaseToken
-                            )
+                                viewModel.loginAccount(
+                                    email = etEmailLogin.text.toString(),
+                                    password = etPasswordLogin.text.toString(),
+                                    firebaseToken = firebaseToken
+                                )
+                            } catch (e: Exception) {
+                                Toast.makeText(this@LoginActivity, e.localizedMessage, Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
                 }

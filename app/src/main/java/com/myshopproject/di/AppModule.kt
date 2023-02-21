@@ -75,9 +75,9 @@ object AppModule {
             .addInterceptor(headerInterceptor)
             .addInterceptor(authExpiredToken)
             .authenticator(authAuthentication)
-            .readTimeout(10, TimeUnit.SECONDS)
-            .connectTimeout(10, TimeUnit.SECONDS)
-            .writeTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(10L, TimeUnit.SECONDS)
+            .connectTimeout(10L, TimeUnit.SECONDS)
+            .writeTimeout(10L, TimeUnit.SECONDS)
             .build()
     }
 
