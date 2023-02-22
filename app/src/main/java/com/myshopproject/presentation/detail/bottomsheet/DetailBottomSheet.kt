@@ -82,7 +82,7 @@ class DetailBottomSheet(
             tvProductPriceBottSht.text = data.harga.toIDRPrice()
             (resources.getString(R.string.buy_now) + data.harga.toIDRPrice()).also { btnBuyNowBottSheet.text = it }
 
-            if (data.stock == 1) tvStockProductBottSht.text = resources.getString(R.string.out_of_stock)
+            if (data.stock == 0) tvStockProductBottSht.text = resources.getString(R.string.out_of_stock)
             else tvStockProductBottSht.text = data.stock.toString()
 
             if (paymentData == null) {

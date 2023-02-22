@@ -18,10 +18,13 @@ import com.google.gson.JsonObject
 import com.myshopproject.R
 import com.myshopproject.databinding.ActivityRegisterBinding
 import com.myshopproject.domain.utils.Resource
+import com.myshopproject.presentation.CustomLoadingDialog
 import com.myshopproject.presentation.camera.CameraActivity
-import com.myshopproject.utils.*
 import com.myshopproject.utils.Constants.IS_BACK_CAMERA_INTENT
 import com.myshopproject.utils.Constants.PICTURE_INTENT
+import com.myshopproject.utils.reduceFileImage
+import com.myshopproject.utils.rotateBitmap
+import com.myshopproject.utils.uriToFile
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -37,6 +40,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
     private val viewModel by viewModels<RegisterViewModel>()
 
+    private lateinit var loadingDialog: CustomLoadingDialog
     private lateinit var resultCamera: Bitmap
     private var getFile: File? = null
 
@@ -79,6 +83,7 @@ class RegisterActivity : AppCompatActivity() {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        loadingDialog = CustomLoadingDialog(this@RegisterActivity)
         setupListener()
         initObserver()
     }
@@ -87,16 +92,16 @@ class RegisterActivity : AppCompatActivity() {
         viewModel.state.observe(this@RegisterActivity) { response ->
             when (response) {
                 is Resource.Loading -> {
-                    binding.registerCardLoading.root.show()
+                    loadingDialog.showDialog()
                 }
                 is Resource.Success -> {
-                    binding.registerCardLoading.root.hide()
+                    loadingDialog.hideDialog()
                     alertDialogRegisSuccess()
                     Toast.makeText(this@RegisterActivity, "Register Successfully.", Toast.LENGTH_SHORT).show()
                     finish()
                 }
                 is Resource.Error -> {
-                    binding.registerCardLoading.root.hide()
+                    loadingDialog.hideDialog()
                     Toast.makeText(this@RegisterActivity, response.message, Toast.LENGTH_SHORT).show()
                     try {
                         val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }

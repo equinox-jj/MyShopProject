@@ -47,7 +47,7 @@ class ProductPagingAdapter(private val onClick: (Int) -> Unit): PagingDataAdapte
 
     companion object {
         private val PRODUCT_COMPARATOR = object : DiffUtil.ItemCallback<DataProduct>() {
-            override fun areItemsTheSame(oldItem: DataProduct, newItem: DataProduct) = oldItem.id == newItem.id
+            override fun areItemsTheSame(oldItem: DataProduct, newItem: DataProduct) = oldItem.id == newItem.id && oldItem.nameProduct == newItem.nameProduct
             override fun areContentsTheSame(oldItem: DataProduct, newItem: DataProduct) = oldItem == newItem
         }
     }

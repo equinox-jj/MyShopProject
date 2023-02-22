@@ -13,9 +13,6 @@ class RemotePagingSource @Inject constructor(
     private val query: String?,
     private val apiProduct: ApiProduct
 ) : PagingSource<Int, DataProduct>() {
-    override fun getRefreshKey(state: PagingState<Int, DataProduct>): Int? {
-        return state.anchorPosition
-    }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, DataProduct> {
         return try {
@@ -24,7 +21,6 @@ class RemotePagingSource @Inject constructor(
             val response = apiProduct.getListProductPaging(query, productOffset)
             val productResult = response.success.data.map { it.toDomain() }
 
-//            val prevKey = if (productOffset == INITIAL_INDEX) null else productOffset.minus(1)
             val nextKey = if (productResult.isEmpty()) null else productOffset.plus(TOTAL_ITEM)
 
             LoadResult.Page(
@@ -36,6 +32,15 @@ class RemotePagingSource @Inject constructor(
             LoadResult.Error(exception)
         } catch (exception: HttpException) {
             LoadResult.Error(exception)
+        } catch (exception: Exception) {
+            LoadResult.Error(exception)
+        }
+    }
+
+    override fun getRefreshKey(state: PagingState<Int, DataProduct>): Int? {
+        return state.anchorPosition?.let { anchorPosition ->
+            val anchorPage = state.closestPageToPosition(anchorPosition)
+            anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
         }
     }
 

@@ -290,7 +290,7 @@ class DetailActivity : AppCompatActivity() {
             tvTypeProductDtl.text = data.type
             tvDescProductDtl.text = data.desc
 
-            if (data.stock == 1) tvStockProductDtl.text = resources.getString(R.string.out_of_stock)
+            if (data.stock == 0) tvStockProductDtl.text = resources.getString(R.string.out_of_stock)
             else tvStockProductDtl.text = data.stock.toString()
             if (data.isFavorite) ivImageFavProductDtl.setImageResource(R.drawable.ic_favorite_filled)
             else ivImageFavProductDtl.setImageResource(R.drawable.ic_favorite_outlined)
@@ -333,7 +333,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun addToCart(data: DetailProductData) {
-        if (data.stock > 1) {
+        if (data.stock > 0) {
             localViewModel.insertCart(
                 CartDataDomain(
                     id = data.id,

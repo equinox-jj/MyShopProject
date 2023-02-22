@@ -57,7 +57,10 @@
     <string name="multiple_select">Pilih Beberapa</string>
     <string name="check_data_trolley">Produk sudah ada di trolley.</string>
     <string name="add_to_trolley">Tambah ke trolley.</string>
-    <string name="failed_add_trolley">Gagal tambah ke trolley.</string>
+    <string name="failed_add_trolley">Stok product sudah habis.</string>
     <string name="success_add_to_favorite">Berhasil menambahkan ke favorite.</string>
     <string name="success_remove_favorite">Berhasil menghapus dari favorite.</string>
+    <string name="error_too_many_request">Too many request.</string>
+    <string name="error_an_unknown">An unknown error occurred.</string>
+    <string name="login_successful">Login Successfully.</string>
 </resources>

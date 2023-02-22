@@ -46,23 +46,25 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     startActivity(intent)
                 }
             )
-            rvHome.adapter = adapter!!
+            rvHome.adapter = adapter
             rvHome.setHasFixedSize(true)
 
-            rvHome.adapter = adapter!!.withLoadStateFooter(
-                footer = ItemLoadAdapter { adapter!!.retry() }
+            rvHome.adapter = adapter?.withLoadStateFooter(
+                footer = ItemLoadAdapter { adapter?.retry() }
             )
 
-            adapter!!.addLoadStateListener { loadState ->
+            adapter?.addLoadStateListener { loadState ->
                 shimmerHome.root.isVisible = loadState.source.refresh is LoadState.Loading
                 rvHome.isVisible = loadState.source.refresh is LoadState.NotLoading
 
                 /** SEARCH EMPTY STATE */
-                if (loadState.source.refresh is LoadState.NotLoading && adapter!!.itemCount < 1) {
-                    rvHome.isVisible = false
-                    emptyHome.root.isVisible = true
-                } else {
-                    emptyHome.root.isVisible = false
+                adapter?.let {
+                    if (loadState.source.refresh is LoadState.NotLoading && it.itemCount < 1) {
+                        rvHome.isVisible = false
+                        emptyHome.root.isVisible = true
+                    } else {
+                        emptyHome.root.isVisible = false
+                    }
                 }
             }
         }
@@ -86,13 +88,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 svHome.clearFocus()
                 refreshHome.isRefreshing = false
                 adapter?.refresh()
+                initObserver()
             }
         }
     }
 
     private fun initObserver() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.productList.collectLatest { adapter?.submitData(viewLifecycleOwner.lifecycle,it) }
+            viewModel.productList.collectLatest { adapter?.submitData(it) }
         }
     }
 

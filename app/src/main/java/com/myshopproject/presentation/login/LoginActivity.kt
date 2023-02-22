@@ -17,14 +17,14 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.ktx.messaging
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.myshopproject.R
 import com.myshopproject.data.source.remote.dto.ErrorResponseDTO
 import com.myshopproject.databinding.ActivityLoginBinding
 import com.myshopproject.domain.utils.Resource
+import com.myshopproject.presentation.CustomLoadingDialog
 import com.myshopproject.presentation.main.MainActivity
 import com.myshopproject.presentation.register.RegisterActivity
 import com.myshopproject.presentation.viewmodel.DataStoreViewModel
-import com.myshopproject.utils.hide
-import com.myshopproject.utils.show
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -39,12 +39,14 @@ class LoginActivity : AppCompatActivity() {
     private val prefViewModel by viewModels<DataStoreViewModel>()
 
     private lateinit var firebaseMessaging: FirebaseMessaging
+    private lateinit var loadingDialog: CustomLoadingDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        loadingDialog = CustomLoadingDialog(this@LoginActivity)
         firebaseMessaging = Firebase.messaging
 
         setupListener()
@@ -55,7 +57,7 @@ class LoginActivity : AppCompatActivity() {
         viewModel.state.observe(this@LoginActivity) { response ->
             when (response) {
                 is Resource.Loading -> {
-                    binding.loginCardLoading.root.show()
+                    loadingDialog.showDialog()
                 }
                 is Resource.Success -> {
                     val refreshToken = response.data?.refreshToken
@@ -73,13 +75,13 @@ class LoginActivity : AppCompatActivity() {
                     prefViewModel.saveEmailUser(emailUser!!)
                     prefViewModel.saveNameUser(nameUser!!)
                     prefViewModel.saveImageUser(imageUser!!)
-                    binding.loginCardLoading.root.hide()
-                    Toast.makeText(this@LoginActivity, "Login Successfully.", Toast.LENGTH_SHORT).show()
+                    loadingDialog.hideDialog()
+                    Toast.makeText(this@LoginActivity, getString(R.string.login_successful), Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                     finish()
                 }
                 is Resource.Error -> {
-                    binding.loginCardLoading.root.hide()
+                    loadingDialog.hideDialog()
                     Toast.makeText(this@LoginActivity, response.message, Toast.LENGTH_SHORT).show()
                     try {
                         val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
@@ -108,13 +110,13 @@ class LoginActivity : AppCompatActivity() {
                                     .addOnFailureListener {
                                         when(it) {
                                             is FirebaseNetworkException -> {
-                                                Toast.makeText(this@LoginActivity, "Check your internet connection.", Toast.LENGTH_SHORT).show()
+                                                Toast.makeText(this@LoginActivity, getString(R.string.check_your_connectivity), Toast.LENGTH_SHORT).show()
                                             }
                                             is FirebaseTooManyRequestsException -> {
-                                                Toast.makeText(this@LoginActivity, "Too many request.", Toast.LENGTH_SHORT).show()
+                                                Toast.makeText(this@LoginActivity, getString(R.string.error_too_many_request), Toast.LENGTH_SHORT).show()
                                             }
                                             is FirebaseException -> {
-                                                Toast.makeText(this@LoginActivity, "An unknown error occurred.", Toast.LENGTH_SHORT).show()
+                                                Toast.makeText(this@LoginActivity, getString(R.string.error_an_unknown), Toast.LENGTH_SHORT).show()
                                             }
                                         }
                                     }.await()

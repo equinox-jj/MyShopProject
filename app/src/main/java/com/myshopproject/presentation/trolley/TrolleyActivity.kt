@@ -241,7 +241,7 @@ class TrolleyActivity : AppCompatActivity() {
             )
             binding.rvTrolley.adapter = trolleyAdapter
             binding.rvTrolley.setHasFixedSize(true)
-            binding.rvTrolley.itemAnimator = null
+//            binding.rvTrolley.itemAnimator = null
         }
     }
 

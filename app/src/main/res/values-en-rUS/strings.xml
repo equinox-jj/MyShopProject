@@ -57,7 +57,10 @@
     <string name="multiple_select">Multiple Select</string>
     <string name="check_data_trolley">Product has already in trolley.</string>
     <string name="add_to_trolley">Add to trolley.</string>
-    <string name="failed_add_trolley">Failed add to trolley.</string>
+    <string name="failed_add_trolley">This product is out of stock.</string>
     <string name="success_add_to_favorite">Success add to favorite.</string>
     <string name="success_remove_favorite">Success remove from favorite.</string>
+    <string name="error_too_many_request">Too many request.</string>
+    <string name="error_an_unknown">An unknown error occurred.</string>
+    <string name="login_successful">Login Successfully.</string>
 </resources>
