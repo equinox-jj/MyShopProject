@@ -94,7 +94,6 @@ class BuySuccessActivity : AppCompatActivity() {
                             finishAffinity()
                         }
                         is Resource.Error -> {
-                            Toast.makeText(this@BuySuccessActivity, response.message, Toast.LENGTH_SHORT).show()
                             try {
                                 val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
                                 val gson = Gson()

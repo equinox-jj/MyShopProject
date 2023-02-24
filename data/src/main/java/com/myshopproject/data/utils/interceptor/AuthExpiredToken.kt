@@ -1,9 +1,8 @@
-package com.myshopproject.utils.token
+package com.myshopproject.data.utils.interceptor
 
 import android.content.Context
 import android.content.Intent
 import com.myshopproject.domain.preferences.MyPreferences
-import com.myshopproject.presentation.login.LoginActivity
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -20,7 +19,7 @@ class AuthExpiredToken @Inject constructor(
             runBlocking {
                 pref.clearSession() // Clear Preferences
             }
-            val intent = Intent(context, LoginActivity::class.java) // Back to Login Screen
+            val intent = Intent(context, Class.forName("com.myshopproject.presentation.login.LoginActivity")) // Back to Login Screen
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
             return response

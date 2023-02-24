@@ -1,4 +1,4 @@
-package com.myshopproject.di
+package com.myshopproject.data.di
 
 import android.content.Context
 import com.myshopproject.data.BuildConfig
@@ -9,6 +9,11 @@ import com.myshopproject.data.source.local.dao.FirebaseMessageDao
 import com.myshopproject.data.source.local.dao.ProductCartDao
 import com.myshopproject.data.source.remote.network.ApiAuth
 import com.myshopproject.data.source.remote.network.ApiProduct
+import com.myshopproject.data.utils.Constants.BASE_URL
+import com.myshopproject.data.utils.interceptor.AuthAuthentication
+import com.myshopproject.data.utils.interceptor.AuthExpiredToken
+import com.myshopproject.data.utils.interceptor.HeaderInterceptor
+import com.myshopproject.data.utils.interceptor.NoConnectionInterceptor
 import com.myshopproject.domain.preferences.MyPreferences
 import com.myshopproject.domain.repository.AuthRepository
 import com.myshopproject.domain.repository.FirebaseRepository
@@ -17,10 +22,6 @@ import com.myshopproject.domain.usecase.LocalInteractor
 import com.myshopproject.domain.usecase.LocalUseCase
 import com.myshopproject.domain.usecase.RemoteInteractor
 import com.myshopproject.domain.usecase.RemoteUseCase
-import com.myshopproject.utils.Constants.BASE_URL
-import com.myshopproject.utils.token.AuthAuthentication
-import com.myshopproject.utils.token.AuthExpiredToken
-import com.myshopproject.utils.token.HeaderInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -49,18 +50,21 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun providesAuthAuthentication(pref: MyPreferences): AuthAuthentication = AuthAuthentication(pref)
+    fun providesAuthAuthentication(pref: MyPreferences): AuthAuthentication =
+        AuthAuthentication(pref)
 
     @Singleton
     @Provides
     fun providesAuthInterceptor(
         @ApplicationContext context: Context,
         pref: MyPreferences
-    ): AuthExpiredToken = AuthExpiredToken(context, pref)
+    ): AuthExpiredToken =
+        AuthExpiredToken(context, pref)
 
     @Singleton
     @Provides
-    fun providesHeaderInterceptor(pref: MyPreferences): HeaderInterceptor = HeaderInterceptor(pref)
+    fun providesHeaderInterceptor(pref: MyPreferences): HeaderInterceptor =
+        HeaderInterceptor(pref)
 
     @Singleton
     @Provides
@@ -69,11 +73,13 @@ object AppModule {
         headerInterceptor: HeaderInterceptor,
         authExpiredToken: AuthExpiredToken,
         authAuthentication: AuthAuthentication,
+        noConnectionInterceptor: NoConnectionInterceptor
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(httpLoggingInterceptor)
             .addInterceptor(headerInterceptor)
             .addInterceptor(authExpiredToken)
+            .addInterceptor(noConnectionInterceptor)
             .authenticator(authAuthentication)
             .readTimeout(10L, TimeUnit.SECONDS)
             .connectTimeout(10L, TimeUnit.SECONDS)

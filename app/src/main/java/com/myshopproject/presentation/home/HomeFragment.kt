@@ -11,12 +11,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import com.myshopproject.R
 import com.myshopproject.databinding.FragmentHomeBinding
+import com.myshopproject.domain.repository.FirebaseAnalyticsRepository
 import com.myshopproject.presentation.detail.DetailActivity
 import com.myshopproject.presentation.home.adapter.ItemLoadAdapter
 import com.myshopproject.presentation.home.adapter.ProductPagingAdapter
 import com.myshopproject.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -28,9 +30,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val viewModel by viewModels<HomeViewModel>()
 
+    @Inject
+    lateinit var analyticRepository: FirebaseAnalyticsRepository
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentHomeBinding.bind(view)
+
+        analyticRepository.onHomeLoadScreen(requireContext().javaClass.simpleName)
 
         initObserver()
         initRecyclerView()
@@ -41,8 +48,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.apply {
             adapter = ProductPagingAdapter(
                 onClick = {
+                    analyticRepository.onProductHomeClick(it.nameProduct, it.harga.replace(Regex("\\D"), "").toDouble(), it.rate, it.id)
+
                     val intent = Intent(requireContext(), DetailActivity::class.java)
-                    intent.putExtra(Constants.PRODUCT_ID_INTENT, it)
+                    intent.putExtra(Constants.PRODUCT_ID_INTENT, it.id)
                     startActivity(intent)
                 }
             )
@@ -54,6 +63,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             )
 
             adapter?.addLoadStateListener { loadState ->
+                val state = loadState.source.refresh
+                val offset = state.let { it as? LoadState.NotLoading }?.endOfPaginationReached?.not() ?: false
+                val result = if (offset) adapter?.itemCount else 0
+                result?.let { analyticRepository.onPagingScroll(it) }
+
                 shimmerHome.root.isVisible = loadState.source.refresh is LoadState.Loading
                 rvHome.isVisible = loadState.source.refresh is LoadState.NotLoading
 
@@ -78,6 +92,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 }
 
                 override fun onQueryTextChange(newText: String): Boolean {
+                    analyticRepository.onSearchHome(newText)
                     viewModel.onSearch(newText)
                     return true
                 }

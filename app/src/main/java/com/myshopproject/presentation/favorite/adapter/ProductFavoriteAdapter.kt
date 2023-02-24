@@ -13,7 +13,7 @@ import com.myshopproject.utils.ItemType
 import com.myshopproject.utils.hide
 import com.myshopproject.utils.show
 
-class ProductFavoriteAdapter(private val type: ItemType, private val onClick: (Int) -> Unit) : RecyclerView.Adapter<ProductFavoriteAdapter.ProductFavoriteVH>() {
+class ProductFavoriteAdapter(private val type: ItemType, private val onClick: (DataProduct) -> Unit) : RecyclerView.Adapter<ProductFavoriteAdapter.ProductFavoriteVH>() {
 
     private var listProduct = listOf<DataProduct>()
 
@@ -40,7 +40,7 @@ class ProductFavoriteAdapter(private val type: ItemType, private val onClick: (I
                 rbProductRate.rating = data.rate.toFloat()
 
                 itemView.setOnClickListener {
-                    onClick.invoke(data.id)
+                    onClick.invoke(data)
                 }
             }
         }

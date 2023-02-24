@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.myshopproject.data.source.local.entity.FcmEntity
-import com.myshopproject.domain.utils.Constants.FCM_TABLE
+import com.myshopproject.data.utils.Constants.FCM_TABLE
 import kotlinx.coroutines.flow.Flow
 
 @Dao

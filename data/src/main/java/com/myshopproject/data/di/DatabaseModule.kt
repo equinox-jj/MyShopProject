@@ -3,7 +3,7 @@ package com.myshopproject.data.di
 import android.content.Context
 import androidx.room.Room
 import com.myshopproject.data.source.local.ProductCartDatabase
-import com.myshopproject.domain.utils.Constants.CART_DATABASE
+import com.myshopproject.data.utils.Constants.CART_DATABASE
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

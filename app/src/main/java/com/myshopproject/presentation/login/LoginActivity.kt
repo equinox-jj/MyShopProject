@@ -20,6 +20,7 @@ import com.google.gson.JsonObject
 import com.myshopproject.R
 import com.myshopproject.data.source.remote.dto.ErrorResponseDTO
 import com.myshopproject.databinding.ActivityLoginBinding
+import com.myshopproject.domain.repository.FirebaseAnalyticsRepository
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.CustomLoadingDialog
 import com.myshopproject.presentation.main.MainActivity
@@ -29,6 +30,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.json.JSONObject
+import java.io.IOException
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
@@ -37,6 +40,9 @@ class LoginActivity : AppCompatActivity() {
 
     private val viewModel by viewModels<LoginViewModel>()
     private val prefViewModel by viewModels<DataStoreViewModel>()
+
+    @Inject
+    lateinit var analyticRepository: FirebaseAnalyticsRepository
 
     private lateinit var firebaseMessaging: FirebaseMessaging
     private lateinit var loadingDialog: CustomLoadingDialog
@@ -48,9 +54,13 @@ class LoginActivity : AppCompatActivity() {
 
         loadingDialog = CustomLoadingDialog(this@LoginActivity)
         firebaseMessaging = Firebase.messaging
-
         setupListener()
         initObserver()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analyticRepository.onLoginLoadScreen(this@LoginActivity.javaClass.simpleName)
     }
 
     private fun initObserver() {
@@ -60,6 +70,8 @@ class LoginActivity : AppCompatActivity() {
                     loadingDialog.showDialog()
                 }
                 is Resource.Success -> {
+                    loadingDialog.hideDialog()
+
                     val refreshToken = response.data?.refreshToken
                     val accessToken = response.data?.accessToken
                     val idUser = response.data?.dataUser?.id
@@ -75,15 +87,17 @@ class LoginActivity : AppCompatActivity() {
                     prefViewModel.saveEmailUser(emailUser!!)
                     prefViewModel.saveNameUser(nameUser!!)
                     prefViewModel.saveImageUser(imageUser!!)
-                    loadingDialog.hideDialog()
+
+                    analyticRepository.onLoginButtonClick(emailUser)
+
                     Toast.makeText(this@LoginActivity, getString(R.string.login_successful), Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                     finish()
                 }
                 is Resource.Error -> {
-                    loadingDialog.hideDialog()
-                    Toast.makeText(this@LoginActivity, response.message, Toast.LENGTH_SHORT).show()
                     try {
+                        loadingDialog.hideDialog()
+
                         val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
                         val gson = Gson()
                         val jsonObject = gson.fromJson(errors, JsonObject::class.java)
@@ -126,6 +140,8 @@ class LoginActivity : AppCompatActivity() {
                                     password = etPasswordLogin.text.toString(),
                                     firebaseToken = firebaseToken
                                 )
+                            } catch (e: IOException) {
+                                Toast.makeText(this@LoginActivity, e.localizedMessage, Toast.LENGTH_SHORT).show()
                             } catch (e: Exception) {
                                 Toast.makeText(this@LoginActivity, e.localizedMessage, Toast.LENGTH_SHORT).show()
                             }

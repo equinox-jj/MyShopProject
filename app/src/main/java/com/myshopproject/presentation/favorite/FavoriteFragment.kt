@@ -12,6 +12,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.myshopproject.R
 import com.myshopproject.databinding.FragmentFavoriteBinding
+import com.myshopproject.domain.repository.FirebaseAnalyticsRepository
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.detail.DetailActivity
 import com.myshopproject.presentation.favorite.adapter.ProductFavoriteAdapter
@@ -20,6 +21,7 @@ import com.myshopproject.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
@@ -31,9 +33,14 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
     private val viewModel by viewModels<FavoriteViewModel>()
     private val prefViewModel by viewModels<DataStoreViewModel>()
 
+    @Inject
+    lateinit var analyticRepository: FirebaseAnalyticsRepository
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentFavoriteBinding.bind(view)
+
+        analyticRepository.onFavoriteLoadScreen(this@FavoriteFragment.javaClass.simpleName)
 
         initObserver(SortedBy.DefaultSort)
         launchCoroutines()
@@ -55,8 +62,10 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
             adapter = ProductFavoriteAdapter(
                 type = ItemType.IS_FAVORITE_PRODUCT,
                 onClick = {
+                    analyticRepository.onProductFavoriteClick(it.nameProduct, it.harga.replace(Regex("\\D"), "").toDouble(), it.rate, it.id)
+
                     val intent = Intent(requireContext(), DetailActivity::class.java)
-                    intent.putExtra(Constants.PRODUCT_ID_INTENT, it)
+                    intent.putExtra(Constants.PRODUCT_ID_INTENT, it.id)
                     startActivity(intent)
                 }
             )
@@ -73,6 +82,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
                 }
 
                 override fun onQueryTextChange(newText: String): Boolean {
+                    analyticRepository.onSearchFavorite(newText)
                     viewModel.onSearch(newText)
                     return true
                 }
@@ -98,6 +108,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
             .setTitle("Sort By")
             .setSingleChoiceItems(items, -1){_, position ->
                 selectedItem = items[position]
+                analyticRepository.onSortByName(selectedItem)
             }
             .setPositiveButton("OK") {_,_ ->
                 when(selectedItem) {

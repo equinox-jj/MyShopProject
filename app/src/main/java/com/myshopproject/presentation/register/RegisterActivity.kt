@@ -16,7 +16,12 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.myshopproject.R
+import com.myshopproject.data.utils.Constants.CAMERA
+import com.myshopproject.data.utils.Constants.FEMALE
+import com.myshopproject.data.utils.Constants.GALLERY
+import com.myshopproject.data.utils.Constants.MALE
 import com.myshopproject.databinding.ActivityRegisterBinding
+import com.myshopproject.domain.repository.FirebaseAnalyticsRepository
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.CustomLoadingDialog
 import com.myshopproject.presentation.camera.CameraActivity
@@ -33,6 +38,7 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import java.io.File
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class RegisterActivity : AppCompatActivity() {
@@ -43,6 +49,10 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var loadingDialog: CustomLoadingDialog
     private lateinit var resultCamera: Bitmap
     private var getFile: File? = null
+
+    @Inject
+    lateinit var analyticRepository: FirebaseAnalyticsRepository
+    private var isCamera = false
 
     private val launcherIntentCameraX = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -88,6 +98,11 @@ class RegisterActivity : AppCompatActivity() {
         initObserver()
     }
 
+    override fun onResume() {
+        super.onResume()
+        analyticRepository.onSignUpLoadScreen(this@RegisterActivity.javaClass.simpleName)
+    }
+
     private fun initObserver() {
         viewModel.state.observe(this@RegisterActivity) { response ->
             when (response) {
@@ -98,12 +113,11 @@ class RegisterActivity : AppCompatActivity() {
                     loadingDialog.hideDialog()
                     alertDialogRegisSuccess()
                     Toast.makeText(this@RegisterActivity, "Register Successfully.", Toast.LENGTH_SHORT).show()
-                    finish()
                 }
                 is Resource.Error -> {
-                    loadingDialog.hideDialog()
-                    Toast.makeText(this@RegisterActivity, response.message, Toast.LENGTH_SHORT).show()
                     try {
+                        loadingDialog.hideDialog()
+
                         val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
                         val gson = Gson()
                         val jsonObject = gson.fromJson(errors, JsonObject::class.java)
@@ -120,9 +134,18 @@ class RegisterActivity : AppCompatActivity() {
         binding.apply {
             btnSignUp.setOnClickListener {
                 if (validation() && getFile != null) {
+                    val email = binding.etEmailRegister.text.toString()
+                    val name = binding.etNameRegister.text.toString()
+                    val phone = binding.etPhoneRegister.text.toString()
+                    val gender = isGender()
+                    val checkGender = if (gender == 0) MALE else FEMALE
+                    val checkPhotoFrom = if (isCamera) CAMERA else GALLERY
+                    analyticRepository.onButtonSignUpClick(checkPhotoFrom, email, name, phone, checkGender)
+
                     val file = reduceFileImage(getFile as File)
                     val requestBodyImage = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
                     val multiPartImage: MultipartBody.Part = MultipartBody.Part.createFormData("image", file.name, requestBodyImage)
+
                     viewModel.registerAccount(
                         image = multiPartImage,
                         email = binding.etEmailRegister.text.toString().toRequestBody("text/plain".toMediaType()),
@@ -134,9 +157,11 @@ class RegisterActivity : AppCompatActivity() {
                 }
             }
             btnToLogin.setOnClickListener {
+                analyticRepository.onButtonLoginClick()
                 finish()
             }
             fabButtonProfile.setOnClickListener {
+                analyticRepository.onCameraButtonClick()
                 alertDialogSelectImage()
             }
         }
@@ -213,6 +238,7 @@ class RegisterActivity : AppCompatActivity() {
         builder.setPositiveButton("Ok") { _, _ ->
             finish()
         }
+        builder.setCancelable(false)
         builder.create().show()
     }
 
@@ -225,10 +251,14 @@ class RegisterActivity : AppCompatActivity() {
         val fromGallery = view.findViewById<TextView>(R.id.tvSelectGallery)
 
         fromCamera.setOnClickListener {
+            isCamera = true
+            analyticRepository.onChangeImage(CAMERA)
             openCamera()
             showDialog.dismiss()
         }
+
         fromGallery.setOnClickListener {
+            analyticRepository.onChangeImage(GALLERY)
             openGallery()
             showDialog.dismiss()
         }

@@ -2,20 +2,22 @@ package com.myshopproject.presentation
 
 import android.app.Activity
 import androidx.appcompat.app.AlertDialog
-import com.myshopproject.databinding.CustomLoadingBinding
+import com.myshopproject.R
 
 class CustomLoadingDialog(private val activity: Activity) {
 
     private lateinit var isDialog: AlertDialog
 
     fun showDialog() {
-        val dialogBinding = CustomLoadingBinding.inflate(activity.layoutInflater)
+        val inflater = activity.layoutInflater
+        val dialogView = inflater.inflate(R.layout.custom_loading, null)
 
-        val dialog = AlertDialog.Builder(activity)
-        dialog.setView(dialogBinding.root)
-        dialog.setCancelable(false)
-        isDialog = dialog.create()
-        dialog.show()
+        val builder = AlertDialog.Builder(activity)
+        builder.setView(dialogView)
+        builder.setCancelable(false)
+        isDialog = builder.create()
+//        isDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        isDialog.show()
     }
 
     fun hideDialog() {

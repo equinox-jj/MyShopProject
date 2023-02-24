@@ -11,7 +11,9 @@ import com.myshopproject.databinding.ItemProductListBinding
 import com.myshopproject.domain.entities.DataProduct
 import com.myshopproject.utils.hide
 
-class ProductPagingAdapter(private val onClick: (Int) -> Unit): PagingDataAdapter<DataProduct, ProductPagingAdapter.ProductPagingVH>(PRODUCT_COMPARATOR) {
+class ProductPagingAdapter(
+    private val onClick: (DataProduct) -> Unit
+): PagingDataAdapter<DataProduct, ProductPagingAdapter.ProductPagingVH>(PRODUCT_COMPARATOR) {
 
     inner class ProductPagingVH(private val binding: ItemProductListBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(data: DataProduct) {
@@ -27,7 +29,7 @@ class ProductPagingAdapter(private val onClick: (Int) -> Unit): PagingDataAdapte
                 tvProductPrice.text = data.harga
                 rbProductRate.rating = data.rate.toFloat()
                 itemView.setOnClickListener {
-                    onClick.invoke(data.id)
+                    onClick.invoke(data)
                 }
             }
         }

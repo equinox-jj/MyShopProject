@@ -1,6 +1,7 @@
 package com.myshopproject.presentation.notification
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -15,12 +16,14 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.myshopproject.R
 import com.myshopproject.databinding.ActivityNotificationBinding
 import com.myshopproject.domain.entities.FcmDataDomain
+import com.myshopproject.domain.repository.FirebaseAnalyticsRepository
 import com.myshopproject.presentation.notification.adapter.NotificationAdapter
 import com.myshopproject.presentation.viewmodel.LocalViewModel
 import com.myshopproject.utils.hide
 import com.myshopproject.utils.show
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class NotificationActivity : AppCompatActivity() {
@@ -32,6 +35,10 @@ class NotificationActivity : AppCompatActivity() {
     private val viewModel by viewModels<LocalViewModel>()
     private var adapter: NotificationAdapter? = null
     private var isMultipleSelect = false
+    private var totalItem = listOf<Int>()
+
+    @Inject
+    lateinit var analyticRepository: FirebaseAnalyticsRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +47,11 @@ class NotificationActivity : AppCompatActivity() {
 
         setupToolbar()
         initObserver()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analyticRepository.onNotificationLoadScreen(this@NotificationActivity.javaClass.simpleName)
     }
 
     private fun setupToolbar() {
@@ -57,12 +69,16 @@ class NotificationActivity : AppCompatActivity() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 when (menuItem.itemId) {
                     android.R.id.home -> {
+                        analyticRepository.onClickBackIcon()
                         onBackPressed()
                     }
                     R.id.menu_check_notification -> {
+                        analyticRepository.onMultipleSelect()
                         showMultipleSelect()
                     }
                     R.id.menu_read_notification -> {
+                        analyticRepository.onClickReadNotification(totalItem.size)
+                        Log.d("TotalItemNotif", totalItem.size.toString())
                         readNotification()
                     }
                     R.id.menu_delete_notification -> {
@@ -107,8 +123,15 @@ class NotificationActivity : AppCompatActivity() {
         adapter = NotificationAdapter(
             context = this@NotificationActivity,
             isMultipleSelect = isMultipleSelect,
-            onItemClicked = { onNotificationItemClicked(it) },
-            onCheckboxChecked = { onCheckboxChecked(it) }
+            onItemClicked = {
+                analyticRepository.onClickItemNotification(it.notificationTitle ?: "", it.notificationBody ?: "")
+                onNotificationItemClicked(it)
+            },
+            onCheckboxChecked = {
+                totalItem = listOf(it.id ?: 0)
+                analyticRepository.onCheckBoxNotificationSelect(it.notificationTitle ?: "", it.notificationBody ?: "")
+                onCheckboxChecked(it)
+            }
         )
         binding.rvNotification.adapter = adapter
         binding.rvNotification.setHasFixedSize(true)
@@ -157,6 +180,7 @@ class NotificationActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         if (isMultipleSelect) {
             showMultipleSelect()
+            analyticRepository.onClickBackMultiple()
         } else {
             onBackPressedDispatcher.onBackPressed()
         }

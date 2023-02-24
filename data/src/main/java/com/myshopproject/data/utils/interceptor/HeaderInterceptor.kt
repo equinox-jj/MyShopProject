@@ -1,4 +1,4 @@
-package com.myshopproject.utils.token
+package com.myshopproject.data.utils.interceptor
 
 import com.myshopproject.domain.preferences.MyPreferences
 import kotlinx.coroutines.flow.first

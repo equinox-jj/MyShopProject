@@ -2,6 +2,7 @@ package com.myshopproject.presentation.payment
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.ktx.Firebase
@@ -38,14 +39,38 @@ class PaymentActivity : AppCompatActivity() {
         productId = idProduct
         remoteTest = Firebase.remoteConfig
 
+        initRecyclerView()
         setupToolbar()
         initObserver()
+    }
+
+    private fun initRecyclerView() {
+        adapterPayment = PaymentHeaderAdapter(
+            onBodyClick = { data ->
+                if (productId == 0) {
+                    val intent = Intent(this@PaymentActivity, TrolleyActivity::class.java)
+                    intent.putExtra(PAYMENT_DATA_INTENT, data)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    val intent = Intent(this@PaymentActivity, DetailActivity::class.java)
+                    intent.putExtra(PRODUCT_ID_INTENT, productId)
+                    intent.putExtra(PAYMENT_DATA_INTENT, data)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    startActivity(intent)
+                    finish()
+                }
+            },
+            onHeaderClick = {}
+        )
+        binding.rvItemHeaderPayment.adapter = adapterPayment
+        binding.rvItemHeaderPayment.setHasFixedSize(true)
     }
 
     private fun setupToolbar() {
         setSupportActionBar(binding.toolbarPayment)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
     }
 
     private fun initObserver() {
@@ -59,32 +84,13 @@ class PaymentActivity : AppCompatActivity() {
                 is Resource.Success -> {
                     binding.pbPayment.hide()
                     binding.rvItemHeaderPayment.show()
-                    adapterPayment = PaymentHeaderAdapter(
-                        onBodyClick = { data ->
-                            if (productId == 0) {
-                                val intent = Intent(this@PaymentActivity, TrolleyActivity::class.java)
-                                intent.putExtra(PAYMENT_DATA_INTENT, data)
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                                startActivity(intent)
-                                finish()
-                            } else {
-                                val intent = Intent(this@PaymentActivity, DetailActivity::class.java)
-                                intent.putExtra(PRODUCT_ID_INTENT, productId)
-                                intent.putExtra(PAYMENT_DATA_INTENT, data)
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                                startActivity(intent)
-                                finish()
-                            }
-                        },
-                        onHeaderClick = {}
-                    )
-                    binding.rvItemHeaderPayment.adapter = adapterPayment
-                    binding.rvItemHeaderPayment.setHasFixedSize(true)
                     response.data?.sortedBy { it.order }?.let { adapterPayment?.submitData(it) }
                 }
                 is Resource.Error -> {
                     binding.pbPayment.hide()
                     binding.rvItemHeaderPayment.hide()
+
+                    Toast.makeText(this@PaymentActivity, response.message, Toast.LENGTH_SHORT).show()
                 }
             }
         }

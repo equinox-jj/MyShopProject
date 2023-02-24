@@ -11,11 +11,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.myshopproject.databinding.ActivitySplashBinding
+import com.myshopproject.domain.repository.FirebaseAnalyticsRepository
 import com.myshopproject.presentation.login.LoginActivity
 import com.myshopproject.presentation.main.MainActivity
 import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @SuppressLint("CustomSplashScreen")
 @AndroidEntryPoint
@@ -24,6 +26,9 @@ class SplashActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySplashBinding
 
     private val prefViewModel by viewModels<DataStoreViewModel>()
+
+    @Inject
+    lateinit var analyticRepository: FirebaseAnalyticsRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,4 +52,8 @@ class SplashActivity : AppCompatActivity() {
         }, 3000)
     }
 
+    override fun onResume() {
+        super.onResume()
+        analyticRepository.onSplashLoadScreen(this@SplashActivity.javaClass.simpleName)
+    }
 }

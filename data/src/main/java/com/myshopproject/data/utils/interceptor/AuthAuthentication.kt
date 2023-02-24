@@ -1,9 +1,9 @@
-package com.myshopproject.utils.token
+package com.myshopproject.data.utils.interceptor
 
 import com.myshopproject.data.source.remote.dto.RefreshTokenResponseDTO
 import com.myshopproject.data.source.remote.network.ApiRefreshToken
+import com.myshopproject.data.utils.Constants.BASE_URL
 import com.myshopproject.domain.preferences.MyPreferences
-import com.myshopproject.utils.Constants.BASE_URL
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import okhttp3.*

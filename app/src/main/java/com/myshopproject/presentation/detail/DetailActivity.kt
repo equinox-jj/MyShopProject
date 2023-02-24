@@ -300,8 +300,12 @@ class DetailActivity : AppCompatActivity() {
     private fun setupListener(data: DetailProductData) {
         binding.apply {
             btnDtlBuy.setOnClickListener {
-                val bottSheet = DetailBottomSheet(data, paymentParcel)
-                bottSheet.show(supportFragmentManager, DetailActivity::class.java.simpleName)
+                if (data.stock > 0) {
+                    val bottSheet = DetailBottomSheet(data, paymentParcel)
+                    bottSheet.show(supportFragmentManager, DetailActivity::class.java.simpleName)
+                } else {
+                    Toast.makeText(this@DetailActivity, getString(R.string.failed_add_trolley), Toast.LENGTH_SHORT).show()
+                }
             }
 
             if (paymentParcel != null) {

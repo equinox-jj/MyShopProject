@@ -2,7 +2,7 @@ package com.myshopproject.data.source.local.dao
 
 import androidx.room.*
 import com.myshopproject.data.source.local.entity.CartEntity
-import com.myshopproject.domain.utils.Constants.CART_TABLE
+import com.myshopproject.data.utils.Constants.CART_TABLE
 import kotlinx.coroutines.flow.Flow
 
 @Dao
