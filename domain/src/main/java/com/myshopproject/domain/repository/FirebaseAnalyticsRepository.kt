@@ -33,8 +33,8 @@ interface FirebaseAnalyticsRepository {
     // Notification Screen
     fun onNotificationLoadScreen(nameClass: String)
     fun onMultipleSelect()
-    fun onClickBackIcon()
-    fun onClickBackMultiple()
+    fun onClickBackIconNotif()
+    fun onClickBackMultipleNotif()
     fun onClickItemNotification(title: String, message: String)
     fun onCheckBoxNotificationSelect(title: String, message: String)
     fun onClickDeleteNotification(total: Int)
@@ -51,9 +51,9 @@ interface FirebaseAnalyticsRepository {
     // Bottom Sheet
     fun onShowBottomSheet(productId: Int)
     fun onClickQuantityBottom(quantity: String, total: Int, productId: Int, productName: String)
-    fun onClickButtonBuyNow(productPrice: String)
+    fun onClickButtonBuyNow()
     fun onClickIconBankBottom(paymentMethod: String)
-    fun onClickButtonBuyNowWithPayment(buttonPrice: String,productPrice: String, productId: Int, productName: String, productTotalPrice: Int, productTotal: Int, paymentMethod: String)
+    fun onClickButtonBuyNowWithPayment(productPrice: String, productId: Int, productName: String, productTotalPrice: Int, productTotal: Int, paymentMethod: String)
 
     // Payment Screen
     fun onPaymentLoadScreen(nameClass: String)

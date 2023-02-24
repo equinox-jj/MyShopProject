@@ -1,7 +1,6 @@
 package com.myshopproject.presentation.notification
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -35,7 +34,6 @@ class NotificationActivity : AppCompatActivity() {
     private val viewModel by viewModels<LocalViewModel>()
     private var adapter: NotificationAdapter? = null
     private var isMultipleSelect = false
-    private var totalItem = listOf<Int>()
 
     @Inject
     lateinit var analyticRepository: FirebaseAnalyticsRepository
@@ -69,7 +67,7 @@ class NotificationActivity : AppCompatActivity() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 when (menuItem.itemId) {
                     android.R.id.home -> {
-                        analyticRepository.onClickBackIcon()
+                        analyticRepository.onClickBackIconNotif()
                         onBackPressed()
                     }
                     R.id.menu_check_notification -> {
@@ -77,8 +75,6 @@ class NotificationActivity : AppCompatActivity() {
                         showMultipleSelect()
                     }
                     R.id.menu_read_notification -> {
-                        analyticRepository.onClickReadNotification(totalItem.size)
-                        Log.d("TotalItemNotif", totalItem.size.toString())
                         readNotification()
                     }
                     R.id.menu_delete_notification -> {
@@ -110,11 +106,25 @@ class NotificationActivity : AppCompatActivity() {
     }
 
     private fun readNotification() {
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.getAllNotification().collect { data ->
+                    analyticRepository.onClickReadNotification(data.filter { it.isChecked }.size)
+                }
+            }
+        }
         viewModel.setAllReadNotification(true)
         onBackPressed()
     }
 
     private fun deleteNotification() {
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.getAllNotification().collect { data ->
+                    analyticRepository.onClickDeleteNotification(data.filter { it.isChecked }.size)
+                }
+            }
+        }
         viewModel.deleteNotification(true)
         onBackPressed()
     }
@@ -128,7 +138,6 @@ class NotificationActivity : AppCompatActivity() {
                 onNotificationItemClicked(it)
             },
             onCheckboxChecked = {
-                totalItem = listOf(it.id ?: 0)
                 analyticRepository.onCheckBoxNotificationSelect(it.notificationTitle ?: "", it.notificationBody ?: "")
                 onCheckboxChecked(it)
             }
@@ -180,9 +189,10 @@ class NotificationActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         if (isMultipleSelect) {
             showMultipleSelect()
-            analyticRepository.onClickBackMultiple()
+            analyticRepository.onClickBackMultipleNotif()
         } else {
             onBackPressedDispatcher.onBackPressed()
+            analyticRepository.onClickBackIconNotif()
         }
         viewModel.setAllUncheckedNotification()
         return true

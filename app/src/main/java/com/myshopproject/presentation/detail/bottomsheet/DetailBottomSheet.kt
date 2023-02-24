@@ -21,6 +21,7 @@ import com.myshopproject.data.utils.toIDRPrice
 import com.myshopproject.databinding.FragmentBottomSheetDetailBinding
 import com.myshopproject.domain.entities.DetailProductData
 import com.myshopproject.domain.entities.PaymentResult
+import com.myshopproject.domain.repository.FirebaseAnalyticsRepository
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.buysuccess.BuySuccessActivity
 import com.myshopproject.presentation.payment.PaymentActivity
@@ -36,6 +37,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class DetailBottomSheet(
@@ -53,6 +55,11 @@ class DetailBottomSheet(
     private var totalPrice = 0
     private var quantity = 0
 
+    private var dataName = paymentData?.id
+
+    @Inject
+    lateinit var analyticRepository: FirebaseAnalyticsRepository
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -66,6 +73,11 @@ class DetailBottomSheet(
         initDataStore()
 
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analyticRepository.onShowBottomSheet(userId.toInt())
     }
 
     private fun initDataStore() {
@@ -87,6 +99,7 @@ class DetailBottomSheet(
 
             if (paymentData == null) {
                 binding.btnBuyNowBottSheet.setOnClickListener {
+                    analyticRepository.onClickButtonBuyNow()
                     val intent = Intent(requireContext(), PaymentActivity::class.java)
                     intent.putExtra(PRODUCT_ID_INTENT, data.id)
                     startActivity(intent)
@@ -96,12 +109,15 @@ class DetailBottomSheet(
             } else {
                 binding.llBottPayment.show()
                 binding.llBottPayment.setOnClickListener {
+                    analyticRepository.onClickIconBankBottom(dataName ?: "")
+
                     val intent = Intent(requireContext(), PaymentActivity::class.java)
                     intent.putExtra(PRODUCT_ID_INTENT, data.id)
                     startActivity(intent)
                     dismiss()
                 }
                 binding.btnBuyNowBottSheet.setOnClickListener {
+                    analyticRepository.onClickButtonBuyNowWithPayment(data.harga, data.id, data.nameProduct, totalPrice, quantity, dataName ?: "")
                     viewLifecycleOwner.lifecycleScope.launch {
                         viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                             updateStock(userId, data.id.toString(), quantity)
@@ -173,12 +189,14 @@ class DetailBottomSheet(
 
     private fun setupListener() {
         binding.btnIncreaseBottSheet.setOnClickListener {
+            analyticRepository.onClickQuantityBottom("+", quantity, data.id, data.nameProduct)
             viewModel.increaseQuantity(data.stock)
             val sum = binding.tvQuantityBottSheet.text.toString()
             val total = (sum.toInt() * data.harga.replace(Regex("\\D"), "").toInt())
             (resources.getString(R.string.buy_now) + total.toString().toIDRPrice()).also { binding.btnBuyNowBottSheet.text = it }
         }
         binding.btnDecreaseBottSheet.setOnClickListener {
+            analyticRepository.onClickQuantityBottom("-", quantity, data.id, data.nameProduct)
             viewModel.decreaseQuantity()
             val sum = binding.tvQuantityBottSheet.text.toString()
             val total = (sum.toInt() * data.harga.replace(Regex("\\D"), "").toInt())

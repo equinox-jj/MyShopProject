@@ -27,6 +27,7 @@ import com.myshopproject.databinding.CustomDialogImageDetailBinding
 import com.myshopproject.domain.entities.CartDataDomain
 import com.myshopproject.domain.entities.DetailProductData
 import com.myshopproject.domain.entities.PaymentResult
+import com.myshopproject.domain.repository.FirebaseAnalyticsRepository
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.detail.adapter.ImageSliderAdapter
 import com.myshopproject.presentation.detail.bottomsheet.DetailBottomSheet
@@ -40,6 +41,7 @@ import com.myshopproject.utils.hide
 import com.myshopproject.utils.show
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class DetailActivity : AppCompatActivity() {
@@ -60,6 +62,9 @@ class DetailActivity : AppCompatActivity() {
     private var userId = 0
     private var isFavorite = false
 
+    @Inject
+    lateinit var analyticRepository: FirebaseAnalyticsRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
@@ -75,6 +80,11 @@ class DetailActivity : AppCompatActivity() {
 
         val builder: StrictMode.VmPolicy.Builder = StrictMode.VmPolicy.Builder()
         StrictMode.setVmPolicy(builder.build())
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analyticRepository.onDetailLoadScreen(this@DetailActivity.javaClass.simpleName)
     }
 
     private fun initRecyclerView() {
@@ -116,14 +126,16 @@ class DetailActivity : AppCompatActivity() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 when (menuItem.itemId) {
                     android.R.id.home -> {
+                        analyticRepository.onClickBackButtonDetail()
                         finish()
                     }
                     R.id.menu_share -> {
+                        analyticRepository.onClickShareDetail(dataDetailProduct.nameProduct, dataDetailProduct.harga.replace(Regex("\\D"), "").toDouble(), dataDetailProduct.id)
                         if (this@DetailActivity::dataDetailProduct.isInitialized) {
                             val request = ImageRequest.Builder(this@DetailActivity)
                                 .data(dataDetailProduct.image)
                                 .target(
-                                    onStart = { },
+                                    onStart = {  },
                                     onSuccess = { result ->
                                         val intent = Intent(Intent.ACTION_SEND)
                                         val bitmap = (result as BitmapDrawable).bitmap
@@ -300,6 +312,7 @@ class DetailActivity : AppCompatActivity() {
     private fun setupListener(data: DetailProductData) {
         binding.apply {
             btnDtlBuy.setOnClickListener {
+                analyticRepository.onClickButtonBuy()
                 if (data.stock > 0) {
                     val bottSheet = DetailBottomSheet(data, paymentParcel)
                     bottSheet.show(supportFragmentManager, DetailActivity::class.java.simpleName)
@@ -314,6 +327,7 @@ class DetailActivity : AppCompatActivity() {
             }
 
             btnDtlTrolley.setOnClickListener {
+                analyticRepository.onClickButtonTrolley()
                 val checkProductCart = localViewModel.checkProductDataCart(data.id, data.nameProduct)
                 if (checkProductCart > 0) {
                     Toast.makeText(this@DetailActivity, getString(R.string.check_data_trolley), Toast.LENGTH_SHORT).show()
@@ -325,12 +339,12 @@ class DetailActivity : AppCompatActivity() {
             ivImageFavProductDtl.setOnClickListener {
                 if (isFavorite) {
                     isFavorite = false
-                    viewModel.removeProductFavorite(productId, userId)
                     removeFavorite()
+                    analyticRepository.onClickFavorite(dataDetailProduct.nameProduct, dataDetailProduct.id, isFavorite.toString())
                 } else {
                     isFavorite = true
-                    viewModel.addProductFavorite(productId, userId)
                     addFavorite()
+                    analyticRepository.onClickFavorite(dataDetailProduct.nameProduct, dataDetailProduct.id, isFavorite.toString())
                 }
             }
         }
@@ -358,6 +372,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun addFavorite() {
+        viewModel.addProductFavorite(productId, userId)
         viewModel.favState.observe(this@DetailActivity) { response ->
             when (response) {
                 is Resource.Loading -> {}
@@ -373,6 +388,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun removeFavorite() {
+        viewModel.removeProductFavorite(productId, userId)
         viewModel.unFavState.observe(this@DetailActivity) { response ->
             when (response) {
                 is Resource.Loading -> {}

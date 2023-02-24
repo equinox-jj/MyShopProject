@@ -198,7 +198,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
             putString(PRODUCT_RATE, productRate.toString())
             putString(PRODUCT_ID, productId.toString())
         }
-        firebaseAnalytics.logEvent(SCREEN_VIEW, bundle)
+        firebaseAnalytics.logEvent(SELECT_ITEM, bundle)
     }
 
     override fun onClickTrolleyIconHome() {
@@ -275,7 +275,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
         firebaseAnalytics.logEvent(BUTTON_CLICKED, bundle)
     }
 
-    override fun onClickBackIcon() {
+    override fun onClickBackIconNotif() {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, NOTIFICATION)
             putString(BUTTON_NAME, BACK_ICON)
@@ -283,7 +283,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
         firebaseAnalytics.logEvent(BUTTON_CLICKED, bundle)
     }
 
-    override fun onClickBackMultiple() {
+    override fun onClickBackMultipleNotif() {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, MULTIPLE_SELECT)
             putString(BUTTON_NAME, BACK_ICON)
@@ -408,10 +408,10 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
         firebaseAnalytics.logEvent(BUTTON_CLICKED, bundle)
     }
 
-    override fun onClickButtonBuyNow(productPrice: String) {
+    override fun onClickButtonBuyNow() {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, DETAIL)
-            putString(BUTTON_NAME, productPrice)
+            putString(BUTTON_NAME, "Buy Now - 10.000")
         }
         firebaseAnalytics.logEvent(BUTTON_CLICKED, bundle)
     }
@@ -425,7 +425,6 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
     }
 
     override fun onClickButtonBuyNowWithPayment(
-        buttonPrice: String,
         productPrice: String,
         productId: Int,
         productName: String,
@@ -435,7 +434,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
     ) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, DETAIL)
-            putString(BUTTON_NAME, buttonPrice)
+            putString(BUTTON_NAME, "Buy Now - 10.000")
             putString(PRODUCT_ID, productId.toString())
             putString(PRODUCT_NAME, productName)
             putString(PRODUCT_PRICE, productPrice)
