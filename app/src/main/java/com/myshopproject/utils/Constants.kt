@@ -12,4 +12,5 @@ object Constants {
     const val PAYMENT_ID_INTENT = "payment_id_intent"
     const val PAYMENT_NAME_INTENT = "payment_name_intent"
     const val PAYMENT_DATA_INTENT = "payment_data_intent"
+
 }
