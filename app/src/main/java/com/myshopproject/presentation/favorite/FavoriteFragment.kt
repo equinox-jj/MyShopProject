@@ -65,7 +65,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
             adapter = ProductFavoriteAdapter(
                 type = ItemType.IS_FAVORITE_PRODUCT,
                 onClick = {
-                    analyticRepository.onProductFavoriteClick(it.nameProduct, it.harga.replace(Regex("\\D"), "").toDouble(), it.rate, it.id)
+                    analyticRepository.onProductFavoriteClick(it.nameProduct, it.harga?.replace(Regex("\\D"), "")?.toDouble(), it.rate, it.id)
 
                     val intent = Intent(requireContext(), DetailActivity::class.java)
                     intent.putExtra(Constants.PRODUCT_ID_INTENT, it.id)

@@ -51,7 +51,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.apply {
             adapter = ProductPagingAdapter(
                 onClick = {
-                    analyticRepository.onProductHomeClick(it.nameProduct, it.harga.replace(Regex("\\D"), "").toDouble(), it.rate, it.id)
+                    analyticRepository.onProductHomeClick(it.nameProduct, it.harga?.replace(Regex("\\D"), "")?.toDouble(), it.rate, it.id)
 
                     val intent = Intent(requireContext(), DetailActivity::class.java)
                     intent.putExtra(Constants.PRODUCT_ID_INTENT, it.id)

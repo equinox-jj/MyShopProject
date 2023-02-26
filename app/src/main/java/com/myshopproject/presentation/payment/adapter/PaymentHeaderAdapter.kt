@@ -26,7 +26,7 @@ class PaymentHeaderAdapter(
                 val paymentBodyAdapter = PaymentBodyAdapter(
                     onClick = { onBodyClick.invoke(it) }
                 )
-                paymentBodyAdapter.submitData(data.data.sortedBy { it.order })
+                data.data.let { result -> paymentBodyAdapter.submitData(result.sortedBy { it.order }) }
                 rvItemBodyPayment.adapter = paymentBodyAdapter
                 rvItemBodyPayment.setHasFixedSize(true)
                 rvItemBodyPayment.addItemDecoration(DividerItemDecoration(itemView.context, DividerItemDecoration.VERTICAL))

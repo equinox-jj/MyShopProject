@@ -18,7 +18,7 @@ class AuthRepositoryImpl @Inject constructor(
     private val apiAuth: ApiAuth
 ) : AuthRepository {
 
-    override fun loginAccount(email: String, password: String, firebaseToken: String): Flow<Resource<LoginResult>> = flow {
+    override fun loginAccount(email: String, password: String, firebaseToken: String): Flow<Resource<LoginResult?>> = flow {
         emit(Resource.Loading)
         try {
             val response = apiAuth.loginAccount(

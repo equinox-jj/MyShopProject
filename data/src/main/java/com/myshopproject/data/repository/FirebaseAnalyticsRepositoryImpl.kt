@@ -74,7 +74,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
     private val firebaseAnalytics: FirebaseAnalytics
 ): FirebaseAnalyticsRepository {
     // Splash Screen
-    override fun onSplashLoadScreen(nameClass: String) {
+    override fun onSplashLoadScreen(nameClass: String?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, SPLASH)
             putString(SCREEN_CLASS, nameClass)
@@ -83,7 +83,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
     }
 
     // Login Screen
-    override fun onLoginLoadScreen(nameClass: String) {
+    override fun onLoginLoadScreen(nameClass: String?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, LOGIN)
             putString(SCREEN_CLASS, nameClass)
@@ -91,7 +91,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
         firebaseAnalytics.logEvent(SCREEN_VIEW, bundle)
     }
 
-    override fun onLoginButtonClick(email: String) {
+    override fun onLoginButtonClick(email: String?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, LOGIN)
             putString(EMAIL, email)
@@ -109,7 +109,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
     }
 
     // Sign Up Screen
-    override fun onSignUpLoadScreen(nameClass: String) {
+    override fun onSignUpLoadScreen(nameClass: String?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, SIGNUP)
             putString(SCREEN_CLASS, nameClass)
@@ -133,7 +133,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
         firebaseAnalytics.logEvent(BUTTON_CLICKED, bundle)
     }
 
-    override fun onChangeImage(image: String) {
+    override fun onChangeImage(image: String?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, PROFILE)
             putString(IMAGE, image)
@@ -142,11 +142,11 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
     }
 
     override fun onButtonSignUpClick(
-        image: String,
-        email: String,
-        name: String,
-        phone: String,
-        gender: String
+        image: String?,
+        email: String?,
+        name: String?,
+        phone: String?,
+        gender: String?
     ) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, SIGNUP)
@@ -161,7 +161,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
     }
 
     // Home Screen
-    override fun onHomeLoadScreen(nameClass: String) {
+    override fun onHomeLoadScreen(nameClass: String?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, HOME)
             putString(SCREEN_CLASS, nameClass)
@@ -169,7 +169,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
         firebaseAnalytics.logEvent(SCREEN_VIEW, bundle)
     }
 
-    override fun onPagingScroll(offset: Int) {
+    override fun onPagingScroll(offset: Int?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, HOME)
             putString(PAGE, offset.toString())
@@ -177,7 +177,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
         firebaseAnalytics.logEvent(ON_SCROLL, bundle)
     }
 
-    override fun onSearchHome(query: String) {
+    override fun onSearchHome(query: String?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, HOME)
             putString(SEARCH, query)
@@ -186,10 +186,10 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
     }
 
     override fun onProductHomeClick(
-        productName: String,
-        productPrice: Double,
-        productRate: Int,
-        productId: Int
+        productName: String?,
+        productPrice: Double?,
+        productRate: Int?,
+        productId: Int?
     ) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, HOME)
@@ -218,7 +218,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
     }
 
     // Favorite Screen
-    override fun onFavoriteLoadScreen(nameClass: String) {
+    override fun onFavoriteLoadScreen(nameClass: String?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, FAVORITE)
             putString(SCREEN_CLASS, nameClass)
@@ -226,7 +226,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
         firebaseAnalytics.logEvent(SCREEN_VIEW, bundle)
     }
 
-    override fun onSearchFavorite(query: String) {
+    override fun onSearchFavorite(query: String?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, FAVORITE)
             putString(SEARCH, query)
@@ -234,7 +234,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
         firebaseAnalytics.logEvent(ON_SEARCH, bundle)
     }
 
-    override fun onSortByName(sort: String) {
+    override fun onSortByName(sort: String?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, FAVORITE)
             putString(SORT_BY, sort)
@@ -243,10 +243,10 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
     }
 
     override fun onProductFavoriteClick(
-        productName: String,
-        productPrice: Double,
-        productRate: Int,
-        productId: Int
+        productName: String?,
+        productPrice: Double?,
+        productRate: Int?,
+        productId: Int?
     ) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, FAVORITE)
@@ -259,7 +259,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
     }
 
     // Notification Screen
-    override fun onNotificationLoadScreen(nameClass: String) {
+    override fun onNotificationLoadScreen(nameClass: String?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, NOTIFICATION)
             putString(SCREEN_CLASS, nameClass)
@@ -291,7 +291,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
         firebaseAnalytics.logEvent(BUTTON_CLICKED, bundle)
     }
 
-    override fun onClickItemNotification(title: String, message: String) {
+    override fun onClickItemNotification(title: String?, message: String?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, NOTIFICATION)
             putString(TITLE, title)
@@ -300,7 +300,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
         firebaseAnalytics.logEvent(SELECT_ITEM, bundle)
     }
 
-    override fun onCheckBoxNotificationSelect(title: String, message: String) {
+    override fun onCheckBoxNotificationSelect(title: String?, message: String?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, MULTIPLE_SELECT)
             putString(TITLE, title)
@@ -309,7 +309,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
         firebaseAnalytics.logEvent(SELECT_ITEM, bundle)
     }
 
-    override fun onClickDeleteNotification(total: Int) {
+    override fun onClickDeleteNotification(total: Int?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, MULTIPLE_SELECT)
             putString(BUTTON_NAME, DELETE_ICON)
@@ -318,7 +318,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
         firebaseAnalytics.logEvent(BUTTON_CLICKED, bundle)
     }
 
-    override fun onClickReadNotification(total: Int) {
+    override fun onClickReadNotification(total: Int?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, MULTIPLE_SELECT)
             putString(BUTTON_NAME, READ_ICON)
@@ -328,7 +328,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
     }
 
     // Detail Screen
-    override fun onDetailLoadScreen(nameClass: String) {
+    override fun onDetailLoadScreen(nameClass: String?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, DETAIL)
             putString(SCREEN_CLASS, nameClass)
@@ -352,7 +352,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
         firebaseAnalytics.logEvent(BUTTON_CLICKED, bundle)
     }
 
-    override fun onClickShareDetail(productName: String, productPrice: Double, productId: Int) {
+    override fun onClickShareDetail(productName: String?, productPrice: Double?, productId: Int?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, DETAIL)
             putString(PRODUCT_NAME, productName)
@@ -363,7 +363,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
         firebaseAnalytics.logEvent(BUTTON_CLICKED, bundle)
     }
 
-    override fun onClickFavorite(productName: String, productId: Int, favoriteState: String) {
+    override fun onClickFavorite(productName: String?, productId: Int?, favoriteState: String?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, DETAIL)
             putString(BUTTON_NAME, LOVE_ICON)
@@ -383,7 +383,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
     }
 
     // Bottom Sheet
-    override fun onShowBottomSheet(productId: Int) {
+    override fun onShowBottomSheet(productId: Int?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, DETAIL)
             putString(POPUP, SHOW)
@@ -393,10 +393,10 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
     }
 
     override fun onClickQuantityBottom(
-        quantity: String,
-        total: Int,
-        productId: Int,
-        productName: String
+        quantity: String?,
+        total: Int?,
+        productId: Int?,
+        productName: String?
     ) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, DETAIL)
@@ -416,7 +416,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
         firebaseAnalytics.logEvent(BUTTON_CLICKED, bundle)
     }
 
-    override fun onClickIconBankBottom(paymentMethod: String) {
+    override fun onClickIconBankBottom(paymentMethod: String?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, DETAIL)
             putString(BUTTON_NAME, paymentMethod)
@@ -425,12 +425,12 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
     }
 
     override fun onClickButtonBuyNowWithPayment(
-        productPrice: String,
-        productId: Int,
-        productName: String,
-        productTotalPrice: Int,
-        productTotal: Int,
-        paymentMethod: String
+        productPrice: String?,
+        productId: Int?,
+        productName: String?,
+        productTotalPrice: Int?,
+        productTotal: Int?,
+        paymentMethod: String?
     ) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, DETAIL)
@@ -446,7 +446,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
     }
 
     // Payment Screen
-    override fun onPaymentLoadScreen(nameClass: String) {
+    override fun onPaymentLoadScreen(nameClass: String?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, PAYMENT_SCREEN)
             putString(SCREEN_CLASS, nameClass)
@@ -462,7 +462,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
         firebaseAnalytics.logEvent(BUTTON_CLICKED, bundle)
     }
 
-    override fun onClickPaymentMethod(payment: String, bank: String) {
+    override fun onClickPaymentMethod(payment: String?, bank: String?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, PAYMENT_SCREEN)
             putString(PAYMENT_TYPE, payment)
@@ -472,7 +472,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
     }
 
     // Trolley Screen
-    override fun onTrolleyLoadScreen(nameClass: String) {
+    override fun onTrolleyLoadScreen(nameClass: String?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, TROLLEY)
             putString(SCREEN_CLASS, nameClass)
@@ -481,10 +481,10 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
     }
 
     override fun onClickQuantityTrolley(
-        quantity: String,
-        total: Int,
-        productId: Int,
-        productName: String
+        quantity: String?,
+        total: Int?,
+        productId: Int?,
+        productName: String?
     ) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, TROLLEY)
@@ -496,7 +496,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
         firebaseAnalytics.logEvent(BUTTON_CLICKED, bundle)
     }
 
-    override fun onClickDeleteTrolley(productId: Int, productName: String) {
+    override fun onClickDeleteTrolley(productId: Int?, productName: String?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, TROLLEY)
             putString(BUTTON_NAME, DELETE_ICON)
@@ -506,7 +506,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
         firebaseAnalytics.logEvent(BUTTON_CLICKED, bundle)
     }
 
-    override fun onCheckBoxTrolley(productId: Int, productName: String) {
+    override fun onCheckBoxTrolley(productId: Int?, productName: String?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, TROLLEY)
             putString(PRODUCT_ID, productId.toString())
@@ -531,7 +531,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
         firebaseAnalytics.logEvent(BUTTON_CLICKED, bundle)
     }
 
-    override fun onClickIconBankTrolley(paymentMethod: String) {
+    override fun onClickIconBankTrolley(paymentMethod: String?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, TROLLEY)
             putString(BUTTON_NAME, paymentMethod)
@@ -539,7 +539,10 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
         firebaseAnalytics.logEvent(BUTTON_CLICKED, bundle)
     }
 
-    override fun onClickButtonBuyNowWithPaymentTrolley(productTotalPrice: Double, paymentMethod: String) {
+    override fun onClickButtonBuyNowWithPaymentTrolley(
+        productTotalPrice: Double?,
+        paymentMethod: String?
+    ) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, TROLLEY)
             putString(BUTTON_NAME, BUY)
@@ -550,7 +553,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
     }
 
     // Success Screen
-    override fun onSuccessLoadScreen(nameClass: String) {
+    override fun onSuccessLoadScreen(nameClass: String?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, CHECKOUT)
             putString(SCREEN_CLASS, nameClass)
@@ -558,7 +561,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
         firebaseAnalytics.logEvent(SCREEN_VIEW, bundle)
     }
 
-    override fun onClickButtonSubmitSuccess(rate: Int) {
+    override fun onClickButtonSubmitSuccess(rate: Int?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, CHECKOUT)
             putString(BUTTON_NAME, SUBMIT)
@@ -568,7 +571,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
     }
 
     // Profile Screen
-    override fun onProfileLoadScreen(nameClass: String) {
+    override fun onProfileLoadScreen(nameClass: String?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, PROFILE)
             putString(SCREEN_CLASS, nameClass)
@@ -576,7 +579,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
         firebaseAnalytics.logEvent(SCREEN_VIEW, bundle)
     }
 
-    override fun onChangeLanguage(language: String) {
+    override fun onChangeLanguage(language: String?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, PROFILE)
             putString(ITEM_NAME, CHANGE_LANGUAGE)
@@ -601,7 +604,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
         firebaseAnalytics.logEvent(SELECT_ITEM, bundle)
     }
 
-    override fun onChangeImageProfile(image: String) {
+    override fun onChangeImageProfile(image: String?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, PROFILE)
             putString(IMAGE, image)
@@ -618,7 +621,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
     }
 
     // Change Password Screen
-    override fun onChangeLoadScreen(nameClass: String) {
+    override fun onChangeLoadScreen(nameClass: String?) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, CHANGE_PASSWORD)
             putString(SCREEN_CLASS, nameClass)

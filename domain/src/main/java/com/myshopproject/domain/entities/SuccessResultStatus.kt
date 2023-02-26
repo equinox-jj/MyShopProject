@@ -1,6 +1,6 @@
 package com.myshopproject.domain.entities
 
 data class SuccessResultStatus(
-    val message: String,
-    val status: Int
+    val message: String? = null,
+    val status: Int? = null
 )

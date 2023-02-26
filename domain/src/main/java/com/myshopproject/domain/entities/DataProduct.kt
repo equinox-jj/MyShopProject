@@ -1,15 +1,15 @@
 package com.myshopproject.domain.entities
 
 data class DataProduct(
-    val id: Int,
-    val date: String,
-    val desc: String,
-    val harga: String,
-    val image: String,
-    val nameProduct: String,
-    val rate: Int,
-    val size: String,
-    val stock: Int,
-    val type: String,
-    val weight: String
+    val id: Int? = null,
+    val date: String? = null,
+    val desc: String? = null,
+    val harga: String? = null,
+    val image: String? = null,
+    val nameProduct: String? = null,
+    val rate: Int? = null,
+    val size: String? = null,
+    val stock: Int? = null,
+    val type: String? = null,
+    val weight: String? = null
 )

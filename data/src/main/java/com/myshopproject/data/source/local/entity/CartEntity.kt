@@ -11,19 +11,19 @@ data class CartEntity(
     val id: Int? = null,
 
     @ColumnInfo(name = "image")
-    val image: String?,
+    val image: String? = null,
 
     @ColumnInfo(name = "name_product")
-    val nameProduct: String?,
+    val nameProduct: String? = null,
 
     @ColumnInfo(name = "quantity")
     val quantity: Int? = 1,
 
     @ColumnInfo(name = "price")
-    val price: String?,
+    val price: String? = null,
 
     @ColumnInfo(name = "item_total_price")
-    val itemTotalPrice: Int?,
+    val itemTotalPrice: Int? = null,
 
     @ColumnInfo(name = "stock")
     val stock: Int? = null,

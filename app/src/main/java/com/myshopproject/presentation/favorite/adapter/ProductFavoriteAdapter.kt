@@ -37,7 +37,7 @@ class ProductFavoriteAdapter(private val type: ItemType, private val onClick: (D
                 tvProductName.isSelected = true
                 tvProductName.text = data.nameProduct
                 tvProductPrice.text = data.harga
-                rbProductRate.rating = data.rate.toFloat()
+                rbProductRate.rating = data.rate?.toFloat() ?: 0f
 
                 itemView.setOnClickListener {
                     onClick.invoke(data)
@@ -56,7 +56,7 @@ class ProductFavoriteAdapter(private val type: ItemType, private val onClick: (D
                 tvProductName.isSelected = true
                 tvProductName.text = data.nameProduct
                 tvProductPrice.text = data.harga
-                rbProductRate.rating = data.rate.toFloat()
+                rbProductRate.rating = data.rate?.toFloat() ?: 0f
             }
         }
     }

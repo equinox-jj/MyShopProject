@@ -10,7 +10,7 @@ import com.myshopproject.domain.entities.DetailProductImage
 
 class ImageSliderAdapter(
     private val listImage: List<DetailProductImage>,
-    private val onClick: (String) -> Unit
+    private val onClick: (String?) -> Unit
     ): RecyclerView.Adapter<ImageSliderAdapter.ImageVH>() {
 
     inner class ImageVH(private val binding: ItemImageSliderBinding): RecyclerView.ViewHolder(binding.root) {

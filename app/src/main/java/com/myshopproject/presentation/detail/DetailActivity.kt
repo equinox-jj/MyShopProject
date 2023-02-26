@@ -130,7 +130,7 @@ class DetailActivity : AppCompatActivity() {
                         finish()
                     }
                     R.id.menu_share -> {
-                        analyticRepository.onClickShareDetail(dataDetailProduct.nameProduct, dataDetailProduct.harga.replace(Regex("\\D"), "").toDouble(), dataDetailProduct.id)
+                        analyticRepository.onClickShareDetail(dataDetailProduct.nameProduct, dataDetailProduct.harga?.replace(Regex("\\D"), "")?.toDouble(), dataDetailProduct.id)
                         if (this@DetailActivity::dataDetailProduct.isInitialized) {
                             val request = ImageRequest.Builder(this@DetailActivity)
                                 .data(dataDetailProduct.image)
@@ -288,7 +288,7 @@ class DetailActivity : AppCompatActivity() {
             imageSliderAdapter = ImageSliderAdapter(
                 data.imageProduct,
                 onClick = {
-                    showImageDetail(this@DetailActivity, it)
+                    showImageDetail(this@DetailActivity, it.toString())
                 }
             )
             vpImageSliderProductDtl.adapter = imageSliderAdapter
@@ -296,7 +296,7 @@ class DetailActivity : AppCompatActivity() {
             tvNameProductDtl.isSelected = true
             tvNameProductDtl.text = data.nameProduct
             tvPriceProductDtl.text = data.harga
-            rbProductDtl.rating = data.rate.toFloat()
+            rbProductDtl.rating = data.rate?.toFloat() ?: 0f
             tvSizeProductDtl.text = data.size
             tvWeightProductDtl.text = data.weight
             tvTypeProductDtl.text = data.type
@@ -313,7 +313,7 @@ class DetailActivity : AppCompatActivity() {
         binding.apply {
             btnDtlBuy.setOnClickListener {
                 analyticRepository.onClickButtonBuy()
-                if (data.stock > 0) {
+                if ((data.stock ?: 0) > 0) {
                     val bottSheet = DetailBottomSheet(data, paymentParcel)
                     bottSheet.show(supportFragmentManager, DetailActivity::class.java.simpleName)
                 } else {
@@ -351,7 +351,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun addToCart(data: DetailProductData) {
-        if (data.stock > 0) {
+        if ((data.stock ?: 0) > 0) {
             localViewModel.insertCart(
                 CartDataDomain(
                     id = data.id,
@@ -359,7 +359,7 @@ class DetailActivity : AppCompatActivity() {
                     nameProduct = data.nameProduct,
                     quantity = 1,
                     price = data.harga,
-                    itemTotalPrice = data.harga.replace(Regex("\\D"), "").toInt(),
+                    itemTotalPrice = data.harga?.replace(Regex("\\D"), "")?.toInt(),
                     stock = data.stock,
                     isChecked = false
                 )

@@ -89,7 +89,7 @@ class ChangePassActivity : AppCompatActivity() {
                 is Resource.Success -> {
                     binding.changePassCardLoading.root.hide()
 
-                    Toast.makeText(this@ChangePassActivity, "Change password success ${response.data!!.success.status}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@ChangePassActivity, "Change password success ${response.data?.success?.status}", Toast.LENGTH_SHORT).show()
 
                     finish()
                 }

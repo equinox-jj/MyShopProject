@@ -90,8 +90,8 @@ class DetailBottomSheet(
     private fun initView() {
         binding.apply {
             ivProductBottSht.load(data.image)
-            tvProductPriceBottSht.text = data.harga.toIDRPrice()
-            (resources.getString(R.string.buy_now) + data.harga.toIDRPrice()).also { btnBuyNowBottSheet.text = it }
+            tvProductPriceBottSht.text = data.harga?.toIDRPrice()
+            (resources.getString(R.string.buy_now) + (data.harga?.toIDRPrice())).also { btnBuyNowBottSheet.text = it }
 
             if (data.stock == 0) tvStockProductBottSht.text = resources.getString(R.string.out_of_stock)
             else tvStockProductBottSht.text = data.stock.toString()
@@ -178,7 +178,7 @@ class DetailBottomSheet(
             }
         }
 
-        viewModel.setPrice(data.harga.replace(Regex("\\D"), "").toInt())
+        viewModel.setPrice(data.harga?.replace(Regex("\\D"), "")?.toInt() ?: 0)
 
         viewModel.price.observe(viewLifecycleOwner) {
             totalPrice = it
@@ -191,14 +191,14 @@ class DetailBottomSheet(
             analyticRepository.onClickQuantityBottom("+", quantity, data.id, data.nameProduct)
             viewModel.increaseQuantity(data.stock)
             val sum = binding.tvQuantityBottSheet.text.toString()
-            val total = (sum.toInt() * data.harga.replace(Regex("\\D"), "").toInt())
+            val total = (sum.toInt() * (data.harga?.replace(Regex("\\D"), "")?.toInt() ?: 0))
             (resources.getString(R.string.buy_now) + total.toString().toIDRPrice()).also { binding.btnBuyNowBottSheet.text = it }
         }
         binding.btnDecreaseBottSheet.setOnClickListener {
             analyticRepository.onClickQuantityBottom("-", quantity, data.id, data.nameProduct)
             viewModel.decreaseQuantity()
             val sum = binding.tvQuantityBottSheet.text.toString()
-            val total = (sum.toInt() * data.harga.replace(Regex("\\D"), "").toInt())
+            val total = (sum.toInt() * (data.harga?.replace(Regex("\\D"), "")?.toInt() ?: 0))
             (resources.getString(R.string.buy_now) + total.toString().toIDRPrice()).also { binding.btnBuyNowBottSheet.text = it }
         }
     }

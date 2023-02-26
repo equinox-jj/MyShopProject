@@ -222,7 +222,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     is Resource.Success -> {
                         val imageUser = response.data?.success?.path
                         binding.profileCardLoading.root.hide()
-                        prefViewModel.saveImageUser(imageUser!!)
+                        prefViewModel.saveImageUser(imageUser.toString())
                         Toast.makeText(requireContext(), "Change image success", Toast.LENGTH_SHORT).show()
                     }
                     is Resource.Error -> {

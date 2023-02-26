@@ -1,7 +1,7 @@
 package com.myshopproject.domain.entities
 
 data class ChangeImageResult(
-    val path: String,
-    val message: String,
-    val status: Int
+    val path: String? = null,
+    val message: String? = null,
+    val status: Int? = null
 )

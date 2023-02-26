@@ -101,7 +101,7 @@ class TrolleyActivity : AppCompatActivity() {
                         val filterResult = result.filter { it.isChecked }
 
                         filterResult.forEach {
-                            priceTotal = priceTotal.plus(it.itemTotalPrice!!)
+                            priceTotal = priceTotal.plus(it.itemTotalPrice ?: 0)
                         }
 
                         binding.tvProductPriceTrlly.text = priceTotal.toString().toIDRPrice()
@@ -141,7 +141,7 @@ class TrolleyActivity : AppCompatActivity() {
                     val dataStockItems = arrayListOf<UpdateStockItem>()
                     val listOfProductId = arrayListOf<String>()
                     for (i in result.indices) {
-                        dataStockItems.add(UpdateStockItem(result[i].id.toString(), result[i].quantity!!))
+                        dataStockItems.add(UpdateStockItem(result[i].id.toString(), result[i].quantity))
                         listOfProductId.add(result[i].id.toString())
                     }
 
@@ -204,7 +204,7 @@ class TrolleyActivity : AppCompatActivity() {
                                         is Resource.Loading -> {}
                                         is Resource.Success -> {
                                             analyticRepository.onClickButtonBuyNowWithPaymentTrolley(totalPrice.toDouble(), paymentParcel?.name.toString())
-                                            dataStockItems.forEach { localViewModel.deleteProductByIdFromTrolley(it.id_product.toInt()) }
+                                            dataStockItems.forEach { localViewModel.deleteProductByIdFromTrolley(it.id_product?.toInt()) }
                                             val intent = Intent(this@TrolleyActivity, BuySuccessActivity::class.java)
                                             intent.putExtra(LIST_PRODUCT_ID, listOfProductId)
                                             intent.putExtra(PRICE_INTENT, totalPrice)

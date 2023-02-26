@@ -1,8 +1,8 @@
 package com.myshopproject.domain.entities
 
 data class RefreshTokenResult(
-    val accessToken: String,
-    val message: String,
-    val refreshToken: String,
-    val status: Int
+    val accessToken: String? = null,
+    val message: String? = null,
+    val refreshToken: String? = null,
+    val status: Int? = null
 )
