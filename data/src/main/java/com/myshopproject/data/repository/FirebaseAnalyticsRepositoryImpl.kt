@@ -201,7 +201,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
         firebaseAnalytics.logEvent(SELECT_ITEM, bundle)
     }
 
-    override fun onClickTrolleyIconHome() {
+    override fun onClickTrolleyIcon() {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, HOME)
             putString(BUTTON_NAME, TROLLEY_ICON)
@@ -209,7 +209,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
         firebaseAnalytics.logEvent(BUTTON_CLICKED, bundle)
     }
 
-    override fun onClickNotificationIconHome() {
+    override fun onClickNotificationIcon() {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, HOME)
             putString(BUTTON_NAME, NOTIFICATION_ICON)
@@ -539,7 +539,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
         firebaseAnalytics.logEvent(BUTTON_CLICKED, bundle)
     }
 
-    override fun onClickButtonBuyNowWithPayment(productTotalPrice: Double, paymentMethod: String) {
+    override fun onClickButtonBuyNowWithPaymentTrolley(productTotalPrice: Double, paymentMethod: String) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, TROLLEY)
             putString(BUTTON_NAME, BUY)

@@ -21,8 +21,8 @@ interface FirebaseAnalyticsRepository {
     fun onPagingScroll(offset: Int)
     fun onSearchHome(query: String)
     fun onProductHomeClick(productName: String, productPrice: Double, productRate: Int, productId: Int)
-    fun onClickTrolleyIconHome()
-    fun onClickNotificationIconHome()
+    fun onClickTrolleyIcon()
+    fun onClickNotificationIcon()
 
     // Favorite Screen
     fun onFavoriteLoadScreen(nameClass: String)
@@ -68,19 +68,19 @@ interface FirebaseAnalyticsRepository {
     fun onClickButtonBuyTrolley()
     fun onClickButtonBackTrolley()
     fun onClickIconBankTrolley(paymentMethod: String)
-    fun onClickButtonBuyNowWithPayment(productTotalPrice: Double, paymentMethod: String)
+    fun onClickButtonBuyNowWithPaymentTrolley(productTotalPrice: Double, paymentMethod: String)
 
     // Success Activity
     fun onSuccessLoadScreen(nameClass: String)
     fun onClickButtonSubmitSuccess(rate: Int)
 
     // Profile Page Screen
-    fun onProfileLoadScreen(nameClass: String)
+    fun onProfileLoadScreen(nameClass: String)//
     fun onChangeLanguage(language: String)
-    fun onClickChangePassword()
-    fun onClickLogout()
-    fun onChangeImageProfile(image: String)
-    fun onClickCameraIconProfile()
+    fun onClickChangePassword()//
+    fun onClickLogout()//
+    fun onChangeImageProfile(image: String)//
+    fun onClickCameraIconProfile()//
 
     // Change Password Screen
     fun onChangeLoadScreen(nameClass: String)

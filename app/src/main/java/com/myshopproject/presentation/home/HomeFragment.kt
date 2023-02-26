@@ -37,11 +37,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentHomeBinding.bind(view)
 
-        analyticRepository.onHomeLoadScreen(requireContext().javaClass.simpleName)
-
         initObserver()
         initRecyclerView()
         setupListener()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analyticRepository.onHomeLoadScreen(requireContext().javaClass.simpleName)
     }
 
     private fun initRecyclerView() {

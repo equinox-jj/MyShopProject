@@ -11,6 +11,7 @@ import com.google.gson.JsonObject
 import com.myshopproject.R
 import com.myshopproject.data.utils.toIDRPrice
 import com.myshopproject.databinding.ActivityBuySuccessBinding
+import com.myshopproject.domain.repository.FirebaseAnalyticsRepository
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.main.MainActivity
 import com.myshopproject.utils.Constants.LIST_PRODUCT_ID
@@ -20,6 +21,7 @@ import com.myshopproject.utils.Constants.PRICE_INTENT
 import com.myshopproject.utils.Constants.PRODUCT_ID
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class BuySuccessActivity : AppCompatActivity() {
@@ -35,6 +37,9 @@ class BuySuccessActivity : AppCompatActivity() {
     private var paymentId = ""
     private var paymentName = ""
 
+    @Inject
+    lateinit var analyticRepository: FirebaseAnalyticsRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBuySuccessBinding.inflate(layoutInflater)
@@ -47,6 +52,11 @@ class BuySuccessActivity : AppCompatActivity() {
         totalPrice = intent.getIntExtra(PRICE_INTENT, 0)
 
         initObserver()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analyticRepository.onSuccessLoadScreen(this@BuySuccessActivity.javaClass.simpleName)
     }
 
     private fun initObserver() {
@@ -136,6 +146,7 @@ class BuySuccessActivity : AppCompatActivity() {
                     finishAffinity()
                 }
             }
+            analyticRepository.onClickButtonSubmitSuccess(rate.toDouble().toInt())
         }
     }
 }

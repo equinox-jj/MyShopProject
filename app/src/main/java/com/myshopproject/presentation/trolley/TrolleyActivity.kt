@@ -16,6 +16,7 @@ import com.myshopproject.databinding.ActivityTrolleyBinding
 import com.myshopproject.domain.entities.CartDataDomain
 import com.myshopproject.domain.entities.PaymentResult
 import com.myshopproject.domain.entities.UpdateStockItem
+import com.myshopproject.domain.repository.FirebaseAnalyticsRepository
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.buysuccess.BuySuccessActivity
 import com.myshopproject.presentation.payment.PaymentActivity
@@ -32,6 +33,7 @@ import com.myshopproject.utils.show
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class TrolleyActivity : AppCompatActivity() {
@@ -48,6 +50,9 @@ class TrolleyActivity : AppCompatActivity() {
     private var userId = ""
     private var totalPrice = 0
 
+    @Inject
+    lateinit var analyticRepository: FirebaseAnalyticsRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTrolleyBinding.inflate(layoutInflater)
@@ -63,7 +68,13 @@ class TrolleyActivity : AppCompatActivity() {
         postProductTrolley()
     }
 
+    override fun onResume() {
+        super.onResume()
+        analyticRepository.onTrolleyLoadScreen(this@TrolleyActivity.javaClass.simpleName)
+    }
+
     override fun onSupportNavigateUp(): Boolean {
+        analyticRepository.onClickButtonBackTrolley()
         finish()
         return true
     }
@@ -137,11 +148,13 @@ class TrolleyActivity : AppCompatActivity() {
                     when {
                         result.isEmpty() -> {
                             binding.btnBuyTrlly.setOnClickListener {
+                                analyticRepository.onClickButtonBuyTrolley()
                                 Toast.makeText(this@TrolleyActivity, "You haven't select any product yet", Toast.LENGTH_SHORT).show()
                             }
                         }
                         paymentParcel == null -> {
                             binding.btnBuyTrlly.setOnClickListener {
+                                analyticRepository.onClickButtonBuyTrolley()
                                 val intent = Intent(this@TrolleyActivity, PaymentActivity::class.java)
                                 startActivity(intent)
                             }
@@ -149,6 +162,7 @@ class TrolleyActivity : AppCompatActivity() {
                         }
                         else -> {
                             binding.llTrllyPayment.setOnClickListener {
+                                analyticRepository.onClickIconBankTrolley(paymentParcel?.name.toString())
                                 val intent = Intent(this@TrolleyActivity, PaymentActivity::class.java)
                                 startActivity(intent)
                             }
@@ -189,6 +203,7 @@ class TrolleyActivity : AppCompatActivity() {
                                     when (response) {
                                         is Resource.Loading -> {}
                                         is Resource.Success -> {
+                                            analyticRepository.onClickButtonBuyNowWithPaymentTrolley(totalPrice.toDouble(), paymentParcel?.name.toString())
                                             dataStockItems.forEach { localViewModel.deleteProductByIdFromTrolley(it.id_product.toInt()) }
                                             val intent = Intent(this@TrolleyActivity, BuySuccessActivity::class.java)
                                             intent.putExtra(LIST_PRODUCT_ID, listOfProductId)
@@ -200,6 +215,7 @@ class TrolleyActivity : AppCompatActivity() {
                                         is Resource.Error -> {}
                                     }
                                 }
+                                analyticRepository.onClickButtonBuyTrolley()
                             }
                         }
                     }
@@ -221,6 +237,7 @@ class TrolleyActivity : AppCompatActivity() {
                         itemTotalPrice = price?.replace(Regex("\\D"), "")?.toInt()?.times(quantity.toString().toInt().plus(1)),
                         id = productId
                     )
+                    analyticRepository.onClickQuantityTrolley(quantity = "+", total = quantity?.plus(1)?: 0, productId = productId ?: 0, it.nameProduct.toString())
                 },
                 onMinQuantity = {
                     val productId = it.id
@@ -231,12 +248,14 @@ class TrolleyActivity : AppCompatActivity() {
                         itemTotalPrice = price?.replace(Regex("\\D"), "")?.toInt()?.times(quantity.toString().toInt().minus(1)),
                         id = productId
                     )
+                    analyticRepository.onClickQuantityTrolley(quantity = "-", total = quantity?.minus(1)?: 0, productId = productId ?: 0, it.nameProduct.toString())
                 },
                 onCheckedItem = {
                     val productId = it.id
                     val isChecked = !it.isChecked
                     binding.btnBuyTrlly.isClickable = false
                     localViewModel.updateProductIsCheckedById(isChecked, productId)
+                    analyticRepository.onCheckBoxTrolley(productId = productId ?: 0, productName = it.nameProduct.toString())
                 },
             )
             binding.rvTrolley.adapter = trolleyAdapter
@@ -251,6 +270,7 @@ class TrolleyActivity : AppCompatActivity() {
             .setMessage("Are you sure you want to remove this item?")
             .setPositiveButton("Ok") { _, _ ->
                 localViewModel.deleteProductByIdFromTrolley(data.id)
+                analyticRepository.onClickDeleteTrolley(productId = data.id ?: 0, data.nameProduct.toString())
             }
             .setNegativeButton("Cancel") { _, _ -> }
             .show()

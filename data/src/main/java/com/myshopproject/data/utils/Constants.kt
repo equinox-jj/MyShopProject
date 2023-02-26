@@ -79,4 +79,6 @@ object Constants {
     const val MULTIPLE_SELECT_ICON = "Multiple Select Icon"
     const val MULTIPLE_SELECT = "Multiple Select"
     const val NOTIFICATION_ICON = "Notification Icon"
+    const val ENGLISH = "en"
+    const val INDO = "in"
 }

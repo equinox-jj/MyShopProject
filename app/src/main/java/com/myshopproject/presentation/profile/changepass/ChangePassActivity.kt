@@ -10,6 +10,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.myshopproject.databinding.ActivityChangePassBinding
+import com.myshopproject.domain.repository.FirebaseAnalyticsRepository
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.utils.hide
@@ -18,6 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ChangePassActivity : AppCompatActivity() {
@@ -30,6 +32,9 @@ class ChangePassActivity : AppCompatActivity() {
     private var userId = 0
     private var authorization = ""
 
+    @Inject
+    lateinit var analyticRepository: FirebaseAnalyticsRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChangePassBinding.inflate(layoutInflater)
@@ -40,6 +45,11 @@ class ChangePassActivity : AppCompatActivity() {
         initObserver()
         initDataStore()
         launchCoroutines()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analyticRepository.onChangeLoadScreen(this@ChangePassActivity.javaClass.simpleName)
     }
 
     private fun setupToolbar() {
@@ -56,6 +66,7 @@ class ChangePassActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
+        analyticRepository.onClickButtonBackPass()
         finish()
         return true
     }
@@ -110,6 +121,7 @@ class ChangePassActivity : AppCompatActivity() {
                         confirmPassword = binding.etConfirmNewPass.text.toString()
                     )
                 }
+                analyticRepository.onClickButtonSavePass()
             }
         }
     }

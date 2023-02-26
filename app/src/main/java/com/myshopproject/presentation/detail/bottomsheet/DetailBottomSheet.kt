@@ -55,10 +55,9 @@ class DetailBottomSheet(
     private var totalPrice = 0
     private var quantity = 0
 
-    private var dataName = paymentData?.id
-
     @Inject
     lateinit var analyticRepository: FirebaseAnalyticsRepository
+    private var dataName = paymentData?.name
 
     override fun onCreateView(
         inflater: LayoutInflater,

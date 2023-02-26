@@ -67,7 +67,6 @@ class NotificationActivity : AppCompatActivity() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 when (menuItem.itemId) {
                     android.R.id.home -> {
-                        analyticRepository.onClickBackIconNotif()
                         onBackPressed()
                     }
                     R.id.menu_check_notification -> {

@@ -9,6 +9,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.myshopproject.databinding.ActivityPaymentBinding
+import com.myshopproject.domain.repository.FirebaseAnalyticsRepository
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.detail.DetailActivity
 import com.myshopproject.presentation.payment.adapter.PaymentHeaderAdapter
@@ -18,6 +19,7 @@ import com.myshopproject.utils.Constants.PRODUCT_ID_INTENT
 import com.myshopproject.utils.hide
 import com.myshopproject.utils.show
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PaymentActivity : AppCompatActivity() {
@@ -29,6 +31,9 @@ class PaymentActivity : AppCompatActivity() {
     private var adapterPayment: PaymentHeaderAdapter? = null
 
     private var productId = 0
+
+    @Inject
+    lateinit var analyticRepository: FirebaseAnalyticsRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +47,11 @@ class PaymentActivity : AppCompatActivity() {
         initRecyclerView()
         setupToolbar()
         initObserver()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analyticRepository.onPaymentLoadScreen(this@PaymentActivity.javaClass.simpleName)
     }
 
     private fun initRecyclerView() {
@@ -61,6 +71,7 @@ class PaymentActivity : AppCompatActivity() {
                     startActivity(intent)
                     finish()
                 }
+                analyticRepository.onClickPaymentMethod(data.id.toString(), data.name.toString())
             },
             onHeaderClick = {}
         )
@@ -97,6 +108,7 @@ class PaymentActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
+        analyticRepository.onClickButtonBackPayment()
         onBackPressedDispatcher.onBackPressed()
         return true
     }

@@ -19,6 +19,7 @@ import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.badge.BadgeUtils
 import com.myshopproject.R
 import com.myshopproject.databinding.ActivityMainBinding
+import com.myshopproject.domain.repository.FirebaseAnalyticsRepository
 import com.myshopproject.presentation.notification.NotificationActivity
 import com.myshopproject.presentation.trolley.TrolleyActivity
 import com.myshopproject.presentation.viewmodel.DataStoreViewModel
@@ -29,6 +30,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -40,6 +42,9 @@ class MainActivity : AppCompatActivity() {
 
     private val prefViewModel by viewModels<DataStoreViewModel>()
     private val localViewModel by viewModels<LocalViewModel>()
+
+    @Inject
+    lateinit var analyticRepository: FirebaseAnalyticsRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,9 +120,11 @@ class MainActivity : AppCompatActivity() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 when (menuItem.itemId) {
                     R.id.menu_cart -> {
+                        analyticRepository.onClickTrolleyIcon()
                         startActivity(Intent(this@MainActivity, TrolleyActivity::class.java))
                     }
                     R.id.menu_notification -> {
+                        analyticRepository.onClickNotificationIcon()
                         startActivity(Intent(this@MainActivity, NotificationActivity::class.java))
                     }
                 }

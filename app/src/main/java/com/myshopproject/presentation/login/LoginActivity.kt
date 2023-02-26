@@ -151,6 +151,7 @@ class LoginActivity : AppCompatActivity() {
             }
 
             btnToSignUp.setOnClickListener {
+                analyticRepository.onClickButtonSignUp()
                 startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
             }
         }

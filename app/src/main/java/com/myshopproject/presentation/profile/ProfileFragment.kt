@@ -24,7 +24,12 @@ import coil.load
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.myshopproject.R
+import com.myshopproject.data.utils.Constants.CAMERA
+import com.myshopproject.data.utils.Constants.ENGLISH
+import com.myshopproject.data.utils.Constants.GALLERY
+import com.myshopproject.data.utils.Constants.INDO
 import com.myshopproject.databinding.FragmentProfileBinding
+import com.myshopproject.domain.repository.FirebaseAnalyticsRepository
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.camera.CameraActivity
 import com.myshopproject.presentation.login.LoginActivity
@@ -42,6 +47,7 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import org.json.JSONObject
 import java.io.File
 import java.util.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
@@ -60,9 +66,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private var userId = 0
 
-    private val launcherIntentCameraX = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) {
+    @Inject
+    lateinit var analyticRepository: FirebaseAnalyticsRepository
+
+    private val launcherIntentCameraX = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == AppCompatActivity.RESULT_OK) {
             val myFile = it.data?.getSerializableExtra(PICTURE_INTENT) as File
             val isBackCamera = it.data?.getBooleanExtra(IS_BACK_CAMERA_INTENT, true) as Boolean
@@ -85,9 +92,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
     }
 
-    private val launcherIntentGallery = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) {
+    private val launcherIntentGallery = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == AppCompatActivity.RESULT_OK) {
             val uri = it.data?.data as Uri
             val file = uriToFile(uri, requireContext())
@@ -112,6 +117,11 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         setupListener()
         spinnerAdapter()
         initDataStore()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analyticRepository.onProfileLoadScreen(requireContext().javaClass.simpleName)
     }
 
     private fun initDataStore() {
@@ -164,11 +174,13 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     if (isSpinnerTouched) {
                         when (position) {
                             0 -> {
+                                analyticRepository.onChangeLanguage(ENGLISH)
                                 setLanguage("en")
                                 prefViewModel.saveLanguage(position)
                                 requireActivity().recreate()
                             }
                             1 -> {
+                                analyticRepository.onChangeLanguage(INDO)
                                 setLanguage("in")
                                 prefViewModel.saveLanguage(position)
                                 requireActivity().recreate()
@@ -211,7 +223,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                         val imageUser = response.data?.success?.path
                         binding.profileCardLoading.root.hide()
                         prefViewModel.saveImageUser(imageUser!!)
-                        Toast.makeText(requireContext(), "Change image success ${response.data!!.success.status}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Change image success", Toast.LENGTH_SHORT).show()
                     }
                     is Resource.Error -> {
                         binding.profileCardLoading.root.hide()
@@ -234,14 +246,17 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private fun setupListener() {
         binding.apply {
             cvLogout.setOnClickListener {
+                analyticRepository.onClickLogout()
                 prefViewModel.clearSession()
                 startActivity(Intent(requireContext(), LoginActivity::class.java))
                 activity?.finish()
             }
             cvChangePassword.setOnClickListener {
+                analyticRepository.onClickChangePassword()
                 findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToChangePassActivity())
             }
             fabSelectPhotoProfile.setOnClickListener {
+                analyticRepository.onClickCameraIconProfile()
                 alertDialogSelectImage()
             }
         }
@@ -256,10 +271,12 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         val fromGallery = view.findViewById<TextView>(R.id.tvSelectGallery)
 
         fromCamera.setOnClickListener {
+            analyticRepository.onChangeImageProfile(CAMERA)
             openCamera()
             showDialog.dismiss()
         }
         fromGallery.setOnClickListener {
+            analyticRepository.onChangeImageProfile(GALLERY)
             openGallery()
             showDialog.dismiss()
         }
@@ -282,5 +299,4 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         super.onDestroyView()
         _binding = null
     }
-
 }

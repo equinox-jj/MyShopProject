@@ -40,12 +40,15 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentFavoriteBinding.bind(view)
 
-        analyticRepository.onFavoriteLoadScreen(this@FavoriteFragment.javaClass.simpleName)
-
         initObserver(SortedBy.DefaultSort)
         launchCoroutines()
         initRecyclerView()
         setupListener()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analyticRepository.onFavoriteLoadScreen(requireContext().javaClass.simpleName)
     }
 
     private fun launchCoroutines() {
