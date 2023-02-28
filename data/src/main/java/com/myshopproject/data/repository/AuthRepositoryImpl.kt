@@ -25,7 +25,7 @@ class AuthRepositoryImpl @Inject constructor(
                 email = email,
                 password = password,
                 firebaseToken = firebaseToken
-            ).success.toDomain()
+            ).success?.toDomain()
             emit(Resource.Success(response))
         } catch (t: Throwable) {
             when(t) {

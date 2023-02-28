@@ -26,7 +26,7 @@ class AuthAuthentication @Inject constructor(
             )
 
             if (!newToken.isSuccessful || newToken.body() == null || newToken.code() == 401) {
-                pref.clearSession() // Clear Preferences
+                pref.clearSession()
             }
 
             newToken.body()?.let {
