@@ -83,11 +83,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             binding.apply {
                 ivProfile.visibility = View.VISIBLE
                 ivProfile.setImageBitmap(resultCamera)
-                viewLifecycleOwner.lifecycleScope.launch {
-                    repeatOnLifecycle(Lifecycle.State.STARTED) {
-                        postChangeImage()
-                    }
-                }
+                postChangeImage()
             }
         }
     }
@@ -101,11 +97,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             binding.apply {
                 ivProfile.visibility = View.VISIBLE
                 ivProfile.setImageURI(uri)
-                viewLifecycleOwner.lifecycleScope.launch {
-                    repeatOnLifecycle(Lifecycle.State.STARTED) {
-                        postChangeImage()
-                    }
-                }
+                postChangeImage()
             }
         }
     }
@@ -175,13 +167,13 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                         when (position) {
                             0 -> {
                                 analyticRepository.onChangeLanguage(ENGLISH)
-                                setLanguage("en")
+                                setLanguage("EN")
                                 prefViewModel.saveLanguage(position)
                                 requireActivity().recreate()
                             }
                             1 -> {
                                 analyticRepository.onChangeLanguage(INDO)
-                                setLanguage("in")
+                                setLanguage("ID")
                                 prefViewModel.saveLanguage(position)
                                 requireActivity().recreate()
                             }
@@ -226,8 +218,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                         Toast.makeText(requireContext(), "Change image success", Toast.LENGTH_SHORT).show()
                     }
                     is Resource.Error -> {
-                        binding.profileCardLoading.root.hide()
                         try {
+                            binding.profileCardLoading.root.hide()
+
                             val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
                             val gson = Gson()
                             val jsonObject = gson.fromJson(errors, JsonObject::class.java)

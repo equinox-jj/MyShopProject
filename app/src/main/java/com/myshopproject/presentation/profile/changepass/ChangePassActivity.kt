@@ -44,7 +44,7 @@ class ChangePassActivity : AppCompatActivity() {
 
         initObserver()
         initDataStore()
-        launchCoroutines()
+        setupListener()
     }
 
     override fun onResume() {
@@ -55,14 +55,6 @@ class ChangePassActivity : AppCompatActivity() {
     private fun setupToolbar() {
         setSupportActionBar(binding.toolbarChangePass)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    }
-
-    private fun launchCoroutines() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                setupListener()
-            }
-        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

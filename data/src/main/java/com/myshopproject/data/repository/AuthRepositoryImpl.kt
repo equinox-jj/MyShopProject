@@ -32,8 +32,6 @@ class AuthRepositoryImpl @Inject constructor(
                 is HttpException -> {
                     when (t.code()) {
                         400 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                        404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                        500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
                         else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
                     }
                 }
@@ -68,8 +66,6 @@ class AuthRepositoryImpl @Inject constructor(
                 is HttpException -> {
                     when (t.code()) {
                         400 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                        404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                        500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
                         else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
                     }
                 }
@@ -100,9 +96,6 @@ class AuthRepositoryImpl @Inject constructor(
                 is HttpException -> {
                     when (t.code()) {
                         400 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                        401 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                        404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                        500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
                         else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
                     }
                 }
@@ -129,9 +122,6 @@ class AuthRepositoryImpl @Inject constructor(
                 is HttpException -> {
                     when (t.code()) {
                         400 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                        401 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                        404 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
-                        500 -> emit(Resource.Error(t.message(), t.code(), t.response()?.errorBody()))
                         else -> emit(Resource.Error(message = null, errorCode = null, errorBody = null))
                     }
                 }

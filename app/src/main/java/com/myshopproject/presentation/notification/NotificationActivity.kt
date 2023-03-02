@@ -179,8 +179,10 @@ class NotificationActivity : AppCompatActivity() {
     override fun onBackPressed() {
         if (isMultipleSelect) {
             showMultipleSelect()
+            analyticRepository.onClickBackMultipleNotif()
         } else {
             onBackPressedDispatcher.onBackPressed()
+            analyticRepository.onClickBackIconNotif()
         }
         viewModel.setAllUncheckedNotification()
     }
@@ -188,10 +190,8 @@ class NotificationActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         if (isMultipleSelect) {
             showMultipleSelect()
-            analyticRepository.onClickBackMultipleNotif()
         } else {
             onBackPressedDispatcher.onBackPressed()
-            analyticRepository.onClickBackIconNotif()
         }
         viewModel.setAllUncheckedNotification()
         return true

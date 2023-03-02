@@ -434,7 +434,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
     ) {
         val bundle = Bundle().apply {
             putString(SCREEN_NAME, DETAIL)
-            putString(BUTTON_NAME, "Buy Now - 10.000")
+            putString(BUTTON_NAME, "Buy Now - $productTotalPrice")
             putString(PRODUCT_ID, productId.toString())
             putString(PRODUCT_NAME, productName)
             putString(PRODUCT_PRICE, productPrice)

@@ -61,9 +61,18 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.homeFragment -> { showBottomNav() }
-                R.id.favoriteFragment -> { showBottomNav() }
-                R.id.profileFragment -> { showBottomNav() }
+                R.id.homeFragment -> {
+                    showBottomNav()
+                    binding.toolbarMain.show()
+                }
+                R.id.favoriteFragment -> {
+                    showBottomNav()
+                    binding.toolbarMain.show()
+                }
+                R.id.profileFragment -> {
+                    showBottomNav()
+                    binding.toolbarMain.hide()
+                }
                 else -> { hideBottomNav() }
             }
         }
