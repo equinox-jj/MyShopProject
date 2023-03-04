@@ -1,7 +1,7 @@
 package com.myshopproject.data.utils
 
 import com.myshopproject.data.source.remote.dto.*
-import org.mockito.ArgumentMatchers
+import com.myshopproject.domain.entities.DataProduct
 
 fun dummyDetailProductResponse(): DetailProductResponseDTO {
     val dataImageDetail = DetailProductImageDTO(
@@ -21,7 +21,7 @@ fun dummyDetailProductResponse(): DetailProductResponseDTO {
         stock = 0,
         type = "",
         weight = "",
-        isFavorite = ArgumentMatchers.anyBoolean()
+        isFavorite = false
     )
 
 
@@ -98,5 +98,21 @@ fun dummyChangeImageResponse(): ChangeImageResponseDTO {
 
     return ChangeImageResponseDTO(
         success = changeImageResult
+    )
+}
+
+fun dummyProductData(): DataProduct {
+    return DataProduct(
+        id = 0,
+        date = "",
+        desc = "",
+        harga = "",
+        image = "",
+        nameProduct = "",
+        rate = 0,
+        size = "",
+        stock = 0,
+        type = "",
+        weight = ""
     )
 }

@@ -7,7 +7,7 @@ import com.myshopproject.data.utils.toIDRPrice
 import com.myshopproject.domain.entities.*
 
 fun LoginResponseDTO.toDomain() = LoginResponse(
-    success = success?.toDomain()
+    success = success.toDomain()
 )
 
 fun LoginResultDTO.toDomain() = LoginResult(

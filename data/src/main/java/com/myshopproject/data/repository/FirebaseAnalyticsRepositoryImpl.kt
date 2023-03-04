@@ -73,6 +73,7 @@ import javax.inject.Inject
 class FirebaseAnalyticsRepositoryImpl @Inject constructor(
     private val firebaseAnalytics: FirebaseAnalytics
 ): FirebaseAnalyticsRepository {
+
     // Splash Screen
     override fun onSplashLoadScreen(nameClass: String?) {
         val bundle = Bundle().apply {

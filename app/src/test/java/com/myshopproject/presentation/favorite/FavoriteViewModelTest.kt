@@ -1,0 +1,3 @@
+package com.myshopproject.presentation.favorite
+
+class FavoriteViewModelTest

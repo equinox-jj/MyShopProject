@@ -1,0 +1,3 @@
+package com.myshopproject.presentation.profile.changepass
+
+class ChangePassViewModelTest

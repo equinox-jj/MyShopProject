@@ -1,5 +1,6 @@
 package com.myshopproject.data.repository
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import app.cash.turbine.test
 import com.myshopproject.data.mapper.toDomain
 import com.myshopproject.data.source.remote.dto.*
@@ -10,13 +11,12 @@ import com.myshopproject.data.utils.dummySuccessResponse
 import com.myshopproject.domain.utils.Resource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers
@@ -25,16 +25,15 @@ import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
 import retrofit2.HttpException
 import retrofit2.Response
-import java.io.File
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
 class AuthRepositoryImplTest {
 
-    @Mock
-    private lateinit var apiAuth: ApiAuth
-    @Mock
-    private var file = File("")
+    @get:Rule
+    var instantExecutorRule = InstantTaskExecutorRule()
+
+    @Mock private lateinit var apiAuth: ApiAuth
     private lateinit var authRepositoryImpl: AuthRepositoryImpl
 
     @Before
@@ -44,27 +43,33 @@ class AuthRepositoryImplTest {
 
     @Test
     fun `test login when state is success`() = runTest {
-        val dataDummy = dummyLoginResponse()
+        val dummyData = dummyLoginResponse()
+
+        val email = ArgumentMatchers.anyString()
+        val password = ArgumentMatchers.anyString()
+        val firebaseToken = ArgumentMatchers.anyString()
+
         // Arrange
         `when`(
             apiAuth.loginAccount(
-                email = ArgumentMatchers.anyString(),
-                password = ArgumentMatchers.anyString(),
-                firebaseToken = ArgumentMatchers.anyString()
+                email = email,
+                password = password,
+                firebaseToken = firebaseToken
             )
-        ).thenReturn(dataDummy)
+        ).thenReturn(dummyData)
 
         // Act
         val resultFlow = authRepositoryImpl.loginAccount(
-            email = ArgumentMatchers.anyString(),
-            password = ArgumentMatchers.anyString(),
-            firebaseToken = ArgumentMatchers.anyString()
+            email = email,
+            password = password,
+            firebaseToken = firebaseToken
         )
 
         // Assert
         resultFlow.test {
             assertTrue(awaitItem() is Resource.Loading)
-            assertTrue(awaitItem() is Resource.Success)
+            val actualData = awaitItem() as Resource.Success
+            assertEquals(dummyData.toDomain().success, actualData.data)
             awaitComplete()
         }
     }
@@ -155,13 +160,7 @@ class AuthRepositoryImplTest {
     fun `test register when state is success`() = runTest {
         val dummyData = dummySuccessResponse()
 
-        val mockFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-        val imageTest: MultipartBody.Part = MultipartBody.Part.createFormData(
-            "photo",
-            file.name,
-            mockFile
-        )
-
+        val imageTest: MultipartBody.Part = MultipartBody.Part.create("text".toRequestBody())
         val email = "".toRequestBody()
         val password = "".toRequestBody()
         val name = "".toRequestBody()
@@ -193,7 +192,6 @@ class AuthRepositoryImplTest {
         resultFlow.test {
             assertEquals(awaitItem(), Resource.Loading)
             val actualData = awaitItem() as Resource.Success
-            assertNotNull(actualData)
             assertEquals(dummyData.toDomain(), actualData.data)
             awaitComplete()
         }
@@ -201,14 +199,9 @@ class AuthRepositoryImplTest {
 
     @Test
     fun `test register when state is error 400`() = runTest {
-        val response = Response.error<LoginResponseDTO>(400, "".toResponseBody(null))
-        val mockFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-        val imageTest: MultipartBody.Part = MultipartBody.Part.createFormData(
-            "photo",
-            file.name,
-            mockFile
-        )
+        val response = Response.error<SuccessResponseDTO>(400, "".toResponseBody(null))
 
+        val imageTest: MultipartBody.Part = MultipartBody.Part.create("text".toRequestBody())
         val email = "".toRequestBody()
         val password = "".toRequestBody()
         val name = "".toRequestBody()
@@ -246,14 +239,9 @@ class AuthRepositoryImplTest {
 
     @Test
     fun `test register when state is error 401`() = runTest {
-        val response = Response.error<LoginResponseDTO>(401, "".toResponseBody(null))
-        val mockFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-        val imageTest: MultipartBody.Part = MultipartBody.Part.createFormData(
-            "photo",
-            file.name,
-            mockFile
-        )
+        val response = Response.error<SuccessResponseDTO>(401, "".toResponseBody(null))
 
+        val imageTest: MultipartBody.Part = MultipartBody.Part.create("text".toRequestBody())
         val email = "".toRequestBody()
         val password = "".toRequestBody()
         val name = "".toRequestBody()
@@ -291,13 +279,7 @@ class AuthRepositoryImplTest {
 
     @Test
     fun `test register when state is error Exception`() = runTest {
-        val mockFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-        val imageTest: MultipartBody.Part = MultipartBody.Part.createFormData(
-            "photo",
-            file.name,
-            mockFile
-        )
-
+        val imageTest: MultipartBody.Part = MultipartBody.Part.create("text".toRequestBody())
         val email = "".toRequestBody()
         val password = "".toRequestBody()
         val name = "".toRequestBody()
@@ -358,14 +340,15 @@ class AuthRepositoryImplTest {
         // Assert
         resultFlow.test {
             assertTrue(awaitItem() is Resource.Loading)
-            assertTrue(awaitItem() is Resource.Success)
+            val actualData = awaitItem() as Resource.Success
+            assertEquals(dummyData.toDomain(), actualData.data)
             awaitComplete()
         }
     }
 
     @Test
     fun `test change password when state is error 400`() = runTest {
-        val response = Response.error<LoginResponseDTO>(401, "".toResponseBody(null))
+        val response = Response.error<SuccessResponseDTO>(401, "".toResponseBody(null))
         // Arrange
         `when`(
             apiAuth.changePassword(
@@ -394,7 +377,7 @@ class AuthRepositoryImplTest {
 
     @Test
     fun `test change password when state is error 401`() = runTest {
-        val response = Response.error<LoginResponseDTO>(401, "".toResponseBody(null))
+        val response = Response.error<SuccessResponseDTO>(401, "".toResponseBody(null))
         // Arrange
         `when`(
             apiAuth.changePassword(
@@ -404,6 +387,34 @@ class AuthRepositoryImplTest {
                 confirmPassword = ArgumentMatchers.anyString()
             )
         ).thenThrow(HttpException(response))
+
+        // Act
+        val resultFlow = authRepositoryImpl.changePassword(
+            id = ArgumentMatchers.anyInt(),
+            password = ArgumentMatchers.anyString(),
+            newPassword = ArgumentMatchers.anyString(),
+            confirmPassword = ArgumentMatchers.anyString()
+        )
+
+        // Assert
+        resultFlow.test {
+            assertTrue(awaitItem() is Resource.Loading)
+            assertTrue(awaitItem() is Resource.Error)
+            awaitComplete()
+        }
+    }
+
+    @Test
+    fun `test change password when state is error Exception`() = runTest {
+        // Arrange
+        `when`(
+            apiAuth.changePassword(
+                id = ArgumentMatchers.anyInt(),
+                password = ArgumentMatchers.anyString(),
+                newPassword = ArgumentMatchers.anyString(),
+                confirmPassword = ArgumentMatchers.anyString()
+            )
+        ).thenThrow(RuntimeException())
 
         // Act
         val resultFlow = authRepositoryImpl.changePassword(
@@ -443,14 +454,15 @@ class AuthRepositoryImplTest {
         // Assert
         resultFlow.test {
             assertTrue(awaitItem() is Resource.Loading)
-            assertTrue(awaitItem() is Resource.Success)
+            val actualData = awaitItem() as Resource.Success
+            assertEquals(dummyData.toDomain(), actualData.data)
             awaitComplete()
         }
     }
 
     @Test
     fun `test change image when state is error 400`() = runTest {
-        val response = Response.error<LoginResponseDTO>(400, "".toResponseBody(null))
+        val response = Response.error<ChangeImageResponseDTO>(400, "".toResponseBody(null))
         val imageTest: MultipartBody.Part = MultipartBody.Part.create("text".toRequestBody())
         // Arrange
         `when`(
@@ -476,7 +488,7 @@ class AuthRepositoryImplTest {
 
     @Test
     fun `test change image when state is error 401`() = runTest {
-        val response = Response.error<LoginResponseDTO>(401, "".toResponseBody(null))
+        val response = Response.error<ChangeImageResponseDTO>(401, "".toResponseBody(null))
         val imageTest: MultipartBody.Part = MultipartBody.Part.create("text".toRequestBody())
 
         // Arrange
