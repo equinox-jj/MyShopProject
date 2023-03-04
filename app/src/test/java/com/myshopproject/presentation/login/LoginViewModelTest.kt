@@ -1,18 +1,16 @@
 package com.myshopproject.presentation.login
 
-import com.myshopproject.domain.usecase.RemoteUseCase
-import org.junit.Assert.*
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
+//@ExperimentalCoroutinesApi
+//@RunWith(MockitoJUnitRunner::class)
+//class LoginViewModelTest {
 
-@RunWith(MockitoJUnitRunner::class)
-class LoginViewModelTest {
+    /*@get:Rule
+    var instantExecutorRule = InstantTaskExecutorRule()
 
-    @Mock
-    private lateinit var remoteUseCase: RemoteUseCase
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
+    @Mock private lateinit var remoteUseCase: RemoteUseCase
     private lateinit var loginViewModel: LoginViewModel
 
     @Before
@@ -21,7 +19,29 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun `test login function when state is success`() {
+    fun `test login function when state is success`() = runTest {
+        val dummyData = dummyLoginResponse()
 
-    }
-}
+        val email = ArgumentMatchers.anyString()
+        val password = ArgumentMatchers.anyString()
+        val firebaseToken = ArgumentMatchers.anyString()
+
+        // Arrange
+        Mockito.`when`(
+            remoteUseCase.loginAccount(
+                email = email,
+                password = password,
+                firebaseToken = firebaseToken
+            )
+        ).thenReturn(flowOf(Resource.Success(dummyData.success)))
+
+        // Act
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+            loginViewModel.state.value
+        }
+        advanceUntilIdle()
+
+        // Assert
+        assertEquals(Resource.Success(dummyData), loginViewModel.state.value)
+    }*/
+//}
