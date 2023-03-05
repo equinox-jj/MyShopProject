@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val remoteUseCase: RemoteUseCase
@@ -21,6 +22,9 @@ class HomeViewModel @Inject constructor(
     private var searchJob: Job? = null
 
     private val currentQuery = MutableStateFlow("")
+    val productList = currentQuery.flatMapLatest { query ->
+        remoteUseCase.getListProductPaging(query).cachedIn(viewModelScope)
+    }
 
     fun onSearch(query: String) {
         searchJob?.cancel()
@@ -32,10 +36,5 @@ class HomeViewModel @Inject constructor(
                 currentQuery.value = query
             }
         }
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val productList = currentQuery.flatMapLatest { query ->
-        remoteUseCase.getListProductPaging(query).cachedIn(viewModelScope)
     }
 }

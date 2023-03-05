@@ -17,9 +17,11 @@ import com.myshopproject.presentation.home.adapter.ItemLoadAdapter
 import com.myshopproject.presentation.home.adapter.ProductPagingAdapter
 import com.myshopproject.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
