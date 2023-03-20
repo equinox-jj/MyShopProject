@@ -15,17 +15,22 @@ import javax.inject.Inject
 class AuthAuthentication @Inject constructor(
     private val pref: MyPreferences
 ) : Authenticator {
+
     override fun authenticate(route: Route?, response: Response): Request? {
         return runBlocking {
-            val authRefresh = pref.getAuthRefresh().first()
+            val token = pref.getAuthRefresh().first()
 
             val newToken = getNewToken(
-                authRefresh.userId,
-                authRefresh.accessToken,
-                authRefresh.refreshToken
+                token.userId,
+                token.accessToken,
+                token.refreshToken
             )
 
-            if (!newToken.isSuccessful || newToken.body() == null || newToken.code() == 401) {
+//            if (!newToken.isSuccessful || newToken.body() == null || newToken.code() == 401) {
+//                pref.clearSession()
+//            }
+
+            if (!newToken.isSuccessful || newToken.body() == null) {
                 pref.clearSession()
             }
 

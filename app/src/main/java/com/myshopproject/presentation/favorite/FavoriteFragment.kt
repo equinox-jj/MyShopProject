@@ -6,9 +6,6 @@ import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.myshopproject.R
 import com.myshopproject.databinding.FragmentFavoriteBinding
@@ -16,11 +13,8 @@ import com.myshopproject.domain.repository.FirebaseAnalyticsRepository
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.detail.DetailActivity
 import com.myshopproject.presentation.favorite.adapter.ProductFavoriteAdapter
-import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.utils.*
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -31,7 +25,6 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
 
     private var adapter: ProductFavoriteAdapter? = null
     private val viewModel by viewModels<FavoriteViewModel>()
-    private val prefViewModel by viewModels<DataStoreViewModel>()
 
     @Inject
     lateinit var analyticRepository: FirebaseAnalyticsRepository
@@ -41,7 +34,6 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
         _binding = FragmentFavoriteBinding.bind(view)
 
         initObserver(SortedBy.DefaultSort)
-        launchCoroutines()
         initRecyclerView()
         setupListener()
     }
@@ -49,15 +41,6 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
     override fun onResume() {
         super.onResume()
         analyticRepository.onFavoriteLoadScreen(requireContext().javaClass.simpleName)
-    }
-
-    private fun launchCoroutines() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                val userId = prefViewModel.getUserId.first()
-                viewModel.getProductListFav(null, userId)
-            }
-        }
     }
 
     private fun initRecyclerView() {

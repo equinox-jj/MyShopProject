@@ -237,7 +237,7 @@ class TrolleyActivity : AppCompatActivity() {
                         itemTotalPrice = price?.replace(Regex("\\D"), "")?.toInt()?.times(quantity.toString().toInt().plus(1)),
                         id = productId
                     )
-                    analyticRepository.onClickQuantityTrolley(quantity = "+", total = quantity?.plus(1)?: 0, productId = productId ?: 0, it.nameProduct.toString())
+                    analyticRepository.onClickQuantityTrolley(quantity = "+", total = quantity?.plus(1) ?: 0, productId = productId ?: 0, it.nameProduct.toString())
                 },
                 onMinQuantity = {
                     val productId = it.id
@@ -248,7 +248,7 @@ class TrolleyActivity : AppCompatActivity() {
                         itemTotalPrice = price?.replace(Regex("\\D"), "")?.toInt()?.times(quantity.toString().toInt().minus(1)),
                         id = productId
                     )
-                    analyticRepository.onClickQuantityTrolley(quantity = "-", total = quantity?.minus(1)?: 0, productId = productId ?: 0, it.nameProduct.toString())
+                    analyticRepository.onClickQuantityTrolley(quantity = "-", total = quantity?.minus(1) ?: 0, productId = productId ?: 0, it.nameProduct.toString())
                 },
                 onCheckedItem = {
                     val productId = it.id

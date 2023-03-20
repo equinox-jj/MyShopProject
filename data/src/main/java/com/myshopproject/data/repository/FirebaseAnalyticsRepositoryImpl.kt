@@ -9,7 +9,6 @@ import com.myshopproject.data.utils.Constants.BUTTON_NAME
 import com.myshopproject.data.utils.Constants.BUY
 import com.myshopproject.data.utils.Constants.CHANGE_LANGUAGE
 import com.myshopproject.data.utils.Constants.CHANGE_PASSWORD
-import com.myshopproject.data.utils.Constants.CHECKOUT
 import com.myshopproject.data.utils.Constants.DELETE_ICON
 import com.myshopproject.data.utils.Constants.DETAIL
 import com.myshopproject.data.utils.Constants.EMAIL
@@ -61,6 +60,7 @@ import com.myshopproject.data.utils.Constants.SORT_BY
 import com.myshopproject.data.utils.Constants.SPLASH
 import com.myshopproject.data.utils.Constants.STATUS
 import com.myshopproject.data.utils.Constants.SUBMIT
+import com.myshopproject.data.utils.Constants.SUCCESS
 import com.myshopproject.data.utils.Constants.TITLE
 import com.myshopproject.data.utils.Constants.TOTAL
 import com.myshopproject.data.utils.Constants.TOTAL_SELECT_ITEM
@@ -469,7 +469,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
             putString(PAYMENT_TYPE, payment)
             putString(BANK, bank)
         }
-        firebaseAnalytics.logEvent(BUTTON_CLICKED, bundle)
+        firebaseAnalytics.logEvent(SELECT_ITEM, bundle)
     }
 
     // Trolley Screen
@@ -556,7 +556,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
     // Success Screen
     override fun onSuccessLoadScreen(nameClass: String?) {
         val bundle = Bundle().apply {
-            putString(SCREEN_NAME, CHECKOUT)
+            putString(SCREEN_NAME, SUCCESS)
             putString(SCREEN_CLASS, nameClass)
         }
         firebaseAnalytics.logEvent(SCREEN_VIEW, bundle)
@@ -564,7 +564,7 @@ class FirebaseAnalyticsRepositoryImpl @Inject constructor(
 
     override fun onClickButtonSubmitSuccess(rate: Int?) {
         val bundle = Bundle().apply {
-            putString(SCREEN_NAME, CHECKOUT)
+            putString(SCREEN_NAME, SUCCESS)
             putString(BUTTON_NAME, SUBMIT)
             putString(RATE, rate.toString())
         }

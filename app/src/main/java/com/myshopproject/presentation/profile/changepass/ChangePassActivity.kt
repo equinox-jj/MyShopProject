@@ -12,9 +12,8 @@ import com.google.gson.JsonObject
 import com.myshopproject.databinding.ActivityChangePassBinding
 import com.myshopproject.domain.repository.FirebaseAnalyticsRepository
 import com.myshopproject.domain.utils.Resource
+import com.myshopproject.presentation.CustomLoadingDialog
 import com.myshopproject.presentation.viewmodel.DataStoreViewModel
-import com.myshopproject.utils.hide
-import com.myshopproject.utils.show
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -25,6 +24,7 @@ import javax.inject.Inject
 class ChangePassActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityChangePassBinding
+    private lateinit var loadingDialog: CustomLoadingDialog
 
     private val viewModel by viewModels<ChangePassViewModel>()
     private val prefViewModel by viewModels<DataStoreViewModel>()
@@ -39,6 +39,7 @@ class ChangePassActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityChangePassBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        loadingDialog = CustomLoadingDialog(this@ChangePassActivity)
 
         setupToolbar()
 
@@ -76,10 +77,10 @@ class ChangePassActivity : AppCompatActivity() {
         viewModel.state.observe(this@ChangePassActivity) { response ->
             when (response) {
                 is Resource.Loading -> {
-                    binding.changePassCardLoading.root.show()
+                    loadingDialog.showDialog()
                 }
                 is Resource.Success -> {
-                    binding.changePassCardLoading.root.hide()
+                    loadingDialog.hideDialog()
 
                     Toast.makeText(this@ChangePassActivity, "Change password success ${response.data?.success?.status}", Toast.LENGTH_SHORT).show()
 
@@ -87,7 +88,7 @@ class ChangePassActivity : AppCompatActivity() {
                 }
                 is Resource.Error -> {
                     try {
-                        binding.changePassCardLoading.root.hide()
+                        loadingDialog.hideDialog()
                         val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
                         val gson = Gson()
                         val jsonObject = gson.fromJson(errors, JsonObject::class.java)

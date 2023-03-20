@@ -918,6 +918,6 @@ class ProductPagingSource: PagingSource<Int, LiveData<List<DataProduct>>>() {
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, LiveData<List<DataProduct>>> {
-        return PagingSource.LoadResult.Page(emptyList(),0 , 1)
+        return LoadResult.Page(emptyList(),0 , 1)
     }
 }

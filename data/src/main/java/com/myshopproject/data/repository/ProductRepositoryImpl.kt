@@ -29,10 +29,8 @@ class ProductRepositoryImpl @Inject constructor(
     override fun getListProductPaging(query: String?): Flow<PagingData<DataProduct>> {
         return Pager(
             config = PagingConfig(
-                enablePlaceholders = true,
                 pageSize = TOTAL_ITEM,
                 initialLoadSize = TOTAL_ITEM,
-//                prefetchDistance = 1
             ),
             pagingSourceFactory = { RemotePagingSource(query = query, apiProduct = apiProduct) }
         ).flow

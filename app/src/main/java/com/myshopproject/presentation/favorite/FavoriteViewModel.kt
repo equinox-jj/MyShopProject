@@ -13,8 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,7 +28,9 @@ class FavoriteViewModel @Inject constructor(
     private var searchJob: Job? = null
 
     init {
-        onSearch("")
+        viewModelScope.launch {
+            getProductListFav("", pref.getUserId().first())
+        }
     }
 
     fun onRefresh() {
@@ -50,22 +50,12 @@ class FavoriteViewModel @Inject constructor(
         }
     }
 
-    fun getProductListFav(query: String?, userId: Int) {
-        remoteUseCase.getListProductFavorite(query, userId).onEach { response ->
-            when (response) {
-                is Resource.Loading -> {
-                    _state.value = Resource.Loading
-                }
-                is Resource.Success -> {
-                    response.data?.let { result ->
-                        _state.value = Resource.Success(result)
-                    }
-                }
-                is Resource.Error -> {
-                    _state.value = Resource.Error(response.message, response.errorCode, response.errorBody)
-                }
+    private fun getProductListFav(query: String?, userId: Int) {
+        viewModelScope.launch {
+            remoteUseCase.getListProductFavorite(query, userId).collect { response ->
+                _state.value = response
             }
-        }.launchIn(viewModelScope)
+        }
     }
 
 }

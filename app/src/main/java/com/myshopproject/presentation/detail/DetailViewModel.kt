@@ -10,8 +10,7 @@ import com.myshopproject.domain.entities.SuccessResponseStatus
 import com.myshopproject.domain.usecase.RemoteUseCase
 import com.myshopproject.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,92 +38,42 @@ class DetailViewModel @Inject constructor(
     }
 
     fun getProductDetail(productId: Int, userId: Int) {
-        remoteUseCase.getProductDetail(productId, userId).onEach { response ->
-            when (response) {
-                is Resource.Loading -> {
-                    _detailState.value = Resource.Loading
-                }
-                is Resource.Success -> {
-                    response.data?.let {
-                        _detailState.value = Resource.Success(it)
-                    }
-                }
-                is Resource.Error -> {
-                    _detailState.value = Resource.Error(response.message, response.errorCode, response.errorBody)
-                }
+        viewModelScope.launch {
+            remoteUseCase.getProductDetail(productId, userId).collect { response ->
+                _detailState.value = response
             }
-        }.launchIn(viewModelScope)
+        }
     }
 
     fun getProductOther(userId: Int) {
-        remoteUseCase.getProductOther(userId).onEach { response ->
-            when (response) {
-                is Resource.Loading -> {
-                    _otherProductState.value = Resource.Loading
-                }
-                is Resource.Success -> {
-                    response.data?.let {
-                        _otherProductState.value = Resource.Success(it)
-                    }
-                }
-                is Resource.Error -> {
-                    _otherProductState.value = Resource.Error(response.message, response.errorCode, response.errorBody)
-                }
+        viewModelScope.launch {
+            remoteUseCase.getProductOther(userId).collect { response ->
+                _otherProductState.value = response
             }
-        }.launchIn(viewModelScope)
+        }
     }
 
     fun getProductHistory(userId: Int) {
-        remoteUseCase.getProductHistory(userId).onEach { response ->
-            when (response) {
-                is Resource.Loading -> {
-                    _historyProductState.value = Resource.Loading
-                }
-                is Resource.Success -> {
-                    response.data?.let {
-                        _historyProductState.value = Resource.Success(it)
-                    }
-                }
-                is Resource.Error -> {
-                    _historyProductState.value = Resource.Error(response.message, response.errorCode, response.errorBody)
-                }
+        viewModelScope.launch {
+            remoteUseCase.getProductHistory(userId).collect { response ->
+                _historyProductState.value = response
             }
-        }.launchIn(viewModelScope)
+        }
     }
 
     fun addProductFavorite(productId: Int, userId: Int) {
-        remoteUseCase.addProductFavorite(productId, userId).onEach { response ->
-            when(response) {
-                is Resource.Loading -> {
-                    _favState.value = Resource.Loading
-                }
-                is Resource.Success -> {
-                    response.data?.let {
-                        _favState.value = Resource.Success(it)
-                    }
-                }
-                is Resource.Error -> {
-                    _favState.value = Resource.Error(response.message, response.errorCode, response.errorBody)
-                }
+        viewModelScope.launch {
+            remoteUseCase.addProductFavorite(productId, userId).collect { response ->
+                _favState.value = response
             }
-        }.launchIn(viewModelScope)
+        }
     }
 
     fun removeProductFavorite(productId: Int, userId: Int) {
-        remoteUseCase.removeProductFavorite(productId, userId).onEach { response ->
-            when(response) {
-                is Resource.Loading -> {
-                    _unFavState.value = Resource.Loading
-                }
-                is Resource.Success -> {
-                    response.data?.let {
-                        _unFavState.value = Resource.Success(it)
-                    }
-                }
-                is Resource.Error -> {
-                    _unFavState.value = Resource.Error(response.message, response.errorCode, response.errorBody)
-                }
+        viewModelScope.launch {
+            remoteUseCase.removeProductFavorite(productId, userId).collect { response ->
+                _unFavState.value = response
             }
-        }.launchIn(viewModelScope)
+        }
     }
 }

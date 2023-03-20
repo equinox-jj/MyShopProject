@@ -6,9 +6,7 @@ import android.util.Patterns
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.FirebaseTooManyRequestsException
@@ -27,7 +25,6 @@ import com.myshopproject.presentation.main.MainActivity
 import com.myshopproject.presentation.register.RegisterActivity
 import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.json.JSONObject
 import java.io.IOException
@@ -114,37 +111,35 @@ class LoginActivity : AppCompatActivity() {
         binding.apply {
             btnLogin.setOnClickListener {
                 if (validation()) {
-                    lifecycleScope.launch {
-                        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                            try {
-                                val firebaseToken = firebaseMessaging.token
-                                    .addOnSuccessListener {
-                                        it.toString()
-                                    }
-                                    .addOnFailureListener {
-                                        when(it) {
-                                            is FirebaseNetworkException -> {
-                                                Toast.makeText(this@LoginActivity, getString(R.string.check_your_connectivity), Toast.LENGTH_SHORT).show()
-                                            }
-                                            is FirebaseTooManyRequestsException -> {
-                                                Toast.makeText(this@LoginActivity, getString(R.string.error_too_many_request), Toast.LENGTH_SHORT).show()
-                                            }
-                                            is FirebaseException -> {
-                                                Toast.makeText(this@LoginActivity, getString(R.string.error_an_unknown), Toast.LENGTH_SHORT).show()
-                                            }
+                    lifecycleScope.launchWhenStarted {
+                        try {
+                            val firebaseToken = firebaseMessaging.token
+                                .addOnSuccessListener {
+                                    it.toString()
+                                }
+                                .addOnFailureListener {
+                                    when(it) {
+                                        is FirebaseNetworkException -> {
+                                            Toast.makeText(this@LoginActivity, getString(R.string.check_your_connectivity), Toast.LENGTH_SHORT).show()
                                         }
-                                    }.await()
+                                        is FirebaseTooManyRequestsException -> {
+                                            Toast.makeText(this@LoginActivity, getString(R.string.error_too_many_request), Toast.LENGTH_SHORT).show()
+                                        }
+                                        is FirebaseException -> {
+                                            Toast.makeText(this@LoginActivity, getString(R.string.error_an_unknown), Toast.LENGTH_SHORT).show()
+                                        }
+                                    }
+                                }.await()
 
-                                viewModel.loginAccount(
-                                    email = etEmailLogin.text.toString(),
-                                    password = etPasswordLogin.text.toString(),
-                                    firebaseToken = firebaseToken
-                                )
-                            } catch (e: IOException) {
-                                Toast.makeText(this@LoginActivity, e.localizedMessage, Toast.LENGTH_SHORT).show()
-                            } catch (e: Exception) {
-                                Toast.makeText(this@LoginActivity, e.localizedMessage, Toast.LENGTH_SHORT).show()
-                            }
+                            viewModel.loginAccount(
+                                email = etEmailLogin.text.toString(),
+                                password = etPasswordLogin.text.toString(),
+                                firebaseToken = firebaseToken
+                            )
+                        } catch (e: IOException) {
+                            Toast.makeText(this@LoginActivity, e.localizedMessage, Toast.LENGTH_SHORT).show()
+                        } catch (e: Exception) {
+                            Toast.makeText(this@LoginActivity, e.localizedMessage, Toast.LENGTH_SHORT).show()
                         }
                     }
                 }

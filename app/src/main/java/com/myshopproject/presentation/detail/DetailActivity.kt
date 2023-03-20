@@ -15,9 +15,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import coil.imageLoader
 import coil.load
 import coil.request.ImageRequest
@@ -32,6 +30,7 @@ import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.detail.adapter.ImageSliderAdapter
 import com.myshopproject.presentation.detail.bottomsheet.DetailBottomSheet
 import com.myshopproject.presentation.favorite.adapter.ProductFavoriteAdapter
+import com.myshopproject.presentation.main.MainActivity
 import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.presentation.viewmodel.LocalViewModel
 import com.myshopproject.utils.Constants.PAYMENT_DATA_INTENT
@@ -73,13 +72,26 @@ class DetailActivity : AppCompatActivity() {
         paymentParcel = intent.getParcelableExtra(PAYMENT_DATA_INTENT)
 
         setupToolbar()
-        coroutineScope()
         refreshListener()
         checkProductId()
         initRecyclerView()
+        coroutineScope()
 
         val builder: StrictMode.VmPolicy.Builder = StrictMode.VmPolicy.Builder()
         StrictMode.setVmPolicy(builder.build())
+    }
+
+    private fun coroutineScope() {
+        lifecycleScope.launchWhenStarted {
+            launch {
+                prefViewModel.getUserId.collect {
+                    userId = it
+                }
+            }
+            launch {
+                initObserver()
+            }
+        }
     }
 
     override fun onResume() {
@@ -127,6 +139,7 @@ class DetailActivity : AppCompatActivity() {
                 when (menuItem.itemId) {
                     android.R.id.home -> {
                         analyticRepository.onClickBackButtonDetail()
+                        startActivity(Intent(this@DetailActivity, MainActivity::class.java))
                         finish()
                     }
                     R.id.menu_share -> {
@@ -176,21 +189,6 @@ class DetailActivity : AppCompatActivity() {
         binding.refreshDetail.setOnRefreshListener {
             binding.refreshDetail.isRefreshing = false
             viewModel.onRefresh(productId, userId)
-        }
-    }
-
-    private fun coroutineScope() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    prefViewModel.getUserId.collect {
-                        userId = it
-                    }
-                }
-                launch {
-                    initObserver()
-                }
-            }
         }
     }
 

@@ -31,6 +31,7 @@ import com.myshopproject.data.utils.Constants.INDO
 import com.myshopproject.databinding.FragmentProfileBinding
 import com.myshopproject.domain.repository.FirebaseAnalyticsRepository
 import com.myshopproject.domain.utils.Resource
+import com.myshopproject.presentation.CustomLoadingDialog
 import com.myshopproject.presentation.camera.CameraActivity
 import com.myshopproject.presentation.login.LoginActivity
 import com.myshopproject.presentation.profile.adapter.CustomSpinnerAdapter
@@ -60,6 +61,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private var listLanguage = arrayOf("EN", "IN")
     private var listFlag = intArrayOf(R.drawable.ic_us_flag, R.drawable.ic_indonesia_flag)
+
+    private lateinit var loadingDialog: CustomLoadingDialog
 
     private lateinit var resultCamera: Bitmap
     private var getFile: File? = null
@@ -105,7 +108,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentProfileBinding.bind(view)
-
+        loadingDialog = CustomLoadingDialog(requireActivity())
         setupListener()
         spinnerAdapter()
         initDataStore()
@@ -209,17 +212,17 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             viewModel.state.observe(viewLifecycleOwner) { response ->
                 when (response) {
                     is Resource.Loading -> {
-                        binding.profileCardLoading.root.show()
+                        loadingDialog.showDialog()
                     }
                     is Resource.Success -> {
                         val imageUser = response.data?.success?.path
-                        binding.profileCardLoading.root.hide()
+                        loadingDialog.hideDialog()
                         prefViewModel.saveImageUser(imageUser.toString())
                         Toast.makeText(requireContext(), "Change image success", Toast.LENGTH_SHORT).show()
                     }
                     is Resource.Error -> {
                         try {
-                            binding.profileCardLoading.root.hide()
+                            loadingDialog.hideDialog()
 
                             val errors = response.errorBody?.string()?.let { JSONObject(it).toString() }
                             val gson = Gson()

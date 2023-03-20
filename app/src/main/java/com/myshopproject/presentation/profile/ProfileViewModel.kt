@@ -8,8 +8,7 @@ import com.myshopproject.domain.entities.ChangeImageResponse
 import com.myshopproject.domain.usecase.RemoteUseCase
 import com.myshopproject.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import javax.inject.Inject
 
@@ -22,21 +21,11 @@ class ProfileViewModel @Inject constructor(
     val state: LiveData<Resource<ChangeImageResponse>> = _state
 
     fun changeImage(id: Int, image: MultipartBody.Part) {
-        remoteUseCase.changeImage(id = id, image = image).onEach { response ->
-            when (response) {
-                is Resource.Loading -> {
-                    _state.value = Resource.Loading
-                }
-                is Resource.Success -> {
-                    response.data?.let {
-                        _state.value = Resource.Success(it)
-                    }
-                }
-                is Resource.Error -> {
-                    _state.value = Resource.Error(response.message, response.errorCode, response.errorBody)
-                }
+        viewModelScope.launch {
+            remoteUseCase.changeImage(id = id, image = image).collect { response ->
+                _state.value = response
             }
-        }.launchIn(viewModelScope)
+        }
     }
 
 }

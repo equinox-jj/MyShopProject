@@ -38,7 +38,7 @@ object Constants {
     const val PAYMENT_SCREEN = "Pilih Metode Pembayaran"
     const val TROLLEY = "Trolley"
     const val TROLLEY_PLUS = "+ Trolley"
-    const val CHECKOUT = "Checkout"
+    const val SUCCESS = "Success"
     const val CHANGE_PASSWORD = "Change Password"
     const val SHARE_PRODUCT = "Share Product"
     const val ITEM_NAME = "item_name"

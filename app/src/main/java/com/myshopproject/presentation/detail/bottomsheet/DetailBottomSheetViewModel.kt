@@ -10,8 +10,7 @@ import com.myshopproject.domain.entities.UpdateStockProduct
 import com.myshopproject.domain.usecase.RemoteUseCase
 import com.myshopproject.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,27 +34,17 @@ class DetailBottomSheetViewModel @Inject constructor(
     }
 
     fun updateStock(userId: String,idProduct: String, stock: Int) {
-        remoteUseCase.updateStock(UpdateStockProduct(userId,listOf(UpdateStockItem(idProduct, stock)))).onEach { response ->
-            when (response) {
-                is Resource.Loading -> {
-                    _updateStockState.value = Resource.Loading
-                }
-                is Resource.Success -> {
-                    response.data?.let {
-                        _updateStockState.value = Resource.Success(it)
-                    }
-                }
-                is Resource.Error -> {
-                    _updateStockState.value = Resource.Error(response.message, response.errorCode, response.errorBody)
-                }
+        viewModelScope.launch {
+            remoteUseCase.updateStock(UpdateStockProduct(userId,listOf(UpdateStockItem(idProduct, stock)))).collect { response ->
+                _updateStockState.value = response
             }
-        }.launchIn(viewModelScope)
+        }
     }
 
     fun increaseQuantity(stock: Int?) {
         if (_quantity.value!! < stock!!) {
             _quantity.value = _quantity.value?.plus(1)
-            _price.value = initPrice?.times(_quantity.value!!.toInt())
+            _price.value = _quantity.value?.toInt()?.let { initPrice?.times(it) }
         }
     }
 
@@ -65,7 +54,7 @@ class DetailBottomSheetViewModel @Inject constructor(
             _price.value = initPrice!!.toInt()
         } else {
             _quantity.value = _quantity.value?.minus(1)
-            _price.value = initPrice?.times(_quantity.value!!.toInt())
+            _price.value = _quantity.value?.toInt()?.let { initPrice?.times(it) }
         }
     }
 

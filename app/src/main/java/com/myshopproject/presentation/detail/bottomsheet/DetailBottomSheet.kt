@@ -8,9 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import coil.load
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
@@ -35,7 +33,6 @@ import com.myshopproject.utils.hide
 import com.myshopproject.utils.show
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import org.json.JSONObject
 import javax.inject.Inject
 
@@ -80,10 +77,8 @@ class DetailBottomSheet(
     }
 
     private fun initDataStore() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                userId = prefViewModel.getUserId.first().toString()
-            }
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            userId = prefViewModel.getUserId.first().toString()
         }
     }
 
@@ -117,10 +112,8 @@ class DetailBottomSheet(
                 }
                 binding.btnBuyNowBottSheet.setOnClickListener {
                     analyticRepository.onClickButtonBuyNowWithPayment(data.harga, data.id, data.nameProduct, totalPrice, quantity, dataName ?: "")
-                    viewLifecycleOwner.lifecycleScope.launch {
-                        viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                            updateStock(userId, data.id.toString(), quantity)
-                        }
+                    viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+                        updateStock(userId, data.id.toString(), quantity)
                     }
                 }
                 binding.tvBottPaymentName.text = paymentData.name
@@ -188,14 +181,14 @@ class DetailBottomSheet(
 
     private fun setupListener() {
         binding.btnIncreaseBottSheet.setOnClickListener {
-            analyticRepository.onClickQuantityBottom("+", quantity, data.id, data.nameProduct)
+            analyticRepository.onClickQuantityBottom("+", quantity.plus(1), data.id, data.nameProduct)
             viewModel.increaseQuantity(data.stock)
             val sum = binding.tvQuantityBottSheet.text.toString()
             val total = (sum.toInt() * (data.harga?.replace(Regex("\\D"), "")?.toInt() ?: 0))
             (resources.getString(R.string.buy_now) + total.toString().toIDRPrice()).also { binding.btnBuyNowBottSheet.text = it }
         }
         binding.btnDecreaseBottSheet.setOnClickListener {
-            analyticRepository.onClickQuantityBottom("-", quantity, data.id, data.nameProduct)
+            analyticRepository.onClickQuantityBottom("-", quantity.minus(1), data.id, data.nameProduct)
             viewModel.decreaseQuantity()
             val sum = binding.tvQuantityBottSheet.text.toString()
             val total = (sum.toInt() * (data.harga?.replace(Regex("\\D"), "")?.toInt() ?: 0))
