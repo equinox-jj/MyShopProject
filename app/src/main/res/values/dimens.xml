@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- DP -->
-    <dimen name="margin_edittext">16dp</dimen>
+    <dimen name="dimen_logo_login_width">267dp</dimen>
+    <dimen name="dimen_logo_login_height">266dp</dimen>
+    <dimen name="dimen_logo_login_horizontal">55dp</dimen>
+    <dimen name="dimen_logo_login_top">35dp</dimen>
+    <dimen name="dimen_form_login_corner_radius">30dp</dimen>
+    <dimen name="dimen_form_login_top">20dp</dimen>
+    <dimen name="dimen_edittext_login_corner_radius">7dp</dimen>
+    <dimen name="dimen_edittext_login_horizontal">40dp</dimen>
+    <dimen name="dimen_edittext_login_top">60dp</dimen>
+    <dimen name="dimen_edittext_login_top_bottom_edittext">50dp</dimen>
+    <dimen name="dimen_button_login_top">60dp</dimen>
+    <dimen name="dimen_button_login_horizontal">50dp</dimen>
+    <dimen name="dimen_button_login_width">280dp</dimen>
+    <dimen name="dimen_button_login_height">52dp</dimen>
+    <dimen name="dimen_button_sign_up_login_corner_radius">30dp</dimen>
+    <dimen name="dimen_button_sign_up_login_top">175dp</dimen>
+
     <!-- SP -->
-    <dimen name="text_header">20sp</dimen>
+    <dimen name="dimen_font_edittext_login">18sp</dimen>
 </resources>
