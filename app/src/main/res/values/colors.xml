@@ -5,8 +5,7 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+
 
     <color name="text_black">#000000</color>
     <color name="text_grey">#CCCCCC</color>
@@ -32,4 +31,10 @@
     <color name="secondaryDarkColor">#004ba0</color>
     <color name="primaryTextColor">#ffffff</color>
     <color name="secondaryTextColor">#ffffff</color>
+
+
+    <color name="light_red">#FFC7CD</color>
+    <color name="light_coral">#EB848E</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFFFF</color>
 </resources>

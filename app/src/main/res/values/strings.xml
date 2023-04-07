@@ -62,4 +62,6 @@
     <string name="error_too_many_request">Too many request.</string>
     <string name="error_an_unknown">An unknown error occurred.</string>
     <string name="login_successful">Login Successfully.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -13,7 +13,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.myshopproject.databinding.ActivitySplashBinding
 import com.myshopproject.domain.repository.FirebaseAnalyticsRepository
 import com.myshopproject.presentation.login.LoginActivity
-import com.myshopproject.presentation.main.MainActivity
+import com.myshopproject.presentation.mains.MainActivity
 import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

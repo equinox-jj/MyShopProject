@@ -13,7 +13,7 @@ import com.myshopproject.data.utils.toIDRPrice
 import com.myshopproject.databinding.ActivityBuySuccessBinding
 import com.myshopproject.domain.repository.FirebaseAnalyticsRepository
 import com.myshopproject.domain.utils.Resource
-import com.myshopproject.presentation.main.MainActivity
+import com.myshopproject.presentation.mains.MainActivity
 import com.myshopproject.utils.Constants.LIST_PRODUCT_ID
 import com.myshopproject.utils.Constants.PAYMENT_ID_INTENT
 import com.myshopproject.utils.Constants.PAYMENT_NAME_INTENT

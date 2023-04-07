@@ -1,4 +1,4 @@
-package com.myshopproject.presentation.main
+package com.myshopproject.presentation.mains
 
 import android.content.Intent
 import android.content.res.Configuration

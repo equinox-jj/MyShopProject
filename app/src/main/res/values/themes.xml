@@ -23,18 +23,4 @@
 
         <item name="android:statusBarColor">@color/primaryLightColor</item>
     </style>
-
-    <style name="Ctm.Button.Auth" parent="Widget.MaterialComponents.Button">
-        <item name="backgroundTint">@color/button_color</item>
-        <item name="android:background">@drawable/bg_button_auth_navigate</item>
-    </style>
-
-    <style name="Ctm.AlertDialog" parent="Theme.AppCompat.Dialog.Alert">
-        <item name="android:windowBackground">@drawable/bg_select_image_dialog</item>
-    </style>
-
-    <style name="Ctm.ImageDialog" parent="Theme.AppCompat.Dialog.Alert">
-        <item name="android:windowBackground">@android:color/transparent</item>
-    </style>
-
 </resources>

@@ -21,7 +21,7 @@ import com.myshopproject.databinding.ActivityLoginBinding
 import com.myshopproject.domain.repository.FirebaseAnalyticsRepository
 import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.CustomLoadingDialog
-import com.myshopproject.presentation.main.MainActivity
+import com.myshopproject.presentation.mains.MainActivity
 import com.myshopproject.presentation.register.RegisterActivity
 import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import dagger.hilt.android.AndroidEntryPoint

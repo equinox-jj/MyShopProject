@@ -30,7 +30,7 @@ import com.myshopproject.domain.utils.Resource
 import com.myshopproject.presentation.detail.adapter.ImageSliderAdapter
 import com.myshopproject.presentation.detail.bottomsheet.DetailBottomSheet
 import com.myshopproject.presentation.favorite.adapter.ProductFavoriteAdapter
-import com.myshopproject.presentation.main.MainActivity
+import com.myshopproject.presentation.mains.MainActivity
 import com.myshopproject.presentation.viewmodel.DataStoreViewModel
 import com.myshopproject.presentation.viewmodel.LocalViewModel
 import com.myshopproject.utils.Constants.PAYMENT_DATA_INTENT
