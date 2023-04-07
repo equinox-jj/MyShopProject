@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/loginFragment">
 
 
     <fragment
@@ -51,6 +51,30 @@
         android:name="com.myshopproject.presentation.detail.DetailActivity"
         android:label="activity_detail"
         tools:layout="@layout/activity_detail" />
+
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.myshopproject.presentation.auth.login.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_loginFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.myshopproject.presentation.auth.signup.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up" />
 
 
 </navigation>

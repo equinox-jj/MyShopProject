@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.ktx.messaging
 import com.myshopproject.R
 import com.myshopproject.databinding.FragmentLoginBinding
 import com.myshopproject.domain.repository.FirebaseAnalyticsRepository
@@ -37,6 +39,11 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentLoginBinding.bind(view)
+        firebaseMessaging = Firebase.messaging
+    }
+
+    private fun initObserver() {
+
     }
 
     override fun onDestroyView() {
