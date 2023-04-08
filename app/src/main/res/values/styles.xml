@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <style name="ThemeAuthBackground">
+        <item name="android:background">@color/light_red</item>
+    </style>
+
+    <style name="ThemeButtonLogin">
+        <item name="android:background">@drawable/bg_button_top_rounded</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/text_18sp</item>
+        <item name="android:fontFamily">@font/poppins_bold</item>
+    </style>
+
     <style name="Ctm.Button.Auth" parent="Widget.MaterialComponents.Button">
         <item name="backgroundTint">@color/button_color</item>
-        <item name="android:background">@drawable/bg_button_auth_navigate</item>
+        <item name="android:background">@drawable/bg_button_top_rounded</item>
     </style>
 
     <style name="Ctm.AlertDialog" parent="Theme.AppCompat.Dialog.Alert">
