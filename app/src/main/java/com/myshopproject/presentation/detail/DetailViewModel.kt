@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    private val remoteUseCase: RemoteUseCase
+    private val remoteUseCase: RemoteUseCase,
 ) : ViewModel() {
 
     private val _detailState = MutableLiveData<Resource<DetailProductResponse>>()
