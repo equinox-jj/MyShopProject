@@ -34,10 +34,6 @@ class AuthAuthentication @Inject constructor(
                 pref.clearSession()
             }
 
-//            if (!newToken.isSuccessful || newToken.body() == null) {
-//                pref.clearSession()
-//            }
-
             newToken.body()?.let {
                 val accessToken = it.success.accessToken
                 val refreshToken = it.success.refreshToken
