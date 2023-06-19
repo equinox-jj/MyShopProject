@@ -10,6 +10,7 @@
         <item name="colorOnSecondary">@color/black</item>
 
         <item name="android:statusBarColor">@color/primaryLightColor</item>
+        <item name="bottomSheetDialogTheme">@style/RoundedBottomSheetTheme</item>
     </style>
 
     <style name="Theme.NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -22,6 +23,7 @@
         <item name="colorOnSecondary">@color/black</item>
 
         <item name="android:statusBarColor">@color/primaryLightColor</item>
+        <item name="bottomSheetDialogTheme">@style/RoundedBottomSheetTheme</item>
     </style>
 
     <style name="Ctm.Button.Auth" parent="Widget.MaterialComponents.Button">
@@ -41,6 +43,14 @@
         <item name="cornerRadius">3dp</item>
         <item name="strokeWidth">2dp</item>
         <item name="strokeColor">@color/button_color</item>
+    </style>
+
+    <style name="RoundedBottomSheetTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/RoundedBottomSheet</item>
+    </style>
+
+    <style name="RoundedBottomSheet" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bg_rounded_bottom_sheet</item>
     </style>
 
 </resources>
