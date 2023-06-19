@@ -37,4 +37,10 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
+    <style name="OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="cornerRadius">3dp</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="strokeColor">@color/button_color</item>
+    </style>
+
 </resources>

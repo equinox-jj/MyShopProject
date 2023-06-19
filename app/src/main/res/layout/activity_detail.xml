@@ -379,17 +379,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <androidx.appcompat.widget.AppCompatButton
+                <Button
                     android:id="@+id/btnDtlTrolley"
+                    style="@style/OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:background="@drawable/bg_button_trolley"
-                    android:drawableStart="@drawable/ic_increase_filled"
-                    android:drawableTint="@color/primaryColor"
-                    android:padding="10dp"
-                    android:text="@string/trolley"
-                    android:textColor="@color/primaryColor"
+                    android:text="@string/trolleyplus"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/btnDtlBuy"
                     app:layout_constraintTop_toTopOf="parent" />

@@ -6,7 +6,11 @@ import com.myshopproject.data.utils.Constants.BASE_URL
 import com.myshopproject.domain.preferences.MyPreferences
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import okhttp3.*
+import okhttp3.Authenticator
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
+import okhttp3.Route
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -26,13 +30,13 @@ class AuthAuthentication @Inject constructor(
                 token.refreshToken
             )
 
-//            if (!newToken.isSuccessful || newToken.body() == null || newToken.code() == 401) {
-//                pref.clearSession()
-//            }
-
-            if (!newToken.isSuccessful || newToken.body() == null) {
+            if (!newToken.isSuccessful || newToken.body() == null || newToken.code() == 401) {
                 pref.clearSession()
             }
+
+//            if (!newToken.isSuccessful || newToken.body() == null) {
+//                pref.clearSession()
+//            }
 
             newToken.body()?.let {
                 val accessToken = it.success.accessToken
